@@ -35,6 +35,10 @@ body {
   color: #495057;
 }
 
+.jumbotron {
+  background-color: #ffffff !important;
+}
+
 .cards {
   display: flex;
   flex-direction: column;
