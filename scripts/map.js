@@ -1,8 +1,3 @@
-// This example requires the Places library. Include the libraries=places
-// parameter when you first load the API. For example:
-// <script
-// src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-
 function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
       mapTypeControl: false,
@@ -24,23 +19,19 @@ function initMap() {
     this.directionsService = new google.maps.DirectionsService;
     this.directionsRenderer = new google.maps.DirectionsRenderer;
     this.directionsRenderer.setMap(map);
+    this.directionsRenderer.setPanel(document.getElementById('bottom-panel'));
   
-    var originInput = document.getElementById('origin-input');
-    var destinationInput = document.getElementById('destination-input');
-    var modeSelector = document.getElementById('mode-selector');
+    let originInput = document.getElementById('origin-input');
+    let destinationInput = document.getElementById('destination-input');
   
-    var originAutocomplete = new google.maps.places.Autocomplete(originInput);
+    let originAutocomplete = new google.maps.places.Autocomplete(originInput);
     // Specify just the place data fields that you need.
     originAutocomplete.setFields(['place_id']);
   
-    var destinationAutocomplete =
+    let destinationAutocomplete =
         new google.maps.places.Autocomplete(destinationInput);
     // Specify just the place data fields that you need.
     destinationAutocomplete.setFields(['place_id']);
-  
-    this.setupClickListener('changemode-walking', 'WALKING');
-    this.setupClickListener('changemode-transit', 'TRANSIT');
-    this.setupClickListener('changemode-driving', 'DRIVING');
   
     this.setupPlaceChangedListener(originAutocomplete, 'ORIG');
     this.setupPlaceChangedListener(destinationAutocomplete, 'DEST');
@@ -48,22 +39,9 @@ function initMap() {
     this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(originInput);
     this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(
         destinationInput);
-    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(modeSelector);
   }
   
-  // Sets a listener on a radio button to change the filter type on Places
-  // Autocomplete.
-  AutocompleteDirectionsHandler.prototype.setupClickListener = function(
-      id, mode) {
-    var radioButton = document.getElementById(id);
-    var me = this;
-  
-    radioButton.addEventListener('click', function() {
-      me.travelMode = mode;
-      me.route();
-    });
-  };
-  
+  // Sets the autocomplete function when a user starts to type in the input box.
   AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function(
       autocomplete, mode) {
     var me = this;
@@ -98,10 +76,10 @@ function initMap() {
           travelMode: this.travelMode,
           provideRouteAlternatives: true,
         },
-        function(response, status) {
+        function(result, status) {
           if (status === 'OK') {
               
-            me.directionsRenderer.setDirections(response);
+            me.directionsRenderer.setDirections(result);
           } else {
             window.alert('Directions request failed due to ' + status);
           }
