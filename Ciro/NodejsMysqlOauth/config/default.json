@@ -1,0 +1,6 @@
+{
+  "clientID": "996411687423-42cbqfeu786fqe2rrf18kqf641f7u4ea.apps.googleusercontent.com",
+  "clientSecret": "Nou6L05tKPEKYf-cV6qGVi9Q",
+  "callbackURL": "http://localhost:1515/google/callback",
+  "mapURL": "AIzaSyB05M9WVnhk7NLh8gSFUxkiOVJecxU5tK0"
+}
