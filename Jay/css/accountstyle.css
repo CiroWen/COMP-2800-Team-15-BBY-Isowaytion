@@ -15,10 +15,50 @@ a {
   text-decoration: none;
 }
 
-nav {
+.headers {
+  color: #ff4858;
+  height: 20%;
+  text-align: center;
+}
+
+.logo {
+  height: 100%;
+  margin: 0;
+  margin-left: 30%;
+  padding: 0;
+  padding-top: 2.5rem;
+}
+
+.logo_box {
+  color: #ffffff;
   background-color: #ff4858;
-  color: white;
-  font-size: 20px;
+  border-radius: 0.5rem;
+}
+
+.top {
+  display: flex;
+  color: #ff4858;
+  height: 15%;
+  text-align: center;
+  padding-top: 2rem;
+  padding-left: 0.5rem;
+}
+
+.fas {
+  font-size: 2rem;
+  padding-top: 0.5rem;
+}
+
+.title {
+  flex: 1;
+  padding-right: 5%;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #495057;
+}
+
+h3 {
+  padding: 0 !important;
 }
 
 #bar {
