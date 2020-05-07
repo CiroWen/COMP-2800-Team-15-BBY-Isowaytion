@@ -3,7 +3,6 @@ function routing(path) {
   switch (path) {
     case "12":
     case "21":
-      list = [];
       list = [Route1, Route3, Route5];
       list.forEach((el) => {
         el.count++;
@@ -13,7 +12,6 @@ function routing(path) {
 
     case "13":
     case "31":
-      list = [];
       list = [Route2, Route3, Route5];
       list.forEach((el) => {
         el.count++;
@@ -23,7 +21,6 @@ function routing(path) {
 
     case "23":
     case "32":
-      list = [];
       list = [Route4, Route6, Route7];
       list.forEach((el) => {
         el.count++;
