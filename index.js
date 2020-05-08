@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express();
-      app.use(express.static('public'));
+app.use(express.static('public'));
 //cors is a middleware for Cross-origin resource sharing.
 //is used to enable the communication between the front end and back end from diff domains
 const bodyParser = require('body-parser')
@@ -42,7 +42,9 @@ app.get('/welcome', isLoggedIn, (req, res) => {
   res.send(`welcome ${req.user.displayName}<hr> ${req.user._json.email} `)
 })
 //display the return value of profile from passport-setup.js
-app.get('/', (req, res) => { res.render("pages/index"); })
+app.get('/', (req, res) => {
+  res.render("pages/index");
+})
 
 app.get('/failed', (req, res) => res.send('sorry you failed to login'))
 app.get('/index', (req, res) => res.send(`welcome to IsoWaytion `))
@@ -207,7 +209,7 @@ app.get("/", (req, res) => {
 app.get("/myAccount", isLoggedIn, (req, res) => {
   useremail = req.user._json.email;
   console.log(useremail);
-  con.query(`SELECT * FROM isowaytion WHERE email = '${useremail}'`, (err, rows) => { 
+  con.query(`SELECT * FROM isowaytion WHERE email = '${useremail}'`, (err, rows) => {
     if (err) throw err;
 
     console.log('Data received from isowaytion.');
@@ -282,33 +284,28 @@ app.post("/myAccount", (req, res) => {
 app.get("/leaderboard", isLoggedIn, (req, res) => {
   useremail = useremail = req.user._json.email;
 
-  //Grab user name
-  let getName = `SELECT isowaytion.Name FROM isowaytion WHERE email = '${useremail}'`;
-  con.query(getName, (err, name) => { 
+  // //Grab user name
+  // let getName = `SELECT isowaytion.Name FROM isowaytion WHERE email = '${useremail}'`;
+
+  //Grab name from query
+  // let username = name[0].Name;
+
+  //Grab points info from database
+  let getPoints = `SELECT * FROM reward ORDER BY reward.Points DESC;`
+
+  con.query(getPoints, (err, leaderboardData) => {
     if (err) throw err;
 
-    console.log('Data received from isowaytion.');
-    console.log(name[0].Name);
-
-    //Grab name from query
-    // let username = name[0].Name;
-
-    //Grab points info from database
-    let getPoints = `SELECT * FROM reward ORDER BY reward.Points DESC;`
-
-    con.query(getPoints, (err, leaderboardData) => {
-      if (err) throw err;
-
-      //Genereate array of leaderboard data from returned array of objects
-      let leaderboard = [];
-      leaderboardData.forEach(row => {
-        leaderboard.push(row.Email);
-        leaderboard.push(row.Points)
-      });
-      
-      //Load leaderboard page
-      res.render("pages/leaderboard", {userData: leaderboard});
+    //Genereate array of leaderboard data from returned array of objects
+    let leaderboard = [];
+    leaderboardData.forEach(row => {
+      leaderboard.push(row.Email);
+      leaderboard.push(row.Points)
     });
-    
+
+    //Load leaderboard page
+    res.render("pages/leaderboard", {
+      userData: leaderboard
+    });
   });
 });
