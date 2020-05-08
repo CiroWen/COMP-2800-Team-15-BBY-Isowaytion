@@ -6,31 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="/css/map.css">
-    <link rel="stylesheet" href="../css/bootstrap.min.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link rel="icon" href="/Images/favicon.ico" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
 </head>
-    <body>
-        <!-- NavBar -->
-        <div class="top">
-            <i class="fas fa-angle-left"></i>
-            <h3 class="logo"><span class="logo_box">Iso</span>waytion</h3>
-          </div>
-        </br>
-        <input id="origin-input" class="controls" type="text" placeholder="Enter an origin location">
 
-        <input id="destination-input" class="controls" type="text" placeholder="Enter a destination location">
+<body>
+    <!-- NavBar -->
+    <div class="top">
+        <a href="./myaccount.html"><b><img src="/Images/profile.png"></b></a>
+        <h3 class="logo"><span class="logo_box">Iso</span>waytion</h3>
+    </div>
+    <input id="origin-input" class="controls" type="text" placeholder="Enter an origin location">
 
-        <div id="map"></div>
-        <div id="bottom-panel"><h5>Directions</h5></div>
+    <input id="destination-input" class="controls" type="text" placeholder="Enter a destination location">
 
-        <script src="/scripts/map.js"></script>
-        <script
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB05M9WVnhk7NLh8gSFUxkiOVJecxU5tK0&libraries=places&callback=initMap"
-            async defer></script>
-        <!-- src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"> -->
-    </body>
+    <div id="map"></div>
+    <div id="bottom-panel">
+        <h5>Directions</h5>
+    </div>
+
+    <script src="/scripts/map.js"></script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB05M9WVnhk7NLh8gSFUxkiOVJecxU5tK0&libraries=places&callback=initMap"
+        async defer></script>
+    <script src="https://kit.fontawesome.com/df012b2a98.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+</body>
+
 </html>

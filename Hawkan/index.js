@@ -39,7 +39,7 @@ app.get('/welcome', isLoggedIn, (req, res) => {
   res.send(`welcome ${req.user.displayName}<hr> ${req.user._json.email} `)
 })
 //display the return value of profile from passport-setup.js
-app.get('/', (req, res) => res.send('<p>Ciro testing</p><a href=localhost:1515/google>to login page/google</a><br><a href=localhost:1515/logout>to logout/logout</a>'))
+app.get('/', (req, res) => { res.render("pages/index"); })
 
 app.get('/failed', (req, res) => res.send('sorry you failed to login'))
 app.get('/index', (req, res) => res.send(`welcome to IsoWaytion `))
@@ -198,7 +198,7 @@ app.use(express.urlencoded({
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  res.render("/pages/index");
+  res.render("pages/index");
 });
 
 app.get("/myAccount", isLoggedIn, (req, res) => {
