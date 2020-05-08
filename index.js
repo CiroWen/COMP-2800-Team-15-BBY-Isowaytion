@@ -210,11 +210,6 @@ app.get("/", (req, res) => {
   res.render('pages/isostats');
  });
 
- // Send to leaderboard page
- app.get('/leaderboard', (req, res) => {
-  res.render('pages/leaderboard');
- });
-
  // Send to about us page
 app.get('/aboutus', function(req, res) {
   res.sendFile(path.join( __dirname + "/views/aboutus.html"));
