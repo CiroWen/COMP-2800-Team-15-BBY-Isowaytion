@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express();
-app.use(express.static('public'));
+const path = require('path');
+const router = express.Router();
 //cors is a middleware for Cross-origin resource sharing.
 //is used to enable the communication between the front end and back end from diff domains
 const bodyParser = require('body-parser')
@@ -21,8 +22,9 @@ const isLoggedIn = (req, res, next) => {
   }
 }
 
-
+app.use(express.static('public'));
 // app.use(cors())
+app.use('/', router);
 
 app.use(bodyParser.urlencoded({
   extended: false
@@ -40,12 +42,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.get('/welcome', isLoggedIn, (req, res) => {
   useremail = req.user._json.email;
-  res.send(`welcome ${req.user.displayName}<hr> ${req.user._json.email} `)
-})
-//display the return value of profile from passport-setup.js
-app.get('/', (req, res) => {
-  res.render("pages/index");
-})
+  res.sendFile("pages/index.html");
+});
 
 app.get('/failed', (req, res) => res.send('sorry you failed to login'))
 app.get('/index', (req, res) => res.send(`welcome to IsoWaytion `))
@@ -207,6 +205,41 @@ app.get("/", (req, res) => {
   res.render("pages/index");
 });
 
+app.get('/editInfo', (req, res) => {
+  res.render('editInfo');
+ });
+
+ // Send to edit info page
+ app.get('/editInfo', (req, res) => {
+  res.render('editInfo');
+ });
+
+ // Send to isostats page
+ app.get('/isostats', (req, res) => {
+  res.render('isostats');
+ });
+
+ // Send to leaderboard page
+ app.get('/leaderboard', (req, res) => {
+  res.render('isostats');
+ });
+
+ // Send to about us page
+app.get('/aboutus', function(req, res) {
+  res.sendFile(path.join( __dirname + "/views/aboutus.html"));
+})
+
+// Send to Map page.
+app.get('/map', function(req, res) {
+  res.sendFile(path.join( __dirname + "/views/map.html"));
+})
+
+// Add the router
+app.use(express.static(__dirname + '/view'));
+//Store all HTML files in view folder.
+app.use(express.static(__dirname + '/script'));
+//Store all JS and CSS in Scripts folder.
+
 app.get("/myAccount", isLoggedIn, (req, res) => {
   useremail = req.user._json.email;
   console.log(useremail);
@@ -310,3 +343,25 @@ app.get("/leaderboard", isLoggedIn, (req, res) => {
     });
   });
 });
+
+
+// // Check mySQL for corrent information
+// app.post('/auth', function(request, response) {
+// 	var username = request.body.username;
+// 	var password = request.body.password;
+// 	if (username && password) {
+// 		connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
+// 			if (results.length > 0) {
+// 				request.session.loggedin = true;
+// 				request.session.username = username;
+// 				response.redirect('/home');
+// 			} else {
+// 				response.send('Incorrect Username and/or Password!');
+// 			}			
+// 			response.end();
+// 		});
+// 	} else {
+// 		response.send('Please enter Username and Password!');
+// 		response.end();
+// 	}
+// });
