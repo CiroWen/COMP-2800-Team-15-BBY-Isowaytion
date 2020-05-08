@@ -274,7 +274,7 @@ app.post("/editInfo", (req, res) => {
   let newAddress = userData.address;
 
   //Update name field
-  if (newName != '' || newName != undefined) {
+  if (newName != '' && newName != undefined) {
     var sql = `UPDATE isowaytion SET name = '${newName}' WHERE email = '${currentInfo[0]}'`;
     con.query(sql, function (err, result) {
       if (err) throw err;
@@ -292,18 +292,18 @@ app.post("/editInfo", (req, res) => {
   }
 
   //Show updated info
-  if (newName != '' && newAddress != '') {
+  if (newName != '' && newAddress != '' && newName != undefined && newAddress != undefined) {
 
     //update name and address in current info array
     currentInfo[1] = newName;
     currentInfo[2] = newAddress;
 
-    //If name field empty
-  } else if (newName != '' && newAddress == '') {
+    //If address field empty
+  } else if ((newName != '' && newName != undefined) && (newAddress == '' || newAddress == undefined)) {
     currentInfo[1] = newName;
 
-    //If address field empty
-  } else if (newName == '' && newAddress != '') {
+    //If name field empty
+  } else if ((newName == '' || newName == undefined) && (newAddress != '' && newAddress != undefined)) {
     currentInfo[2] = newAddress;
   }
   res.render("pages/editInfo", {
