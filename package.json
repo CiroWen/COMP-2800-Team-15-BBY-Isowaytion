@@ -18,6 +18,9 @@
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "engines": {
+    "node": "12.16.x"
+  },
   "author": "TeamHorton",
   "license": "ISC",
   "repository": {
