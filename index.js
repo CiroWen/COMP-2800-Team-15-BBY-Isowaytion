@@ -44,20 +44,6 @@ app.get('/welcome', isLoggedIn, (req, res) => {
   res.sendFile("pages/index.html");
 });
 
-app.get('/aboutus', function(req, res) {
-  res.sendFile(path.join( __dirname + "/views/aboutus.html"));
-})
-
-app.get('/map', function(req, res) {
-  res.sendFile(path.join( __dirname + "/views/map.html"));
-})
-
-// Add the router
-app.use(express.static(__dirname + '/view'));
-//Store all HTML files in view folder.
-app.use(express.static(__dirname + '/script'));
-//Store all JS and CSS in Scripts folder.
-
 app.get('/failed', (req, res) => res.send('sorry you failed to login'))
 app.get('/index', (req, res) => res.send(`welcome to IsoWaytion `))
 
@@ -217,6 +203,39 @@ app.set("view engine", "ejs");
 app.get("/", (req, res) => {
   res.render("pages/index");
 });
+
+app.get('/editInfo', (req, res) => {
+  res.render('editInfo');
+ });
+
+ // Send to edit info page
+ app.get('/editInfo', (req, res) => {
+  res.render('editInfo');
+ });
+
+ // Send to isostats page
+ app.get('/isostats', (req, res) => {
+  res.render('isostats');
+ });
+
+ // Send to leaderboard page
+ app.get('/leaderboard', (req, res) => {
+  res.render('isostats');
+ });
+
+app.get('/aboutus', function(req, res) {
+  res.sendFile(path.join( __dirname + "/views/aboutus.html"));
+})
+
+app.get('/map', function(req, res) {
+  res.sendFile(path.join( __dirname + "/views/map.html"));
+})
+
+// Add the router
+app.use(express.static(__dirname + '/view'));
+//Store all HTML files in view folder.
+app.use(express.static(__dirname + '/script'));
+//Store all JS and CSS in Scripts folder.
 
 app.get("/myAccount", isLoggedIn, (req, res) => {
   useremail = req.user._json.email;
