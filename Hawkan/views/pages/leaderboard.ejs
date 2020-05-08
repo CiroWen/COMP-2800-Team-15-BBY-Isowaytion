@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>IsoWaytion - Leaderboard</title>
     <!-- Style Links -->
-    <link rel="stylesheet" type="text/css" href="/css/leaderboard.css">
-    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/leaderboard.css">
+    <link rel="stylesheet" href="/bootstrap.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
     <link rel="icon" href="../Images/favicon.ico" />
 </head>
@@ -23,11 +23,20 @@
 
         <div class="info">
             <ul>
-                <% for (var i = 0; i < 10;  i++ ) { %>
+                <% if (userData.length / 2 < 10) { %>
+                    <% for (var i = 0; i < userData.length;  i += 2 ) { %>
                     <div id="info1">
-                        <li id="title"><b><%= userName %></b></li> whatever
-                        <li id="points"><b><%= userPoints[i] %></b></li>
+                        <li id="title"><b><%= userData[i] %></b></li> 
+                        <li id="points"><b><%= userData[i + 1] %></b></li>
                     </div>
+                    <% } %>
+                <% } else { %>
+                    <% for (var i = 0; i < 10;  i += 2 ) { %>
+                        <div id="info1">
+                            <li id="title"><b><%= userData[i] %></b></li> 
+                            <li id="points"><b><%= userData[i + 1] %></b></li>
+                        </div>
+                    <% } %>
                 <% } %>
             </ul>
         </div>

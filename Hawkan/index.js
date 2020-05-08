@@ -1,5 +1,6 @@
 const express = require('express')
-const app = express()
+const app = express();
+      app.use(express.static('public'));
 //cors is a middleware for Cross-origin resource sharing.
 //is used to enable the communication between the front end and back end from diff domains
 const bodyParser = require('body-parser')
@@ -8,6 +9,8 @@ const cookieSession = require('cookie-session')
 const email = require(`./passport-setup`)
 require(`./passport-setup`)
 const mysql = require(`mysql`)
+
+
 
 const isLoggedIn = (req, res, next) => {
   if (req.user) {
@@ -204,7 +207,7 @@ app.get("/", (req, res) => {
 app.get("/myAccount", isLoggedIn, (req, res) => {
   useremail = req.user._json.email;
   console.log(useremail);
-  con.query(`SELECT * FROM isowaytion WHERE email = '${useremail}'`, (err, rows) => { //need to implement current user email
+  con.query(`SELECT * FROM isowaytion WHERE email = '${useremail}'`, (err, rows) => { 
     if (err) throw err;
 
     console.log('Data received from isowaytion.');
@@ -270,3 +273,42 @@ app.post("/myAccount", (req, res) => {
 //   if (err) throw err;
 //   console.log("1 record inserted");
 // });
+
+
+/*******************************************
+ * Express server side, LEADERBOARDS
+ */
+
+app.get("/leaderboard", isLoggedIn, (req, res) => {
+  useremail = useremail = req.user._json.email;
+
+  //Grab user name
+  let getName = `SELECT isowaytion.Name FROM isowaytion WHERE email = '${useremail}'`;
+  con.query(getName, (err, name) => { 
+    if (err) throw err;
+
+    console.log('Data received from isowaytion.');
+    console.log(name[0].Name);
+
+    //Grab name from query
+    // let username = name[0].Name;
+
+    //Grab points info from database
+    let getPoints = `SELECT * FROM reward ORDER BY reward.Points DESC;`
+
+    con.query(getPoints, (err, leaderboardData) => {
+      if (err) throw err;
+
+      //Genereate array of leaderboard data from returned array of objects
+      let leaderboard = [];
+      leaderboardData.forEach(row => {
+        leaderboard.push(row.Email);
+        leaderboard.push(row.Points)
+      });
+      
+      //Load leaderboard page
+      res.render("pages/leaderboard", {userData: leaderboard});
+    });
+    
+  });
+});
