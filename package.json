@@ -1,8 +1,8 @@
 {
-  "name": "hawkan",
+  "name": "isowaytion",
   "version": "1.0.0",
   "description": "",
-  "main": "account.js",
+  "main": "index.js",
   "dependencies": {
     "body-parser": "^1.19.0",
     "cookie-session": "^1.4.0",
@@ -15,8 +15,9 @@
   },
   "devDependencies": {},
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "TeamHorton",
   "license": "ISC"
 }
