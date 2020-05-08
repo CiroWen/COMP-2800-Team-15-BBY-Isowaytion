@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account</title>
+</head>
+<body>
+    <form action="/account" method="post">
+        <h1>Email: <%= currentInfo[0] %></h1>
+        <h1>Username: <%= currentInfo[1] %></h1>
+        <input type="text" name="username" placeholder="New username"></br>
+        <h1>Address: <%= currentInfo[2] %></h1>
+        <input type="text" name="address" placeholder="New address"></br>
+        <input id="name" type="submit" value="Edit"></br>
+        <!-- <input id="email" type="submit" value="Edit"></br>
+        <input type="text" name="email" value=""></br>
+        <input id="email" type="submit" value="Edit"> -->
+    </form>
+</body>
+</html>
