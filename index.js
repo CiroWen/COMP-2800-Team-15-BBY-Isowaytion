@@ -4,7 +4,7 @@ const path = require('path');
 const router = express.Router();
 //cors is a middleware for Cross-origin resource sharing.
 //is used to enable the communication between the front end and back end from diff domains
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 const passport = require(`passport`)
 const cookieSession = require('cookie-session')
 const email = require(`./passport-setup`)
@@ -28,10 +28,14 @@ app.use('/', router);
 
 app.use(bodyParser.urlencoded({
   extended: false
-}))
+}));
 
 app.use(bodyParser.json());
 
+app.use(express.urlencoded({
+  extended: true
+}));
+app.set("view engine", "ejs");
 
 app.use(cookieSession({
   name: 'Ciro\'s cookies',
@@ -196,10 +200,6 @@ var con = mysql.createConnection({
 /*******************************************
  * Express server side
  */
-app.use(express.urlencoded({
-  extended: true
-}));
-app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
   res.sendFile(path.join( __dirname + "/views/signin.html"));
