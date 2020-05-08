@@ -269,12 +269,12 @@ app.get("/editInfo", isLoggedIn, (req, res) => {
 
 app.post("/editInfo", (req, res) => {
   let userData = req.body;
-  console.log(userData);
+  console.log("This is the userdata: " + userData);
   let newName = userData.username;
   let newAddress = userData.address;
 
   //Update name field
-  if (newName != '') {
+  if (newName != '' || newName != undefined) {
     var sql = `UPDATE isowaytion SET name = '${newName}' WHERE email = '${currentInfo[0]}'`;
     con.query(sql, function (err, result) {
       if (err) throw err;
@@ -283,7 +283,7 @@ app.post("/editInfo", (req, res) => {
   }
 
   //Update address field
-  if (newAddress != '') {
+  if (newAddress != '' && newAddress != undefined) {
     var sql = `UPDATE isowaytion SET address = '${newAddress}' WHERE email = '${currentInfo[0]}'`;
     con.query(sql, function (err, result) {
       if (err) throw err;
