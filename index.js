@@ -223,10 +223,12 @@ app.get('/editInfo', (req, res) => {
   res.render('isostats');
  });
 
+ // Send to about us page
 app.get('/aboutus', function(req, res) {
   res.sendFile(path.join( __dirname + "/views/aboutus.html"));
 })
 
+// Send to Map page.
 app.get('/map', function(req, res) {
   res.sendFile(path.join( __dirname + "/views/map.html"));
 })
