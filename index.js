@@ -170,7 +170,7 @@ db.query(`SELECT email FROM c1 WHERE Name = \"ciro\"`, (err, results) => {
 
 // })
 
-app.listen(port, () => console.log(`ciro listening on ${port} ctrl + c to quit, visit localhost:1515 to test`))
+app.listen(port, () => console.log(`ciro listening on ${port} ctrl + c to quit, visit localhost:1515 to test`));
 
 /*********************************************************************************************************************************************
  * Account Page Server JS
