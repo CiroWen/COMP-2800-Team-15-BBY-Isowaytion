@@ -168,7 +168,7 @@ db.query(`SELECT email FROM c1 WHERE Name = \"ciro\"`, (err, results) => {
 
 // })
 
-app.listen(port, () => console.log(`ciro listening on ${port} ctrl + c to quit, visit localhost:1515 to test`));
+app.listen(port, () => console.log(`ciro listening on ${port} ctrl + c to quit, visit localhost:5000 to test`));
 
 /*********************************************************************************************************************************************
  * Account Page Server JS
@@ -202,17 +202,8 @@ app.use(express.urlencoded({
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  res.render("pages/index");
+  res.sendFile(path.join( __dirname + "/views/signin.html"));
 });
-
-app.get('/editInfo', (req, res) => {
-  res.render('editInfo');
- });
-
- // Send to edit info page
- app.get('/editInfo', (req, res) => {
-  res.render('editInfo');
- });
 
  // Send to isostats page
  app.get('/isostats', (req, res) => {
@@ -258,7 +249,25 @@ app.get("/myAccount", isLoggedIn, (req, res) => {
   });
 });
 
-app.post("/myAccount", (req, res) => {
+app.get("/editInfo", isLoggedIn, (req, res) => {
+  useremail = req.user._json.email;
+  console.log("This is the email" + useremail);
+  con.query(`SELECT * FROM isowaytion WHERE email = '${useremail}'`, (err, rows) => {
+    if (err) throw err;
+
+    console.log('Data received from isowaytion.');
+    console.log(rows);
+    //Store in user info array, {email, name, address}
+    currentInfo = [rows[0].Email, rows[0].Name, rows[0].Address];
+
+    //pass info to edit info page when rendered
+    res.render("pages/editInfo", {
+      currentInfo: currentInfo
+    });
+  });
+});
+
+app.post("/editInfo", (req, res) => {
   let userData = req.body;
   console.log(userData);
   let newName = userData.username;
