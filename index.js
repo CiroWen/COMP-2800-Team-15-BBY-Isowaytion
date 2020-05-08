@@ -207,12 +207,12 @@ app.get("/", (req, res) => {
 
  // Send to isostats page
  app.get('/isostats', (req, res) => {
-  res.render('isostats');
+  res.render('pages/isostats');
  });
 
  // Send to leaderboard page
  app.get('/leaderboard', (req, res) => {
-  res.render('isostats');
+  res.render('pages/leaderboard');
  });
 
  // Send to about us page
@@ -275,7 +275,7 @@ app.post("/editInfo", (req, res) => {
 
   console.log(newName);
   console.log(newAddress);
-  
+
   //Update name field
   if (newName != '' && newName != undefined) {
     var sql = `UPDATE isowaytion SET name = '${newName}' WHERE email = '${currentInfo[0]}'`;
