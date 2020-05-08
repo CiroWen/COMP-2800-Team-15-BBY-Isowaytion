@@ -1,6 +1,5 @@
 const express = require('express')
 const app = express()
-const cors = require('cors')
 //cors is a middleware for Cross-origin resource sharing.
 //is used to enable the communication between the front end and back end from diff domains
 const bodyParser = require('body-parser')
@@ -199,10 +198,10 @@ app.use(express.urlencoded({
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  res.render("pages/index");
+  res.render("/pages/index");
 });
 
-app.get("/account", isLoggedIn, (req, res) => {
+app.get("/myAccount", isLoggedIn, (req, res) => {
   useremail = req.user._json.email;
   console.log(useremail);
   con.query(`SELECT * FROM isowaytion WHERE email = '${useremail}'`, (err, rows) => { //need to implement current user email
@@ -214,13 +213,13 @@ app.get("/account", isLoggedIn, (req, res) => {
     currentInfo = [rows[0].Email, rows[0].Name, rows[0].Address];
 
     //pass info to account page when rendered
-    res.render("pages/account", {
+    res.render("pages/myAccount", {
       currentInfo: currentInfo
     });
   });
 });
 
-app.post("/account", (req, res) => {
+app.post("/myAccount", (req, res) => {
   let userData = req.body;
   console.log(userData);
   let newName = userData.username;
@@ -259,7 +258,7 @@ app.post("/account", (req, res) => {
   } else if (newName == '' && newAddress != '') {
     currentInfo[2] = newAddress;
   }
-  res.render("pages/account", {
+  res.render("pages/editInfo", {
     currentInfo: currentInfo
   });
 

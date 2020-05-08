@@ -44,7 +44,7 @@ nav {
 
 .outer {
   display: grid;
-  grid-template-rows: 1fr 4fr;
+  grid-template-rows: 1fr;
   padding-top: 2em;
 }
 
@@ -56,7 +56,6 @@ nav {
   display: grid;
   border-radius: 10px;
   margin: 10px;
-  height: 300px;
   padding-right: 40px;
 }
 
@@ -69,51 +68,6 @@ nav {
 }
 
 #info1:hover {
-  border-color: #ff4858;
-  border-bottom-style: solid;
-  border-width: thick;
-  border-radius: 10px;
-}
-
-#info2 {
-  display: flex;
-  padding: 5px;
-  border-color: rgb(199, 199, 199);
-  border-bottom-style: solid;
-  border-width: thin;
-}
-
-#info2:hover {
-  border-color: #ff4858;
-  border-bottom-style: solid;
-  border-width: thick;
-  border-radius: 10px;
-}
-
-#info3 {
-  display: flex;
-  padding: 5px;
-  border-color: rgb(199, 199, 199);
-  border-bottom-style: solid;
-  border-width: thin;
-}
-
-#info3:hover {
-  border-color: #ff4858;
-  border-bottom-style: solid;
-  border-width: thick;
-  border-radius: 10px;
-}
-
-#info4 {
-  display: flex;
-  padding: 5px;
-  border-color: rgb(199, 199, 199);
-  border-bottom-style: solid;
-  border-width: thin;
-}
-
-#info4:hover {
   border-color: #ff4858;
   border-bottom-style: solid;
   border-width: thick;
