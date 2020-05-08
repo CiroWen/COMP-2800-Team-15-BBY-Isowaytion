@@ -226,7 +226,8 @@ app.use(express.static(__dirname + '/view'));
 app.use(express.static(__dirname + '/script'));
 //Store all JS and CSS in Scripts folder.
 
-app.get("/myAccount", isLoggedIn, (req, res) => {
+// app.get("/myAccount", isLoggedIn, (req, res) => {
+app.get("/myAccount", (req, res) => {
   useremail = req.user._json.email;
   console.log(useremail);
   con.query(`SELECT * FROM isowaytion WHERE email = '${useremail}'`, (err, rows) => {
@@ -244,7 +245,8 @@ app.get("/myAccount", isLoggedIn, (req, res) => {
   });
 });
 
-app.get("/editInfo", isLoggedIn, (req, res) => {
+//app.get("/editInfo", isLoggedIn, (req, res) => {
+app.get("/editInfo", (req, res) => {
   useremail = req.user._json.email;
   console.log("This is the email" + useremail);
   con.query(`SELECT * FROM isowaytion WHERE email = '${useremail}'`, (err, rows) => {
@@ -322,7 +324,8 @@ app.post("/editInfo", (req, res) => {
  * Express server side, LEADERBOARDS
  */
 
-app.get("/leaderboard", isLoggedIn, (req, res) => {
+//app.get("/leaderboard", isLoggedIn, (req, res) => {
+app.get("/leaderboard", (req, res) => {
   useremail = useremail = req.user._json.email;
 
   // //Grab user name
@@ -353,22 +356,22 @@ app.get("/leaderboard", isLoggedIn, (req, res) => {
 
 
 // // Check mySQL for corrent information
-// app.post('/auth', function(request, response) {
-// 	var username = request.body.username;
-// 	var password = request.body.password;
-// 	if (username && password) {
-// 		connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
-// 			if (results.length > 0) {
-// 				request.session.loggedin = true;
-// 				request.session.username = username;
-// 				response.redirect('/home');
-// 			} else {
-// 				response.send('Incorrect Username and/or Password!');
-// 			}			
-// 			response.end();
-// 		});
-// 	} else {
-// 		response.send('Please enter Username and Password!');
-// 		response.end();
-// 	}
-// });
+app.post('/auth', function(request, response) {
+	var username = request.body.username;
+	var password = request.body.password;
+	if (username && password) {
+		connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
+			if (results.length > 0) {
+				request.session.loggedin = true;
+				request.session.username = username;
+				response.redirect('/home');
+			} else {
+				response.send('Incorrect Username and/or Password!');
+			}			
+			response.end();
+		});
+	} else {
+		response.send('Please enter Username and Password!');
+		response.end();
+	}
+});
