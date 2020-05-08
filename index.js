@@ -268,11 +268,14 @@ app.get("/editInfo", isLoggedIn, (req, res) => {
 });
 
 app.post("/editInfo", (req, res) => {
-  let userData = req.body;
-  console.log("This is the userdata: " + userData);
+  let userData = req.body;  
+  console.log("TEST");
   let newName = userData.username;
   let newAddress = userData.address;
 
+  console.log(newName);
+  console.log(newAddress);
+  
   //Update name field
   if (newName != '' && newName != undefined) {
     var sql = `UPDATE isowaytion SET name = '${newName}' WHERE email = '${currentInfo[0]}'`;
