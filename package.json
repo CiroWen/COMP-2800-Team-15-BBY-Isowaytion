@@ -19,5 +19,13 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "TeamHorton",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CiroGuangchengWen/COMP-2800-Team-15-BBY-Isowaytion.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CiroGuangchengWen/COMP-2800-Team-15-BBY-Isowaytion/issues"
+  },
+  "homepage": "https://github.com/CiroGuangchengWen/COMP-2800-Team-15-BBY-Isowaytion#readme"
 }
