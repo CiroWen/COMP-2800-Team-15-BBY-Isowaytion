@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express();
-app.use(express.static('public'));
+const path = require('path');
+const router = express.Router();
 //cors is a middleware for Cross-origin resource sharing.
 //is used to enable the communication between the front end and back end from diff domains
 const bodyParser = require('body-parser')
@@ -20,8 +21,9 @@ const isLoggedIn = (req, res, next) => {
   }
 }
 
-
+app.use(express.static('public'));
 // app.use(cors())
+app.use('/', router);
 
 app.use(bodyParser.urlencoded({
   extended: false
@@ -39,12 +41,27 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.get('/welcome', isLoggedIn, (req, res) => {
   useremail = req.user._json.email;
-  res.send(`welcome ${req.user.displayName}<hr> ${req.user._json.email} `)
-})
+  res.sendFile("pages/index.html");
+});
+
 //display the return value of profile from passport-setup.js
-app.get('/', (req, res) => {
-  res.render("pages/index");
+app.get('/', function(req, res) {
+  res.sendFile(path.join( __dirname + "/views/signin.html"));
 })
+
+app.get('/aboutus', function(req, res) {
+  res.sendFile(path.join( __dirname + "/views/aboutus.html"));
+})
+
+app.get('/map', function(req, res) {
+  res.sendFile(path.join( __dirname + "/views/map.html"));
+})
+
+// Add the router
+app.use(express.static(__dirname + '/view'));
+//Store all HTML files in view folder.
+app.use(express.static(__dirname + '/script'));
+//Store all JS and CSS in Scripts folder.
 
 app.get('/failed', (req, res) => res.send('sorry you failed to login'))
 app.get('/index', (req, res) => res.send(`welcome to IsoWaytion `))
