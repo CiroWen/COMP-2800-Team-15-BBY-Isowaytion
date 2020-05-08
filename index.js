@@ -10,7 +10,8 @@ const email = require(`./passport-setup`)
 require(`./passport-setup`)
 const mysql = require(`mysql`)
 
-
+//set port
+var port = process.env.PORT || 8080
 
 const isLoggedIn = (req, res, next) => {
   if (req.user) {
@@ -169,7 +170,7 @@ db.query(`SELECT email FROM c1 WHERE Name = \"ciro\"`, (err, results) => {
 
 // })
 
-app.listen(5000, () => console.log(`ciro listening on ${5000} ctrl + c to quit, visit localhost:1515 to test`))
+app.listen(port, () => console.log(`ciro listening on ${port} ctrl + c to quit, visit localhost:1515 to test`))
 
 /*********************************************************************************************************************************************
  * Account Page Server JS
