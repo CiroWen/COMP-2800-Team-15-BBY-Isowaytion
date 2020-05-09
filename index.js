@@ -1,5 +1,7 @@
-const express = require('express')
+const express = require('express');
 const app = express();
+      app.use(express.urlencoded({extended: true}));
+      app.use(express.static('public'));
 const path = require('path');
 const router = express.Router();
 //cors is a middleware for Cross-origin resource sharing.
@@ -9,7 +11,7 @@ const passport = require(`passport`)
 const cookieSession = require('cookie-session')
 const email = require(`./passport-setup`)
 require(`./passport-setup`)
-const mysql = require(`mysql`)
+const mysql = require(`mysql`);
 
 //set port
 var port = process.env.PORT || 8080
@@ -22,19 +24,18 @@ const isLoggedIn = (req, res, next) => {
   }
 }
 
-app.use(express.static('public'));
-// app.use(cors())
-app.use('/', router);
 
+// app.use(cors())
+
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: false
 }));
 
-app.use(bodyParser.json());
+app.use('/', router);
 
-app.use(express.urlencoded({
-  extended: true
-}));
+
+
 app.set("view engine", "ejs");
 
 app.use(cookieSession({
@@ -172,7 +173,7 @@ db.query(`SELECT email FROM c1 WHERE Name = \"ciro\"`, (err, results) => {
 
 // })
 
-app.listen(port, () => console.log(`ciro listening on ${port} ctrl + c to quit, visit localhost:5000 to test`));
+app.listen(port, () => console.log(`ciro listening on ${port} ctrl + c to quit, visit localhost:${port} to test`));
 
 /*********************************************************************************************************************************************
  * Account Page Server JS
@@ -266,7 +267,7 @@ app.get("/editInfo", (req, res) => {
 
 app.post("/editInfo", (req, res) => {
   let userData = req.body;  
-  console.log("TEST");
+  console.log(userData);
   let newName = userData.username;
   let newAddress = userData.address;
 
