@@ -9,6 +9,17 @@ const passport = require(`passport`)
 const cookieSession = require('cookie-session')
 require(`./passport-setup`)
 const mysql = require(`mysql`);
+const isLoggedIn = (req, res, next) => {
+  if (req.user) {
+    next();
+  } else {
+    res.sendStatus(401);
+  }
+}
+//set port
+var port = process.env.PORT || 1515
+
+//*******************consts/vars/lets declared above********************* */
 // app.use(cors())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -23,13 +34,6 @@ app.use(cookieSession({
 app.use(passport.initialize());
 app.use(passport.session());
 
-const isLoggedIn = (req, res, next) => {
-  if (req.user) {
-    next();
-  } else {
-    res.sendStatus(401);
-  }
-}
 
 app.get('/welcome', isLoggedIn, (req, res) => {
   useremail = req.user._json.email;
@@ -39,8 +43,6 @@ app.get('/welcome', isLoggedIn, (req, res) => {
 });
 
 
-//set port
-var port = process.env.PORT || 1515
 
 app.get('/failed', (req, res) => res.send('sorry you failed to login'))
 app.get('/index', (req, res) => res.send(`welcome to IsoWaytion `))
@@ -140,12 +142,6 @@ app.get('/usercreating', (req, res) => {
 
 
 
-
-// app.listen('1515', ()=>{
-//     console.log('Ciro is listening again on 1515, ctrl + c to escape, visit localhost:1515 to test');
-
-// })
-
 app.listen(port, () => console.log(`ciro listening on ${port} ctrl + c to quit, visit localhost:${port} to test`));
 
 /*********************************************************************************************************************************************
@@ -162,12 +158,12 @@ let currentInfo = new Array(LENGTH);
  */
 
 
-// var con = mysql.createConnection({
-//   host: "205.250.9.115",
-//   user: "root",
-//   password: "123",
-//   database: "isowaytion"
-// });
+var con = mysql.createConnection({
+  host: "205.250.9.115",
+  user: "root",
+  password: "123",
+  database: "isowaytion"
+});
 
 // app.listen(1515, () => console.log(`Hawkan listening on ${1515}`));
 
