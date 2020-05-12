@@ -32,37 +32,75 @@
             <ul>
                 <div id="info1">
                     <li id="title"><b>Points</b></li>
-                    <li id="points"><b>79</b></li>
+                    <li id="points"><b>
+                        <!-- determine where this stat will be in database -->
+                        <%= userData[i] %>
+                    </b></li>
                 </div>
                 <div id="info2">
                     <li id="title"><b>Number of Routes</b></li>
-                    <li id="points"><b>13</b></li>
+                    <li id="points"><b>
+                        <!-- determine where this stat will be in database -->
+                        <%= userData[i] %>
+                    </b></li>
                 </div>
                 <div id="info3">
                     <li id="title"><b>Days with Zero Contact</b></li>
-                    <li id="points"><b>4</b></li>
-                </div>
-                <div id="info4">
-                    <li id="title"><b>Rank Among Friends</b></li>
-                    <li id="points"><b>3</b></li>
+                    <li id="points"><b>
+                        <!-- determine where this stat will be in database -->
+                        <%= userData[i] %>
+                    </b></li>
                 </div>
             </ul>
             <ul id="stars">
-                <li>
-                    <img src="../Images/star.png">
-                </li>
-                <li>
-                    <img src="../Images/star.png">
-                </li>
-                <li>
-                    <img src="../Images/star.png">
-                </li>
-                <li>
-                    <img src="../Images/star.png">
-                </li>
-                <li>
-                    <img src="../Images/star.png">
-                </li>
+                <% if (userData[i] < 10) { %>
+                        <li>
+                            <img src="../Images/star.png">
+                        </li>
+                    <% } %> else if (userData[i] >= 10 && userData[i] < 20) { %>
+                        <li>
+                            <img src="../Images/star.png">
+                        </li>
+                        <li>
+                            <img src="../Images/star.png">
+                        </li>
+                    <% } %> else if (userData[i] >= 20 && userData[i] < 30) { %>
+                        <li>
+                            <img src="../Images/star.png">
+                        </li>
+                        <li>
+                            <img src="../Images/star.png">
+                        </li>
+                        <li>
+                            <img src="../Images/star.png">
+                        </li>
+                    <% } %> else if (userData[i] >= 30 && userData[i] < 50) { %>
+                        <li>
+                            <img src="../Images/star.png">
+                        </li>
+                        <li>
+                            <img src="../Images/star.png">
+                        </li>
+                        <li>
+                            <img src="../Images/star.png">
+                        </li>
+                        <li>
+                            <img src="../Images/star.png">
+                        </li>
+                    <% } %> else if (userData[i] >= 50) { %>
+                        <li>
+                            <img src="../Images/star.png">
+                        </li>
+                        <li>
+                             <img src="../Images/star.png">
+                        </li>
+                        <li>
+                            <img src="../Images/star.png">
+                        </li>
+                        <li>
+                            <img src="../Images/star.png">
+                        </li>
+                <% } %>
             </ul>
         </div>
         <div id="message">
