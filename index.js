@@ -84,16 +84,6 @@ app.get('/logout', (req, res) => {
 //connection for db. google `mpm mysql` for more info
 
 
-//initial connection
-// db.connect((err) => {
-//   if (err) {
-//     throw err;
-//   }
-//   console.log('db is connected');
-//   //ciro is connected
-// });
-
-
 // app.get(`/tabletable`, (req, res) => {
 //   let query1 = 'CREATE TABLE c1(Email VARCHAR(100), Name VARCHAR(100), Address VARCHAR(100), PRIMARY KEY (Email))'
 //   //this is mysql command/syntax. all capital letter is the db reserved syntax
@@ -124,6 +114,7 @@ app.get('/logout', (req, res) => {
 // })
 
 //creating a user in our database.
+//just for testing and demo purpose
 app.get('/usercreating', (req, res) => {
   let value = {
     Email: useremail,
@@ -161,20 +152,65 @@ let currentInfo = new Array(LENGTH);
 /******************************************
  * Accessing user database
  */
-
-
-var con = mysql.createConnection({
-  host: "205.250.9.115",
-  user: "root",
-  password: "123",
-  database: "isowaytion"
+//Ciro's local mysql for testing purpose.
+const con = mysql.createConnection({
+  host     : 'localhost',
+  //where the info is hoste
+  user     : 'root',
+  //the user name of db
+  password : 'isowaytion15',
+  //the pswd for user
+  database : 'isowaytion'
+  //name of db
 });
+
+// initial connection
+con.connect((err) => {
+  if (err) {
+    throw err;
+  }
+  console.log('db is connected');
+  //ciro is connected
+});
+
+
+con.query(`select * from user`,(req,res)=>{
+  // console.log(res);
+  console.log(res[0]);
+  console.log(res[0].Email);
+})
+// var con = mysql.createConnection({
+//   host: "205.250.9.115",
+//   user: "root",
+//   password: "123",
+//   database: "isowaytion"
+// });
 
 // app.listen(1515, () => console.log(`Hawkan listening on ${1515}`));
 
 /*******************************************
  * Express server side
  */
+//**************05-11 edit************************
+app.get(`/regis`, (req, res) => {
+  res.render(`pages/regis.ejs`)
+})
+
+//post method handler that create a new account in Mysql
+app.post(`/regis`, (req, res) => {
+  console.log(req.body.name);
+  console.log(req.body.email);
+  console.log(req.body.password);
+  console.log(req.body);
+  if(req.body){
+      con.query(`INSERT INTO user SET ?`,req.body,(err,result)=>{
+          if(err) throw err;
+          console.log(result);
+          res.redirect(`/`)
+      })
+  }
+  
+})
 
 app.get("/", (req, res) => {
   res.sendFile(path.join( __dirname + "/views/signin.html"));
