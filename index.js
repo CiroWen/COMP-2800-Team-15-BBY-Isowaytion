@@ -61,7 +61,7 @@ app.get('/google/callback', passport.authenticate('google', {
   //authenticate() redirect to 2nd para if fail to authenticate
   function (req, res) {
     // Successful authentication, redirect too the route below
-    res.redirect('/welcome');
+    res.redirect('/map');
   });
 
 app.get('/logout', (req, res) => {
@@ -140,6 +140,11 @@ app.get('/usercreating', (req, res) => {
   })
 })
 
+//Temporary google login, catching the post request from sign in page
+//Works for signin and google button
+app.post('/google', (req, res) => {
+  res.redirect("/google");
+});
 
 
 app.listen(port, () => console.log(`ciro listening on ${port} ctrl + c to quit, visit localhost:${port} to test`));
