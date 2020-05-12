@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use(express.static(__dirname + "scripts"));
 const path = require("path");
 const router = express.Router();
 const bodyParser = require("body-parser");
