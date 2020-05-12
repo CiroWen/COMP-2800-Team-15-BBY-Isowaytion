@@ -152,6 +152,9 @@ let currentInfo = new Array(LENGTH);
 /******************************************
  * Accessing user database
  */
+
+ 
+//**************05-11 edit************************
 //Ciro's local mysql for testing purpose.
 const con = mysql.createConnection({
   host     : 'localhost',
@@ -191,7 +194,6 @@ con.query(`select * from user`,(req,res)=>{
 /*******************************************
  * Express server side
  */
-//**************05-11 edit************************
 app.get(`/regis`, (req, res) => {
   res.render(`pages/regis.ejs`)
 })
@@ -212,6 +214,8 @@ app.post(`/regis`, (req, res) => {
   
 })
 
+
+//************05-11 edit ends ****************
 app.get("/", (req, res) => {
   res.sendFile(path.join( __dirname + "/views/signin.html"));
 });
