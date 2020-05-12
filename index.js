@@ -48,6 +48,13 @@ app.get("/welcome", isLoggedIn, (req, res) => {
 
 app.get("/failed", (req, res) => res.send("sorry you failed to login"));
 app.get("/index", (req, res) => res.send(`welcome to IsoWaytion `));
+app.post(
+  "/google",
+  passport.authenticate("google", {
+    scope: ["profile", `email`],
+  })
+);
+
 // you guys can addmore router
 app.get(
   "/google",
