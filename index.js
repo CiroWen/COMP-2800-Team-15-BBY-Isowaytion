@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const url = require("url");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(express.static(__dirname + "scripts"));
@@ -40,8 +41,15 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get("/welcome", isLoggedIn, (req, res) => {
-  useremail = req.user._json.email;
-  res.send(`welcome ${req.user.Email}`);
+  res.redirect(
+    url.format({
+      pathname: "/myAccount",
+      query: {
+        req: req.user,
+      },
+    })
+  );
+  // res.send(`welcome ${req.user.displayName}`);
   // res.sendFile(`./pages/signup.html`);
   //error at line above: path must be absolute or specify root ro res.sedFile()
 });
