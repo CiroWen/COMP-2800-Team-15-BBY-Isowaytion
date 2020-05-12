@@ -212,8 +212,8 @@ app.post(`/regis`, (req, res) => {
   
 })
 
-//Temporary google login, catching the post request from sign in page
-//Works for signin and google button
+// Temporary google login, catching the post request from sign in page
+// Works for signin and google button
 app.post('/google', (req, res) => {
   //log below is for memo
   // console.log(req.user._json);
@@ -221,20 +221,23 @@ app.post('/google', (req, res) => {
   // console.log(req.user._json.picture);
   //google profle pic
   // console.log(req.user._json.email);
-  const regisInfo ={name:`${req.user._json.name}`,email:`${req.user._json.email}`}
-  //generates a JSON that contains user info.
-
-  // console.log(regisInfo);
-
-  //create user using google's info in our db
-  if(req.user._json.email_verified){
-    con.query(`INSERT INTO user SET ?`,regisInfo,(err,result)=>{
-      if(err) console.log(err);
-      // console.log(result);
-      res.redirect(`/map`)
-    })
-  }
+  if(req.user){
+    const regisInfo ={name:`${req.user._json.name}`,email:`${req.user._json.email}`}
+    //generates a JSON that contains user info.
   
+    // console.log(regisInfo);
+  
+    //create user using google's info in our db
+    if(req.user._json.email_verified){
+      con.query(`INSERT INTO user SET ?`,regisInfo,(err,result)=>{
+        if(err) console.log(err);
+        // console.log(result);
+        res.redirect(`/map`)
+      })
+    }
+  }else{
+    res.redirect(`/google`);
+}
 });
 
 //************05-11 edit ends ****************
