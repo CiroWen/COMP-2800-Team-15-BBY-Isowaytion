@@ -51,3 +51,21 @@ label {
 .signin {
   width: 10rem;
 }
+
+#easter {
+  background: transparent;
+  border: none !important;
+  font-size: 0;
+  width: 50%;
+  height: 5%;
+  margin-left: 2rem;
+  margin-top: 4rem;
+}
+
+#easter:focus {
+  outline: none;
+}
+
+#easter:hover {
+  outline: none;
+}
