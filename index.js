@@ -353,7 +353,7 @@ app.post("/editInfo", (req, res) => {
 
   //Update name field
   if (newName != '' && newName != undefined) {
-    var sql = `UPDATE isowaytion SET name = '${newName}' WHERE email = '${currentInfo[0]}'`;
+    var sql = `UPDATE user SET name = '${newName}' WHERE email = '${currentInfo[0]}'`;
     con.query(sql, function (err, result) {
       if (err) throw err;
       console.log(result.affectedRows + " record(s) updated");
@@ -362,7 +362,7 @@ app.post("/editInfo", (req, res) => {
 
   //Update address field
   if (newAddress != '' && newAddress != undefined) {
-    var sql = `UPDATE isowaytion SET address = '${newAddress}' WHERE email = '${currentInfo[0]}'`;
+    var sql = `UPDATE user SET address = '${newAddress}' WHERE email = '${currentInfo[0]}'`;
     con.query(sql, function (err, result) {
       if (err) throw err;
       console.log(result.affectedRows + " record(s) updated");
