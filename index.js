@@ -152,23 +152,23 @@ let currentInfo = new Array(LENGTH);
  
 //**************05-11 edit************************
 //Ciro's local mysql for testing purpose.
-// const con = mysql.createConnection({
-//   host     : 'localhost',
-//   //where the info is hoste
-//   user     : 'root',
-//   //the user name of db
-//   password : 'isowaytion15',
-//   //the pswd for user
-//   database : 'isowaytion'
-//   //name of db
-// });
-
-var con = mysql.createConnection({
-  host: "205.250.9.115",
-  user: "root",
-  password: "123",
-  database: "isowaytion"
+const con = mysql.createConnection({
+  host     : 'localhost',
+  //where the info is hoste
+  user     : 'root',
+  //the user name of db
+  password : 'isowaytion15',
+  //the pswd for user
+  database : 'isowaytion'
+  //name of db
 });
+
+// var con = mysql.createConnection({
+//   host: "205.250.9.115",
+//   user: "root",
+//   password: "123",
+//   database: "isowaytion"
+// });
 
 // initial connection
 con.connect((err) => {
@@ -261,14 +261,16 @@ app.get('/map', function(req, res) {
 
   con.query(`SELECT email FROM user WHERE email =\"${req.user._json.email}\"`,(dbReq,dbRes)=>{
     // console.log(res);
-    // console.log(dbRes[0].email);
+    console.log(dbRes[0].email);
     // console.log(dbRes.length);
     if(dbRes.length==0){
-      //if the query retuens an array with 0 length.
+      //if the query returns an array with 0 length.
       //then we fetch the user's info and push in database.
-      const regisInfo ={email:`${req.user._json.email}`}
+      const regisInfo ={name:`${req.user._json.name}`,email:`${req.user._json.email}`}
       con.query(`INSERT INTO user SET ?`,regisInfo,(err,result)=>{
         if(err) console.log(err);
+        console.log(result);
+        
       })
     }
   })
