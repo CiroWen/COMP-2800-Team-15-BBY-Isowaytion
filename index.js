@@ -131,11 +131,7 @@ app.get('/usercreating', (req, res) => {
   })
 })
 
-//Temporary google login, catching the post request from sign in page
-//Works for signin and google button
-app.post('/google', (req, res) => {
-  res.redirect("/google");
-});
+
 
 
 app.listen(port, () => console.log(`ciro listening on ${port} ctrl + c to quit, visit localhost:${port} to test`));
@@ -177,11 +173,12 @@ con.connect((err) => {
 });
 
 
-con.query(`select * from user`,(req,res)=>{
-  // console.log(res);
-  console.log(res[0]);
-  console.log(res[0].Email);
-})
+// //testing 
+// con.query(`select * from user`,(req,res)=>{
+//   // console.log(res);
+//   console.log(res[0]);
+//   console.log(res[0].Email);
+// })
 // var con = mysql.createConnection({
 //   host: "205.250.9.115",
 //   user: "root",
@@ -199,6 +196,7 @@ app.get(`/regis`, (req, res) => {
 })
 
 //post method handler that create a new account in Mysql
+// regis with out using google
 app.post(`/regis`, (req, res) => {
   console.log(req.body.name);
   console.log(req.body.email);
@@ -214,6 +212,30 @@ app.post(`/regis`, (req, res) => {
   
 })
 
+//Temporary google login, catching the post request from sign in page
+//Works for signin and google button
+app.post('/google', (req, res) => {
+  //log below is for memo
+  // console.log(req.user._json);
+  // console.log(req.user._json.name);
+  // console.log(req.user._json.picture);
+  //google profle pic
+  // console.log(req.user._json.email);
+  const regisInfo ={name:`${req.user._json.name}`,email:`${req.user._json.email}`}
+  //generates a JSON that contains user info.
+
+  // console.log(regisInfo);
+
+  //create user using google's info in our db
+  if(req.user._json.email_verified){
+    con.query(`INSERT INTO user SET ?`,regisInfo,(err,result)=>{
+      if(err) console.log(err);
+      // console.log(result);
+      res.redirect(`/map`)
+    })
+  }
+  
+});
 
 //************05-11 edit ends ****************
 app.get("/", (req, res) => {
