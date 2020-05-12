@@ -24,7 +24,7 @@ pasp.use(new GoogleStrategy({
     clientSecret: `Nou6L05tKPEKYf-cV6qGVi9Q`,
     //same as line 23
     // callbackURL: "http://localhost:1515/google/callback"
-    callbackURL: "https://desolate-earth-77828.herokuapp.com/map"
+    callbackURL: "https://desolate-earth-77828.herokuapp.com/google/callback"
     //a redirect url after login
   },
 
