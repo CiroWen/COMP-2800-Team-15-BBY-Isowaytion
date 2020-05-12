@@ -327,7 +327,7 @@ app.get("/myAccount", (req, res) => {
 app.get("/editInfo", (req, res) => {
   useremail = req.user._json.email;
   console.log("This is the email" + useremail);
-  con.query(`SELECT * FROM isowaytion WHERE email = '${useremail}'`, (err, rows) => {
+  con.query(`SELECT * FROM user WHERE email = '${useremail}'`, (err, rows) => {
     if (err) throw err;
 
     console.log('Data received from isowaytion.');
