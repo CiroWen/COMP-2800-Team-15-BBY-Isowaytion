@@ -173,8 +173,8 @@ con.connect((err) => {
 });
 
 
-// //testing 
-// con.query(`select * from user`,(req,res)=>{
+// testing 
+// con.query(`SELECT email FROM user WHERE email =\"${req.user._json.email}`,(req,res)=>{
 //   // console.log(res);
 //   console.log(res[0]);
 //   console.log(res[0].Email);
@@ -224,9 +224,7 @@ app.post('/google', (req, res) => {
   if(req.user){
     const regisInfo ={name:`${req.user._json.name}`,email:`${req.user._json.email}`}
     //generates a JSON that contains user info.
-  
     // console.log(regisInfo);
-  
     //create user using google's info in our db
     if(req.user._json.email_verified){
       con.query(`INSERT INTO user SET ?`,regisInfo,(err,result)=>{
@@ -252,11 +250,49 @@ app.get("/", (req, res) => {
 
  // Send to about us page
 app.get('/aboutus', function(req, res) {
+  
   res.sendFile(path.join( __dirname + "/views/aboutus.html"));
 })
 
 // Send to Map page.
 app.get('/map', function(req, res) {
+
+  con.query(`SELECT email FROM user WHERE email =\"${req.user._json.email}\"`,(dbReq,dbRes)=>{
+    // console.log(res);
+    // console.log(dbRes[0].email);
+    // console.log(dbRes.length);
+    if(dbRes.length==0){
+      //if the query retuens an array with 0 length.
+      //then we fetch the user's info and push in database.
+      const regisInfo ={email:`${req.user._json.email}`}
+      con.query(`INSERT INTO user SET ?`,regisInfo,(err,result)=>{
+        if(err) console.log(err);
+      })
+    }
+  })
+//   {
+//   //log below is for memo
+//   // console.log(req.user._json);
+//   // console.log(req.user._json.name);
+//   // console.log(req.user._json.picture);
+//   //google profle pic
+//   // console.log(req.user._json.email);
+//   if(req.user){
+//     const regisInfo ={name:`${req.user._json.name}`,email:`${req.user._json.email}`}
+//     //generates a JSON that contains user info.
+//     // console.log(regisInfo);
+//     //create user using google's info in our db
+//     if(req.user._json.email_verified){
+//       con.query(`INSERT INTO user SET ?`,regisInfo,(err,result)=>{
+//         if(err) console.log(err);
+//         // console.log(result);
+//         res.redirect(`/map`)
+//       })
+//     }
+//   }else{
+//     res.redirect(`/google`);
+// }
+// }
   res.sendFile(path.join( __dirname + "/views/map.html"));
 })
 
@@ -270,7 +306,7 @@ app.use(express.static(__dirname + '/script'));
 app.get("/myAccount", (req, res) => {
   useremail = req.user._json.email;
   console.log(useremail);
-  con.query(`SELECT * FROM isowaytion WHERE email = '${useremail}'`, (err, rows) => {
+  con.query(`SELECT * FROM user WHERE email = '${useremail}'`, (err, rows) => {
     if (err) throw err;
 
     console.log('Data received from isowaytion.');
