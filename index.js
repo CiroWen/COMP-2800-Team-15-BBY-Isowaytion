@@ -4,18 +4,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 const path = require("path");
 const router = express.Router();
-//cors is a middleware for Cross-origin resource sharing.
-//is used to enable the communication between the front end and back end from diff domains
 const bodyParser = require("body-parser");
 const passport = require(`passport`);
 const cookieSession = require("cookie-session");
-const email = require(`./passport-setup`);
 require(`./passport-setup`);
 const mysql = require(`mysql`);
-
-//set port
-var port = process.env.PORT || 8080;
-
 const isLoggedIn = (req, res, next) => {
   if (req.user) {
     next();
@@ -23,45 +16,45 @@ const isLoggedIn = (req, res, next) => {
     res.sendStatus(401);
   }
 };
+//set port
+var port = process.env.PORT || 1515;
 
+//*******************consts/vars/lets declared above********************* */
 // app.use(cors())
-
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
     extended: false,
   })
 );
-
 app.use("/", router);
-
 app.set("view engine", "ejs");
-
 app.use(
   cookieSession({
     name: "Ciro's cookies",
     keys: ["key1", "key2"],
   })
 );
-
 app.use(passport.initialize());
 app.use(passport.session());
+
 app.get("/welcome", isLoggedIn, (req, res) => {
   useremail = req.user._json.email;
-  res.sendFile("pages/index.html");
+  res.send(`welcome ${req.user.Email}`);
+  // res.sendFile(`./pages/signup.html`);
+  //error at line above: path must be absolute or specify root ro res.sedFile()
 });
 
 app.get("/failed", (req, res) => res.send("sorry you failed to login"));
 app.get("/index", (req, res) => res.send(`welcome to IsoWaytion `));
-
 // you guys can addmore router
-
-app.post(
+app.get(
   "/google",
   passport.authenticate("google", {
     scope: ["profile", `email`],
   })
 );
+
 //line above opens a google page with google login account option. just like how we normally have
 //the scope means how much info we can fetch from the user's google account info.
 //!!!!!!Warning: some scopes will charge!!!!!!!!!!!!
@@ -94,54 +87,43 @@ app.get("/logout", (req, res) => {
 //******************************************* *********************/
 //db part starts from here
 //connection for db. google `mpm mysql` for more info
-const db = mysql.createConnection({
-  host: "205.250.9.115",
-  //where the info is hoste
-  user: "root",
-  //the user name of db
-  password: "123",
-  //the pswd for user
-  database: "isowaytion",
-  //name of db
-});
 
 //initial connection
-db.connect((err) => {
-  if (err) {
-    throw err;
-  }
-  console.log("db is connected");
-  //ciro is connected
-});
+// db.connect((err) => {
+//   if (err) {
+//     throw err;
+//   }
+//   console.log('db is connected');
+//   //ciro is connected
+// });
 
-app.get(`/tabletable`, (req, res) => {
-  let query1 =
-    "CREATE TABLE c1(Email VARCHAR(100), Name VARCHAR(100), Address VARCHAR(100), PRIMARY KEY (Email))";
-  //this is mysql command/syntax. all capital letter is the db reserved syntax
-  //that creates a table named c1 with fileds Email, name, and address
-  db.query(query1, (err, result) => {
-    if (err) {
-      console.log(err.sqlMessage);
-      //prompting the sql err msg
-      console.log(err);
-      res.send(`<p>fail to create table</p><p>db feedback:${err.sqlMessage}`);
-    }
-    //you can see all the err msg here. so up above err.sqlMessage is used.
-    else {
-      console.log(result);
-      res.send(`table created`);
-    }
-  });
-});
+// app.get(`/tabletable`, (req, res) => {
+//   let query1 = 'CREATE TABLE c1(Email VARCHAR(100), Name VARCHAR(100), Address VARCHAR(100), PRIMARY KEY (Email))'
+//   //this is mysql command/syntax. all capital letter is the db reserved syntax
+//   //that creates a table named c1 with fileds Email, name, and address
+
+//   db.query(query1, (err, result) => {
+//     if (err) {
+//       console.log(err.sqlMessage);
+//       //prompting the sql err msg
+//       console.log(err);
+//       res.send(`<p>fail to create table</p><p>db feedback:${err.sqlMessage}`)
+//     }
+//     //you can see all the err msg here. so up above err.sqlMessage is used.
+//     else {
+//       console.log(result);
+//       res.send(`table created`);
+//     }
+//   })
+// })
 
 //simple sql query to fetch the data from db.
-//here is just using the system table as a calculator.
-db.query(`SELECT 1+1 AS solution`, (err, results, fileds) => {
-  if (err) console.log("error");
-  //
-  console.log(results);
-  console.log(results[0].solution);
-});
+// //here is just using the system table as a calculator.
+// db.query(`SELECT 1+1 AS solution`, (err, results, fileds) => {
+//   if (err) console.log('error');
+//   console.log(results);
+//   console.log(results[0].solution);
+// })
 
 //creating a user in our database.
 app.get("/usercreating", (req, res) => {
@@ -159,16 +141,6 @@ app.get("/usercreating", (req, res) => {
     }
   });
 });
-
-db.query(`SELECT email FROM c1 WHERE Name = \"ciro\"`, (err, results) => {
-  console.log(results);
-  // console.log(results[0].Email);
-});
-
-// app.listen('1515', ()=>{
-//     console.log('Ciro is listening again on 1515, ctrl + c to escape, visit localhost:1515 to test');
-
-// })
 
 app.listen(port, () =>
   console.log(
