@@ -37,9 +37,27 @@ app.use(passport.session());
 
 app.get('/welcome', isLoggedIn, (req, res) => {
   useremail = req.user._json.email;
-  res.send(`welcome ${req.user.Email}`)
+  //res.send(`welcome ${req.user.Email}`)
   // res.sendFile(`./pages/signup.html`);
   //error at line above: path must be absolute or specify root ro res.sedFile()
+
+  con.query(`SELECT email FROM user WHERE email =\"${req.user._json.email}\"`,(dbReq,dbRes)=>{
+    // console.log(res);
+    //console.log(dbRes[0].email);
+    // console.log(dbRes.length);
+    if(dbRes.length==0){
+      //if the query returns an array with 0 length.
+      //then we fetch the user's info and push in database.
+      const regisInfo ={name:`${req.user._json.name}`,email:`${req.user._json.email}`}
+      con.query(`INSERT INTO user SET ?`,regisInfo,(err,result)=>{
+        if(err) console.log(err);
+        console.log(result);
+        res.redirect('/map');
+      })
+    } else {
+      res.redirect('/map');
+    }
+  })
 });
 
 
@@ -61,7 +79,7 @@ app.get('/google/callback', passport.authenticate('google', {
   //authenticate() redirect to 2nd para if fail to authenticate
   function (req, res) {
     // Successful authentication, redirect too the route below
-    res.redirect('/map');
+    res.redirect('/welcome');
   });
 
 app.get('/logout', (req, res) => {
@@ -259,21 +277,21 @@ app.get('/aboutus', function(req, res) {
 // Send to Map page.
 app.get('/map', function(req, res) {
 
-  con.query(`SELECT email FROM user WHERE email =\"${req.user._json.email}\"`,(dbReq,dbRes)=>{
-    // console.log(res);
-    console.log(dbRes[0].email);
-    // console.log(dbRes.length);
-    if(dbRes.length==0){
-      //if the query returns an array with 0 length.
-      //then we fetch the user's info and push in database.
-      const regisInfo ={name:`${req.user._json.name}`,email:`${req.user._json.email}`}
-      con.query(`INSERT INTO user SET ?`,regisInfo,(err,result)=>{
-        if(err) console.log(err);
-        console.log(result);
+  // con.query(`SELECT email FROM user WHERE email =\"${req.user._json.email}\"`,(dbReq,dbRes)=>{
+  //   // console.log(res);
+  //   console.log(dbRes[0].email);
+  //   // console.log(dbRes.length);
+  //   if(dbRes.length==0){
+  //     //if the query returns an array with 0 length.
+  //     //then we fetch the user's info and push in database.
+  //     const regisInfo ={name:`${req.user._json.name}`,email:`${req.user._json.email}`}
+  //     con.query(`INSERT INTO user SET ?`,regisInfo,(err,result)=>{
+  //       if(err) console.log(err);
+  //       console.log(result);
         
-      })
-    }
-  })
+  //     })
+  //   }
+  // })
 //   {
 //   //log below is for memo
 //   // console.log(req.user._json);
