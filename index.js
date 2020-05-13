@@ -83,14 +83,9 @@ app.get(
   //authenticate() redirect to 2nd para if fail to authenticate
   function (req, res) {
     // Successful authentication, redirect too the route below
-<<<<<<< HEAD
-    res.redirect("/welcome");
+    res.redirect("/map");
   }
 );
-=======
-    res.redirect('/map');
-  });
->>>>>>> origin/dev
 
 app.get("/logout", (req, res) => {
   //session means the access to our API.
@@ -108,18 +103,6 @@ app.get("/logout", (req, res) => {
 //******************************************* *********************/
 //db part starts from here
 //connection for db. google `mpm mysql` for more info
-
-<<<<<<< HEAD
-//initial connection
-// db.connect((err) => {
-//   if (err) {
-//     throw err;
-//   }
-//   console.log('db is connected');
-//   //ciro is connected
-// });
-=======
->>>>>>> origin/dev
 
 // app.get(`/tabletable`, (req, res) => {
 //   let query1 = 'CREATE TABLE c1(Email VARCHAR(100), Name VARCHAR(100), Address VARCHAR(100), PRIMARY KEY (Email))'
@@ -150,12 +133,8 @@ app.get("/logout", (req, res) => {
 // })
 
 //creating a user in our database.
-<<<<<<< HEAD
-app.get("/usercreating", (req, res) => {
-=======
 //just for testing and demo purpose
-app.get('/usercreating', (req, res) => {
->>>>>>> origin/dev
+app.get("/usercreating", (req, res) => {
   let value = {
     Email: useremail,
     Name: "ciro",
@@ -171,16 +150,11 @@ app.get('/usercreating', (req, res) => {
   });
 });
 
-<<<<<<< HEAD
 app.listen(port, () =>
   console.log(
     `ciro listening on ${port} ctrl + c to quit, visit localhost:${port} to test`
   )
 );
-=======
-
-app.listen(port, () => console.log(`ciro listening on ${port} ctrl + c to quit, visit localhost:${port} to test`));
->>>>>>> origin/dev
 
 /*********************************************************************************************************************************************
  * Account Page Server JS
@@ -195,9 +169,6 @@ let currentInfo = new Array(LENGTH);
  * Accessing user database
  */
 
-<<<<<<< HEAD
-=======
- 
 //**************05-11 edit************************
 //Ciro's local mysql for testing purpose.
 // const con = mysql.createConnection({
@@ -211,7 +182,6 @@ let currentInfo = new Array(LENGTH);
 //   //name of db
 // });
 
->>>>>>> origin/dev
 var con = mysql.createConnection({
   host: "205.250.9.115",
   user: "root",
@@ -224,18 +194,16 @@ con.connect((err) => {
   if (err) {
     throw err;
   }
-  console.log('db is connected');
+  console.log("db is connected");
   //ciro is connected
 });
 
-
-// testing 
+// testing
 // con.query(`SELECT email FROM user WHERE email =\"${req.user._json.email}`,(req,res)=>{
 //   // console.log(res);
 //   console.log(res[0]);
 //   console.log(res[0].Email);
 // })
-
 
 // app.listen(1515, () => console.log(`Hawkan listening on ${1515}`));
 
@@ -243,8 +211,8 @@ con.connect((err) => {
  * Express server side
  */
 app.get(`/regis`, (req, res) => {
-  res.render(`pages/regis.ejs`)
-})
+  res.render(`pages/regis.ejs`);
+});
 
 //post method handler that create a new account in Mysql
 // regis with out using google
@@ -253,40 +221,42 @@ app.post(`/regis`, (req, res) => {
   console.log(req.body.email);
   console.log(req.body.password);
   console.log(req.body);
-  if(req.body){
-      con.query(`INSERT INTO user SET ?`,req.body,(err,result)=>{
-          if(err) throw err;
-          console.log(result);
-          res.redirect(`/`)
-      })
+  if (req.body) {
+    con.query(`INSERT INTO user SET ?`, req.body, (err, result) => {
+      if (err) throw err;
+      console.log(result);
+      res.redirect(`/`);
+    });
   }
-  
-})
+});
 
 // Temporary google login, catching the post request from sign in page
 // Works for signin and google button
-app.post('/google', (req, res) => {
+app.post("/google", (req, res) => {
   //log below is for memo
   // console.log(req.user._json);
   // console.log(req.user._json.name);
   // console.log(req.user._json.picture);
   //google profle pic
   // console.log(req.user._json.email);
-  if(req.user){
-    const regisInfo ={name:`${req.user._json.name}`,email:`${req.user._json.email}`}
+  if (req.user) {
+    const regisInfo = {
+      name: `${req.user._json.name}`,
+      email: `${req.user._json.email}`,
+    };
     //generates a JSON that contains user info.
     // console.log(regisInfo);
     //create user using google's info in our db
-    if(req.user._json.email_verified){
-      con.query(`INSERT INTO user SET ?`,regisInfo,(err,result)=>{
-        if(err) console.log(err);
+    if (req.user._json.email_verified) {
+      con.query(`INSERT INTO user SET ?`, regisInfo, (err, result) => {
+        if (err) console.log(err);
         // console.log(result);
-        res.redirect(`/map`)
-      })
+        res.redirect(`/map`);
+      });
     }
-  }else{
+  } else {
     res.redirect(`/google`);
-}
+  }
 });
 
 //************05-11 edit ends ****************
@@ -299,7 +269,6 @@ app.get("/isostats", (req, res) => {
   res.render("pages/isostats");
 });
 
-<<<<<<< HEAD
 // Send to about us page
 app.get("/aboutus", function (req, res) {
   res.sendFile(path.join(__dirname + "/views/aboutus.html"));
@@ -307,59 +276,51 @@ app.get("/aboutus", function (req, res) {
 
 // Send to Map page.
 app.get("/map", function (req, res) {
+  con.query(
+    `SELECT email FROM user WHERE email =\"${req.user._json.email}\"`,
+    (dbReq, dbRes) => {
+      // console.log(res);
+      console.log(dbRes[0].email);
+      // console.log(dbRes.length);
+      if (dbRes.length == 0) {
+        //if the query returns an array with 0 length.
+        //then we fetch the user's info and push in database.
+        const regisInfo = {
+          name: `${req.user._json.name}`,
+          email: `${req.user._json.email}`,
+        };
+        con.query(`INSERT INTO user SET ?`, regisInfo, (err, result) => {
+          if (err) console.log(err);
+          console.log(result);
+        });
+      }
+    }
+  );
+  //   {
+  //   //log below is for memo
+  //   // console.log(req.user._json);
+  //   // console.log(req.user._json.name);
+  //   // console.log(req.user._json.picture);
+  //   //google profle pic
+  //   // console.log(req.user._json.email);
+  //   if(req.user){
+  //     const regisInfo ={name:`${req.user._json.name}`,email:`${req.user._json.email}`}
+  //     //generates a JSON that contains user info.
+  //     // console.log(regisInfo);
+  //     //create user using google's info in our db
+  //     if(req.user._json.email_verified){
+  //       con.query(`INSERT INTO user SET ?`,regisInfo,(err,result)=>{
+  //         if(err) console.log(err);
+  //         // console.log(result);
+  //         res.redirect(`/map`)
+  //       })
+  //     }
+  //   }else{
+  //     res.redirect(`/google`);
+  // }
+  // }
   res.sendFile(path.join(__dirname + "/views/map.html"));
 });
-=======
- // Send to about us page
-app.get('/aboutus', function(req, res) {
-  
-  res.sendFile(path.join( __dirname + "/views/aboutus.html"));
-})
-
-// Send to Map page.
-app.get('/map', function(req, res) {
-
-  con.query(`SELECT email FROM user WHERE email =\"${req.user._json.email}\"`,(dbReq,dbRes)=>{
-    // console.log(res);
-    console.log(dbRes[0].email);
-    // console.log(dbRes.length);
-    if(dbRes.length==0){
-      //if the query returns an array with 0 length.
-      //then we fetch the user's info and push in database.
-      const regisInfo ={name:`${req.user._json.name}`,email:`${req.user._json.email}`}
-      con.query(`INSERT INTO user SET ?`,regisInfo,(err,result)=>{
-        if(err) console.log(err);
-        console.log(result);
-        
-      })
-    }
-  })
-//   {
-//   //log below is for memo
-//   // console.log(req.user._json);
-//   // console.log(req.user._json.name);
-//   // console.log(req.user._json.picture);
-//   //google profle pic
-//   // console.log(req.user._json.email);
-//   if(req.user){
-//     const regisInfo ={name:`${req.user._json.name}`,email:`${req.user._json.email}`}
-//     //generates a JSON that contains user info.
-//     // console.log(regisInfo);
-//     //create user using google's info in our db
-//     if(req.user._json.email_verified){
-//       con.query(`INSERT INTO user SET ?`,regisInfo,(err,result)=>{
-//         if(err) console.log(err);
-//         // console.log(result);
-//         res.redirect(`/map`)
-//       })
-//     }
-//   }else{
-//     res.redirect(`/google`);
-// }
-// }
-  res.sendFile(path.join( __dirname + "/views/map.html"));
-})
->>>>>>> origin/dev
 
 // Add the router
 app.use(express.static(__dirname + "/view"));
@@ -371,54 +332,38 @@ app.use(express.static(__dirname + "/script"));
 app.get("/myAccount", (req, res) => {
   useremail = req.user._json.email;
   console.log(useremail);
-<<<<<<< HEAD
-  con.query(
-    `SELECT * FROM isowaytion WHERE email = '${useremail}'`,
-    (err, rows) => {
-      if (err) throw err;
-=======
   con.query(`SELECT * FROM user WHERE email = '${useremail}'`, (err, rows) => {
     if (err) throw err;
->>>>>>> origin/dev
 
-      console.log("Data received from isowaytion.");
-      console.log(rows);
-      //Store in user info array, {email, name, address}
-      currentInfo = [rows[0].Email, rows[0].Name, rows[0].Address];
+    console.log("Data received from isowaytion.");
+    console.log(rows);
+    //Store in user info array, {email, name, address}
+    currentInfo = [rows[0].Email, rows[0].Name, rows[0].Address];
 
-      //pass info to account page when rendered
-      res.render("pages/myAccount", {
-        currentInfo: currentInfo,
-      });
-    }
-  );
+    //pass info to account page when rendered
+    res.render("pages/myAccount", {
+      currentInfo: currentInfo,
+    });
+  });
 });
 
 //app.get("/editInfo", isLoggedIn, (req, res) => {
 app.get("/editInfo", (req, res) => {
   useremail = req.user._json.email;
   console.log("This is the email" + useremail);
-<<<<<<< HEAD
-  con.query(
-    `SELECT * FROM isowaytion WHERE email = '${useremail}'`,
-    (err, rows) => {
-      if (err) throw err;
-=======
   con.query(`SELECT * FROM user WHERE email = '${useremail}'`, (err, rows) => {
     if (err) throw err;
->>>>>>> origin/dev
 
-      console.log("Data received from isowaytion.");
-      console.log(rows);
-      //Store in user info array, {email, name, address}
-      currentInfo = [rows[0].Email, rows[0].Name, rows[0].Address];
+    console.log("Data received from isowaytion.");
+    console.log(rows);
+    //Store in user info array, {email, name, address}
+    currentInfo = [rows[0].Email, rows[0].Name, rows[0].Address];
 
-      //pass info to edit info page when rendered
-      res.render("pages/editInfo", {
-        currentInfo: currentInfo,
-      });
-    }
-  );
+    //pass info to edit info page when rendered
+    res.render("pages/editInfo", {
+      currentInfo: currentInfo,
+    });
+  });
 });
 
 app.post("/editInfo", (req, res) => {
@@ -431,13 +376,8 @@ app.post("/editInfo", (req, res) => {
   console.log(newAddress);
 
   //Update name field
-<<<<<<< HEAD
   if (newName != "" && newName != undefined) {
-    var sql = `UPDATE isowaytion SET name = '${newName}' WHERE email = '${currentInfo[0]}'`;
-=======
-  if (newName != '' && newName != undefined) {
     var sql = `UPDATE user SET name = '${newName}' WHERE email = '${currentInfo[0]}'`;
->>>>>>> origin/dev
     con.query(sql, function (err, result) {
       if (err) throw err;
       console.log(result.affectedRows + " record(s) updated");
@@ -445,13 +385,8 @@ app.post("/editInfo", (req, res) => {
   }
 
   //Update address field
-<<<<<<< HEAD
   if (newAddress != "" && newAddress != undefined) {
-    var sql = `UPDATE isowaytion SET address = '${newAddress}' WHERE email = '${currentInfo[0]}'`;
-=======
-  if (newAddress != '' && newAddress != undefined) {
     var sql = `UPDATE user SET address = '${newAddress}' WHERE email = '${currentInfo[0]}'`;
->>>>>>> origin/dev
     con.query(sql, function (err, result) {
       if (err) throw err;
       console.log(result.affectedRows + " record(s) updated");
