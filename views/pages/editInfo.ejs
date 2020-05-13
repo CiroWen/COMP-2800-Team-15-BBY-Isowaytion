@@ -25,7 +25,8 @@
       <form action="/editInfo" method="post">
         <div class="form-group">
           <label for="exampleInputEmail1"
-            >Email address: <%= currentInfo[0] %></label
+            ><span class="subject">Email address:</span> <%= currentInfo[0]
+            %></label
           >
           <!-- <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
                     placeholder="Email" /> -->
@@ -34,7 +35,7 @@
 
         <div class="form-group mt-5">
           <label for="exampleInputEmail1"
-            >Username: <%= currentInfo[1] %></label
+            ><span class="subject">Username:</span> <%= currentInfo[1] %></label
           >
           <input
             name="username"
@@ -48,7 +49,9 @@
         <!-- <button class="btn btn-primary-edit px-4">Edit</button> -->
 
         <div class="form-group mt-5">
-          <label for="exampleInputEmail1">Address: <%= currentInfo[2] %></label>
+          <label for="exampleInputEmail1"
+            ><span class="subject">Address:</span> <%= currentInfo[2] %></label
+          >
           <input
             name="address"
             type="text"
@@ -58,7 +61,9 @@
             placeholder="Address"
           />
         </div>
-        <button type="submit" class="btn btn-primary-edit px-4">Edit</button>
+        <button type="submit" class="btn btn-primary-edit mt-2 px-4 heartbeat">
+          Edit
+        </button>
       </form>
     </div>
     <script
