@@ -82,7 +82,14 @@ AutocompleteDirectionsHandler.prototype.route = function () {
     },
     function (result, status) {
       if (status === "OK") {
-        console.log(result);
+        // console.log(result);
+        const routes = result["routes"];
+        // console.log(routes);
+
+        for (var i = 0; i < routes.length; i++) {
+          console.log(routes[i]["legs"][0]);
+        }
+
         me.directionsRenderer.setDirections(result);
       } else {
         window.alert("Directions request failed due to " + status);
