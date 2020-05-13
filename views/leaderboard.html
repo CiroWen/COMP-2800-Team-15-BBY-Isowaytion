@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <!-- Style Links -->
-    <link rel="stylesheet" href="css/leaderboard.css" />
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="icon" href="favicon.ico" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- Style Links -->
+  <link rel="stylesheet" href="/script/css/leaderboard.css" />
+  <link rel="stylesheet" href="css/bootstrap.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="favicon.ico" />
 
 
 </head>
+
 <body>
   <div class="top">
     <i class="fas fa-angle-left" onclick="history.back()"></i>
@@ -22,62 +21,103 @@
       Leaderboard
     </h2>
   </div>
-    <div class="outer">
-        
-        <div class="info">
-            <ul>
-                <div id="info1">
-                    <li id="title"><b>Ciro</b></li>
-                    <li id="points"><b>79</b></li>
-                </div>
-                <div id="info1">
-                    <li id="title"><b>Jay</b></li>
-                    <li id="points"><b>68</b></li>
-                </div>
-                <div id="info1">
-                    <li id="title"><b>Hawkan</b></li>
-                    <li id="points"><b>67</b></li>
-                </div>
-                <div id="info1">
-                    <li id="title"><b>Daichi</b></li>
-                    <li id="points"><b>49</b></li>
-                </div>
-                <div id="info1">
-                    <li id="title"><b>Ishita</b></li>
-                    <li id="points"><b>40</b></li>
-                </div>
-                <div id="info1">
-                    <li id="title"><b>Carly</b></li>
-                    <li id="points"><b>34</b></li>
-                </div>
-                <div id="info1">
-                    <li id="title"><b>Stanley</b></li>
-                    <li id="points"><b>22</b></li>
-                </div>
-                <div id="info1">
-                    <li id="title"><b>Mike</b></li>
-                    <li id="points"><b>5</b></li>
-                </div>
+  <div class="outer">
+
+    <div class="info">
+      <ul>
+        <button id="info1">
+          <li id="title"><b>Ciro</b></li>
+          <li id="points"><b>79</b></li>
+        </button>
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+
+          <!-- Modal content -->
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <ul style="display: flex;">
+              <div style="flex-grow: 3;">
+                <li>Points</li>
+              <li>Number of Routes</li>
+              <li>Days using the App</li>
+              </div>
+              <div>
+                <li>40</li>
+              <li>12</li>
+              <li>60</li>
+              </div>
             </ul>
+          </div>
+
         </div>
-        <script
-      src="https://kit.fontawesome.com/df012b2a98.js"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-      crossorigin="anonymous"
-    ></script>
+        <button id="info1">
+          <li id="title"><b>Jay</b></li>
+          <li id="points"><b>68</b></li>
+        </button>
+        <button id="info1">
+          <li id="title"><b>Hawkan</b></li>
+          <li id="points"><b>67</b></li>
+        </button>
+        <button id="info1">
+          <li id="title"><b>Daichi</b></li>
+          <li id="points"><b>49</b></li>
+        </button>
+        <button id="info1">
+          <li id="title"><b>Ishita</b></li>
+          <li id="points"><b>40</b></li>
+        </button>
+        <button id="info1">
+          <li id="title"><b>Carly</b></li>
+          <li id="points"><b>34</b></li>
+        </button>
+        <button id="info1">
+          <li id="title"><b>Stanley</b></li>
+          <li id="points"><b>22</b></li>
+        </button>
+        <button id="info1">
+          <li id="title"><b>Mike</b></li>
+          <li id="points"><b>5</b></li>
+        </button>
+      </ul>
+    </div>
+    <script src="https://kit.fontawesome.com/df012b2a98.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+
+    <script>
+      // Get the modal
+      var modal = document.getElementById("myModal");
+
+      // Get the button that opens the modal
+      var btn = document.getElementById("info1");
+
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
+
+      // When the user clicks the button, open the modal 
+      btn.onclick = function () {
+        modal.style.display = "block";
+      }
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function () {
+        modal.style.display = "none";
+      }
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+    </script>
 </body>
+
 </html>
