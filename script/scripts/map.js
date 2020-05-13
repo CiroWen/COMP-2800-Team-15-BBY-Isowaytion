@@ -82,6 +82,7 @@ AutocompleteDirectionsHandler.prototype.route = function () {
     },
     function (result, status) {
       if (status === "OK") {
+        console.log(result);
         me.directionsRenderer.setDirections(result);
       } else {
         window.alert("Directions request failed due to " + status);
