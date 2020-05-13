@@ -3,24 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../css/signin.css" />
-    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/signin.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="icon" href="../Images/favicon.ico" />
+    <link rel="icon" href="favicon.ico" />
+
+
     <title>Isowaytion</title>
   </head>
-  <body>
+  <body class="tracking-in-expand">
     <div class="header">
-      <h1 class="logo"><span class="logo_box">Iso</span>waytion</h1>
+      <h1 class="logo text-focus-in"><span class="logo_box">Iso</span>waytion</h1>
     </div>
     <div class="container">
-      <h2 class="title">
+      <h2 class="title bounce-bottom heartbeat">
         Sign In
       </h2>
-      <form action="/google" method="POST">
+      <form action="/google" method="POST" class="slide-in-blurred-top">
         <div class="form-group">
           <label for="exampleInputEmail1">Email address</label>
           <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email">
@@ -35,10 +37,30 @@
         </div>
         <div class="button_group">
           <button class="btn btn-outline-primary signin">Sign In</button>
-          <button class="btn btn-outline-primary"><i class="fab fa-google"></i> Google</button>
+          <button class="btn btn-outline-primary" type="submit" formaction="/google"><i class="fab fa-google"></i> Google</button>
         </div>
         </div>
       </form>
+
+      <button id="easter" type="button" data-toggle="modal" data-target="#exampleModalCenter">
+        Launch demo modal
+      </button>
+        <!-- Modal -->
+<div class="modal fade roll-in-left" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">STAY HOME</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        You do not need to use this app, JUST STAY WITH <i class="fas fa-home"></i> <i class="fas fa-utensils"></i> <i class="fas fa-bed"></i> <i class="fas fa-headphones"></i> <i class="fas fa-dumbbell"></i> <i class="fas fa-hamburger"></i> <i class="fas fa-pizza-slice"></i>
+      </div>
+    </div>
+  </div>
+</div>
     </div>
     <script src="https://kit.fontawesome.com/df012b2a98.js" crossorigin="anonymous"></script>
     <script
