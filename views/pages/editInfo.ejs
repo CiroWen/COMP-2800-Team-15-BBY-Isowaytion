@@ -9,20 +9,20 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="icon" href="../Images/favicon.ico" />
+    <link rel="icon" href="/favicon.ico" />
     <title>Isowaytion</title>
   </head>
 
   <body>
     <div class="container">
       <div class="top">
-        <i class="fas fa-angle-left" onclick="history.back()"></i>
-        <h2 class="title">
+        <i class="fas fa-angle-left bounce-in-top" onclick="history.back()"></i>
+        <h2 class="title bounce-in-top">
           Edit Info
         </h2>
       </div>
 
-      <form action="/editInfo" method="post">
+      <form action="/editInfo" method="post" class="bounce-in-top">
         <div class="form-group">
           <label for="exampleInputEmail1"
             ><span class="subject">Email address:</span> <%= currentInfo[0]
