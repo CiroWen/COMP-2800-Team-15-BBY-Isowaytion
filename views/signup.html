@@ -3,24 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../css/signup.css" />
-    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/signup.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="icon" href="../Images/favicon.ico" />
+    <link rel="icon" href="favicon.ico" />
+
+
     <title>Isowaytion</title>
   </head>
-  <body>
+  <body class="tracking-in-expand">
     <div class="header">
-      <h1 class="logo"><span class="logo_box">Iso</span>waytion</h1>
+      <h1 class="logo text-focus-in"><span class="logo_box">Iso</span>waytion</h1>
     </div>
     <div class="container">
-      <h2 class="title">
+      <h2 class="title bounce-bottom heartbeat">
         Sign Up
       </h2>
-      <form action="">
+      <form action="/google" method="POST">
         <div class="form-group">
           <label for="exampleInputEmail1">Email address</label>
           <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email">
@@ -35,7 +37,7 @@
         </div>
         <div class="button_group">
           <button class="btn btn-outline-primary signup">Sign Up</button>
-          <button class="btn btn-outline-primary"><i class="fab fa-google"></i> Google</button>
+          <button class="btn btn-outline-primary" type="submit" formaction="/google" method="GET"><i class="fab fa-google"></i> Google</button>
         </div>
         </div>
       </form>
