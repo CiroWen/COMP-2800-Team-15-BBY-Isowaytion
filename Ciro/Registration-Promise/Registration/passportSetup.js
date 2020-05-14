@@ -15,7 +15,7 @@ async function paspInit(pasp, getUserByEmail) {
             // console.log(user[0].password);
             // console.log(user[0].email);
                
-        if (user[0].length==null) {
+        if (user[0].email==null) {
             return callbk(null, false, { message: `Account doesn't exist` })
             //return message to login.ejs
         }

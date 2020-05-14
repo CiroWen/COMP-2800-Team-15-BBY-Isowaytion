@@ -33,11 +33,11 @@ app.use(pasp.session());
 
 //local connection setup.
 const db = mysql.createConnection({
-    host     : 'localhost',
+    host     : '205.250.9.115',
     //where the info is hoste
     user     : 'root',
     //the user name of db
-    password : 'isowaytion15',
+    password : '123',
     //the pswd for user
     database : 'isowaytion'
     //name of db
