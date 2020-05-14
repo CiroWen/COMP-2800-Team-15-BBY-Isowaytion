@@ -227,22 +227,22 @@ con.connect((err) => {
 /*******************************************
  * Express server side
  */
-app.get(`/regis`, (req, res) => {
-  res.render(`pages/regis.ejs`);
+app.get(`/signup`, (req, res) => {
+  res.sendFile(path.join(__dirname + "/views/signup.html"));
 });
 
 //post method handler that create a new account in Mysql
 // regis with out using google
-app.post(`/regis`, (req, res) => {
+app.post(`/signup`, (req, res) => {
   console.log(req.body.name);
   console.log(req.body.email);
   console.log(req.body.password);
-  console.log(req.body);
+  //console.log(req.body);
   if (req.body) {
     con.query(`INSERT INTO user SET ?`, req.body, (err, result) => {
       if (err) throw err;
       console.log(result);
-      res.redirect(`/`);
+      res.redirect(`/map`);
     });
   }
 });
@@ -343,6 +343,7 @@ app.use(express.static(__dirname + "/script"));
 // app.get("/myAccount", isLoggedIn, (req, res) => {
 app.get("/myAccount", (req, res) => {
   useremail = req.user._json.email;
+  console.log(req.user);
   console.log(useremail);
   con.query(`SELECT * FROM user WHERE email = '${useremail}'`, (err, rows) => {
     if (err) throw err;
@@ -459,7 +460,7 @@ app.get("/leaderboard", (req, res) => {
   // let username = name[0].Name;
 
   //Grab points info from database
-  let getPoints = `SELECT * FROM reward ORDER BY reward.Points DESC;`;
+  let getPoints = `SELECT user.Name, user.Point FROM reward ORDER BY user.Point DESC;`;
 
   con.query(getPoints, (err, leaderboardData) => {
     if (err) throw err;
@@ -467,8 +468,8 @@ app.get("/leaderboard", (req, res) => {
     //Genereate array of leaderboard data from returned array of objects
     let leaderboard = [];
     leaderboardData.forEach((row) => {
-      leaderboard.push(row.Email);
-      leaderboard.push(row.Points);
+      leaderboard.push(row.Name);
+      leaderboard.push(row.Point);
     });
 
     //Load leaderboard page
