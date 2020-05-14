@@ -1,9 +1,12 @@
 const express = require("express");
 const app = express();
 const url = require("url");
+const polyline = require("polyline");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(express.static(__dirname + "scripts"));
+app.use(express.static(__dirname + "scripts/scripts"));
+
 const path = require("path");
 const router = express.Router();
 const bodyParser = require("body-parser");
@@ -39,7 +42,14 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(
+  bodyParser.urlencoded({
+    limit: "50mb",
+    extended: true,
+    parameterLimit: 50000,
+  })
+);
 app.get("/welcome", isLoggedIn, (req, res) => {
   useremail = req.user._json.email;
   //res.send(`welcome ${req.user.Email}`)
@@ -501,4 +511,8 @@ app.post("/auth", function (request, response) {
     response.send("Please enter Username and Password!");
     response.end();
   }
+});
+
+app.post("/mapmap", (req, res) => {
+  console.log(req.body);
 });

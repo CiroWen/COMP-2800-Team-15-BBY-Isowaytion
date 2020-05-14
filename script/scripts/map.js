@@ -110,7 +110,21 @@ AutocompleteDirectionsHandler.prototype.route = function () {
         console.log(result);
         console.log(test);
 
-        // console.log(result[`routes`]);
+        let data1 = result["routes"][0]["legs"][0]["steps"];
+
+        fetch("/mapmap", {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+
+          //make sure to serialize your JSON body
+          body: JSON.stringify({
+            data,
+          }),
+        });
 
         me.directionsRenderer.setDirections(result);
       } else {
