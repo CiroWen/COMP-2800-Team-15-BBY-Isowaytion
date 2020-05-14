@@ -110,7 +110,8 @@ AutocompleteDirectionsHandler.prototype.route = function () {
         console.log(result);
         console.log(test);
 
-        let data1 = result["routes"][0]["legs"][0]["steps"];
+        // currently this is just one of routes
+        let data = result["routes"][0]["legs"][0]["steps"];
 
         fetch("/mapmap", {
           method: "POST",

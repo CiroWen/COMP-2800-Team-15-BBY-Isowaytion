@@ -514,5 +514,13 @@ app.post("/auth", function (request, response) {
 });
 
 app.post("/mapmap", (req, res) => {
-  console.log(req.body);
+  // data from map.js
+  // currently data is only first route
+  // when I try to put all the route, it shows error "entity is too large"
+  console.log(req.body.data);
+
+  // this is paths of a route
+  for (let i = 0; i < req.body.data.length; i++) {
+    console.log(polyline.decode(req.body.data[i]["encoded_lat_lngs"]));
+  }
 });
