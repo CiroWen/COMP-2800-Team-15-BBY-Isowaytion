@@ -11,48 +11,43 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="icon" href="../Images/favicon.ico" />
+    <link rel="icon" href="/favicon.ico" />
 </head>
 <body>
     <div class="outer"></div>
         <!-- NavBar -->
         <div class="top">
-            <i class="fas fa-angle-left" onclick="history.back()"></i>
-            <h3 class="logo"><span class="logo_box">Iso</span>waytion</h3>
+            <i class="fas fa-angle-left roll-in-left" onclick="history.back()"></i>
+            <h3 class="logo roll-in-left"><span class="logo_box">Iso</span>waytion</h3>
           </div>
         </br>
         <!-- User's Name -->
         <div class="header">
             <div class="head">
                 <form action="/myAccount" method="post">
-                    <h1><%= currentInfo[1] %></h1>
+                    <h1 id="username" class="text-pop-up-top"><%= currentInfo[1] %></h1>
                 </form>
             </div>
             <!-- Grab the profile picture the user has from google, or their default initial -->
             <!-- <div class="dot"><%= picture </div> -->
         </div>
         <!-- Account info Options -->
-        <div class="info">
+        <div class="info bounce-in-top-later">
             <ul>
                 <div id="info1">
-                    <li id="title1" ><a href="/editInfo"><b>Edit Info</b></a></li>
-                    <li><b>></b></li>
+                    <li id="title1" ><a href="/editInfo"><strong>Edit Info</strong></a></li>
                 </div>
                 <div id="info2">
-                    <li id="title2"><a href="/isostats"><b>IsoStats</b></a></li>
-                    <li><b>></b></li>
+                    <li id="title2"><a href="/isostats"><strong>IsoStats</strong></a></li>
                 </div>
                 <div id="info3">
-                    <li id="title3"><a href="/leaderboard"><b>Leaderboard</b></a></li>
-                    <li><b>></b></li>
+                    <li id="title3"><a href="/leaderboard"><strong>Leaderboard</strong></a></li>
                 </div>
                 <div id="info4">
-                    <li id="title4"><a href="/aboutus"><b>About Us</b></a></li>
-                    <li><b>></b></li>
+                    <li id="title4"><a href="/aboutus"><strong>About Us</strong></a></li>
                 </div>
                 <div id="info5">
-                    <li  id="title5"><b>Help</b></li>
-                    <li><b>></b></li>
+                    <li id="title5"><strong>Help</strong></li>
                 </div>
             </ul>
         </div>
