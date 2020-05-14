@@ -16,26 +16,30 @@
   <body>
     <!-- NavBar -->
     <div class="top">
+      <i class="fas fa-angle-left roll-in-left" onclick="history.back()"></i>
+      <h3 class="logo roll-in-left">
+        <span class="logo_box">Iso</span>waytion
+      </h3>
       <a href="/myAccount"
-        ><b><img src="Images/profile.png" /></b
-      ></a>
-      <h3 class="logo"><span class="logo_box">Iso</span>waytion</h3>
+        ><img src="Images/ryan_profile.png" class="roll-in-left"
+      /></a>
     </div>
+
     <input
       id="origin-input"
-      class="controls"
+      class="controls form-control"
       type="text"
-      placeholder="Enter an origin location"
+      placeholder="Origin"
     />
 
     <input
       id="destination-input"
-      class="controls"
+      class="controls form-control"
       type="text"
-      placeholder="Enter a destination location"
+      placeholder="Destination"
     />
 
-    <div id="map"></div>
+    <div id="map" class="roll-in-top"></div>
     <div id="bottom-panel"><h5>Directions</h5></div>
 
     <script src="./scripts/map.js"></script>
