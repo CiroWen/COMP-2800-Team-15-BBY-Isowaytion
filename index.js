@@ -522,7 +522,7 @@ app.post("/mapmap", (req, res) => {
     );
 
     for (let j = 0; j < length; j++) {
-      console.log(polyline.decode(req.body.data[i][j]["encoded_lat_lngs"]));
+      console.log(polyline.decode(req.body.data[i][j]["encoded_lat_lngs"])[0]);
     }
   }
 });
