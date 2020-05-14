@@ -75,6 +75,8 @@ AutocompleteDirectionsHandler.prototype.route = function () {
 
   this.directionsService.route(
     {
+      // origin: {'placeId': this.originPlaceId},
+      // destination: {'placeId': this.destinationPlaceId},
       origin: { placeId: this.originPlaceId },
       destination: { placeId: this.destinationPlaceId },
       travelMode: this.travelMode,
@@ -82,13 +84,33 @@ AutocompleteDirectionsHandler.prototype.route = function () {
     },
     function (result, status) {
       if (status === "OK") {
-        // console.log(result);
-        const routes = result["routes"];
-        // console.log(routes);
+        // // console.log(result);
+        // result.routes.forEach((e)=>{
+        //   console.log(e.legs[0].distance.text);
+        //   //texts of distance of each direction
+        //   console.log(e.legs[0].duration.text)
+        //   //texts of time duration of each direciton
+        //   //processing code here.
+        // })
+        // console.log(result.routes[0].legs[0].distance.text);
+        //distance content of first direction
 
-        for (var i = 0; i < routes.length; i++) {
-          console.log(routes[i]["legs"][0]);
-        }
+        // console.log(result.routes[0].legs[0])
+        // console.log(result.routes[0].legs[0].steps[0].distance.text)
+        //text of first steps of first route
+
+        console.log(result.routes[0].overview_path[0]);
+        var test = result.routes[0].overview_path[0].lat;
+
+        // Object.entries(test).forEach(([key,value])=>{
+        //   console.log(key);
+        //   console.log(value);
+        // })
+
+        console.log(result);
+        console.log(test);
+
+        // console.log(result[`routes`]);
 
         me.directionsRenderer.setDirections(result);
       } else {
