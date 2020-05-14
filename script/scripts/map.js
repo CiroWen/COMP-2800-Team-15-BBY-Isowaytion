@@ -5,6 +5,23 @@ function initMap() {
     zoom: 13,
   });
 
+  var heatMapData = [
+    { location: new google.maps.LatLng(49.25964, -123.02757), weight: 0.5 },
+    { location: new google.maps.LatLng(49.26007, -123.02753), weight: 3 },
+    { location: new google.maps.LatLng(49.26008, -123.02387), weight: 2 },
+    { location: new google.maps.LatLng(49.25825, -123.02373), weight: 0.5 },
+    { location: new google.maps.LatLng(49.25826, -123.02757), weight: 0.2 },
+    { location: new google.maps.LatLng(49.25514, -123.0235), weight: 0.3 },
+    { location: new google.maps.LatLng(49.25469, -123.01976), weight: 3 },
+    { location: new google.maps.LatLng(49.22758, -123.00755), weight: 1 },
+  ];
+
+  var heatmap = new google.maps.visualization.HeatmapLayer({
+    data: heatMapData,
+    map: map,
+  });
+  heatmap.setMap(map);
+
   new AutocompleteDirectionsHandler(map);
 }
 
