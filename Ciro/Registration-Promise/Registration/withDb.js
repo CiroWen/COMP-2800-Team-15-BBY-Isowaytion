@@ -20,28 +20,28 @@ app.use(pasp.session());
 //setup
 
 //server connection setup.
-const db = mysql.createConnection({
-    host: '205.250.9.115',
-    //where the info is hoste
-    user: 'root',
-    //the user name of db
-    password: '123',
-    //the pswd for user
-    database: 'isowaytion'
-    //name of db
-});
+// const db = mysql.createConnection({
+//     host: '205.250.9.115',
+//     //where the info is hoste
+//     user: 'root',
+//     //the user name of db
+//     password: '123',
+//     //the pswd for user
+//     database: 'isowaytion'
+//     //name of db
+// });
 
 //local connection setup.
-// const db = mysql.createConnection({
-//     host     : 'localhost',
-//     //where the info is hoste
-//     user     : 'root',
-//     //the user name of db
-//     password : 'isowaytion15',
-//     //the pswd for user
-//     database : 'isowaytion'
-//     //name of db
-//   });
+const db = mysql.createConnection({
+    host     : 'localhost',
+    //where the info is hoste
+    user     : 'root',
+    //the user name of db
+    password : 'isowaytion15',
+    //the pswd for user
+    database : 'isowaytion'
+    //name of db
+  });
 
 //connect to database
 db.connect((err) => {
