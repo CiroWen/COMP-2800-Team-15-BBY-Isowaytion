@@ -26,9 +26,10 @@ var port = process.env.PORT || 1515;
 
 //*******************consts/vars/lets declared above********************* */
 // app.use(cors())
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "50mb" }));
 app.use(
   bodyParser.urlencoded({
+    limit: "50mb",
     extended: false,
   })
 );
@@ -42,14 +43,6 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(bodyParser.json({ limit: "50mb" }));
-app.use(
-  bodyParser.urlencoded({
-    limit: "50mb",
-    extended: true,
-    parameterLimit: 50000,
-  })
-);
 app.get("/welcome", isLoggedIn, (req, res) => {
   useremail = req.user._json.email;
   //res.send(`welcome ${req.user.Email}`)
@@ -517,10 +510,19 @@ app.post("/mapmap", (req, res) => {
   // data from map.js
   // currently data is only first route
   // when I try to put all the route, it shows error "entity is too large"
-  console.log(req.body.data);
+  // console.log(req.body.data);
 
   // this is paths of a route
   for (let i = 0; i < req.body.data.length; i++) {
-    console.log(polyline.decode(req.body.data[i]["encoded_lat_lngs"]));
+    let length = req.body.data[i].length;
+    console.log(
+      `======================================Route ${
+        i + 1
+      }======================================`
+    );
+
+    for (let j = 0; j < length; j++) {
+      console.log(polyline.decode(req.body.data[i][j]["encoded_lat_lngs"]));
+    }
   }
 });
