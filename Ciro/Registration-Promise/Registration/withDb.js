@@ -157,10 +157,10 @@ app.post(`/login`, pasp.authenticate(`local`, {
 
 //post method handler that create a new account in Mysql
 app.post(`/regis`, (req, res) => {
-    // console.log(req.body.name);
-    // console.log(req.body.email);
-    // console.log(req.body.password);
-    // console.log(req.body);
+    console.log(req.body.name);
+    console.log(req.body.email);
+    console.log(req.body.password);
+    console.log(req.body);
     if(req.body){
         db.query(`INSERT INTO user SET ?`,req.body,(err,result)=>{
             if(err) throw err;
