@@ -366,17 +366,14 @@ app.get("/myAccount", isLoggedIn, (req, res) => {
   // app.get("/myAccount", (req, res) => {
   if (login === "google") {
     useremail = req.user._json.email;
+    userPic = req.user._json.picture;
+    
   } else {
     useremail = req.user[0].email;
     console.log(useremail);
   }
-  console.log("Testing this" + req.user);
-// app.get("/myAccount", isLoggedIn, (req, res) => {
-app.get("/myAccount", (req, res) => {
-  useremail = req.user._json.email;
-  userPic = req.user._json.picture;
-  console.log(useremail);
-  console.log(userPic);
+  // console.log(useremail);
+  // console.log(userPic);
   con.query(`SELECT * FROM user WHERE email = '${useremail}'`, (err, rows) => {
     if (err) throw err;
 
@@ -490,9 +487,14 @@ app.post("/editInfo", (req, res) => {
 // Grab the users points for isostats page.
 // app.get("/isostats", isLoggedIn, (req, res) => {
   app.get("/isostats", (req, res) => {
-    useremail = req.user._json.email;
-    userPic = req.user._json.picture;
-    fullName = req.user._json.name;
+    if (login === "google") {
+      useremail = req.user._json.email;
+      userPic = req.user._json.picture;
+    } else {
+      useremail = req.user[0].email;
+    }
+    
+    // fullName = req.user._json.name;
     console.log(useremail);
     con.query(`SELECT * FROM user WHERE email = '${useremail}'`, (err, rows) => {
       if (err) throw err;
@@ -500,7 +502,8 @@ app.post("/editInfo", (req, res) => {
       console.log("Data received from isowaytion.");
       console.log(rows);
       //Store points and number of routes taken in a variable.
-      name = fullName;
+      //name = fullName;
+      name = rows[0].Name;
       profilePic = userPic;
       routeNum = rows[0].Name; // Name is temporary because we dont have a routeNum row.
       points = rows[0].Point;
@@ -530,10 +533,6 @@ app.get("/leaderboard", isLoggedIn, (req, res) => {
   } else {
     useremail = req.user[0].email;
   }
-//app.get("/leaderboard", isLoggedIn, (req, res) => {
-app.get("/leaderboard", (req, res) => {
-  useremail = req.user._json.email;
-
   // //Grab user name
   // let getName = `SELECT isowaytion.Name FROM isowaytion WHERE email = '${useremail}'`;
 
@@ -562,8 +561,12 @@ app.get("/leaderboard", (req, res) => {
     //Genereate array of leaderboard data from returned array of objects
     let leaderboard = [];
     leaderboardData.forEach((row) => {
+      let point = row.Point;
+      if (point == null) {
+        point = 0;
+      }
       leaderboard.push(row.Name);
-      leaderboard.push(row.Point);
+      leaderboard.push(point);
     });
 
     //Load leaderboard page
