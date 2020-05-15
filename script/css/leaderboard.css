@@ -81,7 +81,7 @@ nav {
 }
 
 
-#info1 {
+.userDisplay {
   display: flex;
   padding: 5px;
   border-color: rgb(199, 199, 199);
@@ -97,7 +97,7 @@ nav {
   font: "TeXGyreAdventorBold";
 }
 
-#info1:hover {
+.userDisplay:hover {
   border-color: #ff4858;
   border-bottom-style: solid;
   border-width: thick;

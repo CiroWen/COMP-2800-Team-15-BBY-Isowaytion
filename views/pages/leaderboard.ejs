@@ -34,7 +34,7 @@
                 </form>
                 <% if (userData.length / 2 < 10) { %>
                 <% for (var i = 0; i < userData.length;  i += 2 ) { %>
-                <button id="info1">
+                <button class="userDisplay">
                     <li id="title"><b><%= userData[i] %></b></li>
                     <li id="points"><b><%= userData[i + 1] %></b></li>
                 </button>
@@ -57,8 +57,8 @@
                 </div>
                 <% } %>
                 <% } else { %>
-                <% for (var i = 0; i < 10;  i += 2 ) { %>
-                <button id="info1">
+                <% for (var i = 0; i < 20;  i += 2 ) { %>
+                <button class="userDisplay">
                     <li id="title"><b><%= userData[i] %></b></li>
                     <li id="points"><b><%= userData[i + 1] %></b></li>
                 </button>
@@ -84,36 +84,6 @@
                 <% } %>
             </ul>
         </div>
-        <script>
-            // Get the content specific to the user.
-            let modal = document.getElementsByClassName("modal");
-
-            // Get the button that opens the modal
-            let btn = document.getElementById("info1");
-
-            // Get the <span> element that closes the modal
-            let span = document.getElementsByClassName("close")[0];
-
-            // When the user clicks the button, open the modal
-            for (let i = 0; i < modal.length; i ++) {
-
-                btn.onclick = function () {
-                    modal[i].style.display = "block";
-                }
-
-                // When the user clicks on <span> (x), close the modal
-                span.onclick = function () {
-                    modal[i].style.display = "none";
-                }
-
-                // When the user clicks anywhere outside of the modal, close it
-                window.onclick = function (event) {
-                    if (event.target == modal) {
-                    modal[i].style.display = "none";
-                    }
-                }
-            }
-        </script>
         <script src="https://kit.fontawesome.com/df012b2a98.js" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
             integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
@@ -125,7 +95,7 @@
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
         </script>
         <!-- JS Files -->
-        <script src="/script/scripts/leaderboard.js"></script>
+        <script src="/leaderboard.js"></script>
 </body>
 
 </html>
