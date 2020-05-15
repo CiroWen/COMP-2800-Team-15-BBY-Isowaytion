@@ -10,26 +10,27 @@
     <link rel="stylesheet" href="../css/aboutus.css" />
     <link rel="icon" href="/favicon.ico" />
     <link rel="stylesheet" href="../css/bootstrap.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
-
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
 </head>
 
 <body>
-    <div class="top bounce-in-top">
+    <div class="top">
         <i class="fas fa-angle-left" onclick="history.back()"></i>
         <h2 class="title">
-            Isostats
+            IsoStats
         </h2>
     </div>
-    </br>
+    <!-- NavBar -->
+    <form action="/isostats" method="POST"></form>
+    <div class="header bounce-in-top">
+        <div class="dot"><img id="profile" src="<%= profilePic %>"></div>
+        </br>
+        <h1 id="name" class="text-pop-up-top"><%= name %></h1>
+    </div>
     <div class="outer">
-
-        <div class="header bounce-in-top">
-            <div class="dot"><b>DK</b></div>
-            </br>
-            <h2 class="text-pop-up-top">Daichi Keber</h2>
-        </div>
-        <form action="/isostats" method="POST">
         <div class="info swing-in-top-fwd ">
             <ul>
                     <div id="info1">
@@ -93,12 +94,30 @@
                         <li>
                             <img src="../Images/star.png">
                         </li>
+                        <li>
+                            <img src="../Images/star.png">
+                        </li>
                 <% } %>
             </ul>
+        </br>
+            <div id="message" class="bounce-in-top-later">
+                <% if (points < 10 || points == null) { %>
+                    <h5>You'll have to show how you isolate!</h5>
+                <% } else if (points >= 10 && points < 20) { %>
+                    <h5>You're starting to take this serious!</h5>
+                <% } else if (points >= 20 && points < 30) { %>
+                    <h5>You're doing your part to flatten the curve!</h5>
+                <% } else if (points >= 30 && points < 50) { %>
+                    <h5>You're a model citizen!</h5>
+                <% } else { %>
+                    <h5>You're an IsoExpert!</h5>
+            <% } %>
+            </div>
         </div>
-        <div id="message" class="bounce-in-top-later">
-            <h5>You're an IsoExpert!</h5>
-        </div>
+    </br>
+</br>
+</br>
+</br>
         <p class="footer">COMP2800 Team Horton</p>
     </form>
     </div>

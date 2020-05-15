@@ -86,15 +86,14 @@ h3 {
   padding-bottom: 1em;
 }
 
+img {
+  height: 50px;
+  width: 50px;
+  border-radius: 10px;
+}
+
 .dot {
-  height: 70px;
-  width: 70px;
-  background-color: #ff4858;
-  border-radius: 50%;
-  line-height: 70px;
-  text-align: center;
   margin: auto;
-  color: white;
 }
 
 .info {
