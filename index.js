@@ -493,7 +493,7 @@ app.get("/leaderboard", isLoggedIn, (req, res) => {
   // let username = name[0].Name;
 
   //Grab points info from database
-  let getPoints = `SELECT user.Name, user.Point FROM reward ORDER BY user.Point DESC;`;
+  let getPoints = `SELECT user.Name, user.Point FROM user ORDER BY user.Point DESC;`;
 
   con.query(getPoints, (err, leaderboardData) => {
     if (err) throw err;
