@@ -24,7 +24,11 @@
         <!-- User's Name -->
         <div class="header">
             <form action="/myAccount" method="post"></form>
-            <div class="dot"><img src="<%= profilePic %>"</div>
+            <% if(profilePic === "undefined") { %>
+                <div class="dot"><img id="profile" src="/public/Images/profile.png"></div>
+              <% } else{ %>  
+                <div class="dot"><img id="profile" src="<%= profilePic %>"></div>
+             <% } %>
         </br>
     </br>
             <div class="head">
