@@ -148,7 +148,9 @@ AutocompleteDirectionsHandler.prototype.route = function () {
           body: JSON.stringify({
             data,
           }),
-        });
+        })
+          .then((res) => res.json())
+          .then((data) => console.log(JSON.stringify(data)));
 
         me.directionsRenderer.setDirections(result);
       } else {

@@ -513,6 +513,7 @@ app.post("/mapmap", (req, res) => {
   // console.log(req.body.data);
 
   // this is paths of a route
+  let routes = new Array(req.body.data.length);
   for (let i = 0; i < req.body.data.length; i++) {
     let length = req.body.data[i].length;
     console.log(
@@ -520,9 +521,15 @@ app.post("/mapmap", (req, res) => {
         i + 1
       }======================================`
     );
-
+    routes[i] = new Array(length);
     for (let j = 0; j < length; j++) {
-      console.log(polyline.decode(req.body.data[i][j]["encoded_lat_lngs"])[0]);
+      routes[i][j] = polyline.decode(
+        req.body.data[i][j]["encoded_lat_lngs"]
+      )[0];
     }
   }
+
+  console.log(routes);
+
+  res.send(routes);
 });
