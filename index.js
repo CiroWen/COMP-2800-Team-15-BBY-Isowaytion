@@ -641,7 +641,51 @@ app.post("/mapmap", (req, res) => {
   // when I try to put all the route, it shows error "entity is too large"
   // console.log(req.body.test);
   // console.log(polyline.decode(req.body.test))
-  res.send(polyline.decode(req.body.test))
+//sending the decoded coordinates array to map.js  
+  const decodedCoor = polyline.decode(req.body.test)
+  console.log(decodedCoor);
+  console.log(`----------------------`);
+  console.log(decodedCoor.length);
+  
+  console.log(decodedCoor[0][0]);
+  for(let i=0;i<decodedCoor.length;i++){
+    if(decodedCoor[i]){
+    con.query(`select * from coordinates where lat=${decodedCoor[i][0]} and lng=${decodedCoor[i][1]}`,(err,res,fields)=>{
+      if(res){
+        if(res.length!=0){
+            con.query(`update coordinates set frequency = frequency+1 Where lat=${decodedCoor[i][0]} and lng=${decodedCoor[i][1]}`)
+        }else{
+          con.query(`INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoor[i][0]},${decodedCoor[i][1]},1)`)
+          
+        }
+      }else{
+        console.log(`error occured`);
+        
+      }
+      // console.log(`errbelow`);
+      // console.log(err);
+      // console.log(`resbelow`);
+      // console.log(res);
+      
+      // console.log(res[0].id);
+      
+      
+      
+      
+    })
+    }
+  }
+  
+  res.send(decodedCoor)
+
+
+  
+
+
+
+
+
+
   // // this is paths of a route
   // let routes = new Array(req.body.data.length);
   // for (let i = 0; i < req.body.data.length; i++) {
