@@ -414,3 +414,10 @@ label {
     animation-timing-function: ease-out;
   }
 }
+
+a#signin{
+  font-size: x-large;
+}
+form a{
+  text-align: center;
+}

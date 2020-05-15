@@ -6,23 +6,29 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(express.static(__dirname + "scripts"));
 app.use(express.static(__dirname + "scripts/scripts"));
-
+var coordinates;
 const path = require("path");
 const router = express.Router();
 const bodyParser = require("body-parser");
 const passport = require(`passport`);
+const flash = require(`express-flash`);
 const cookieSession = require("cookie-session");
 require(`./passport-setup`);
+const paspInit = require(`./passport-setup`);
 const mysql = require(`mysql`);
 const isLoggedIn = (req, res, next) => {
   if (req.user) {
     next();
   } else {
     res.sendStatus(401);
+    res.sendFile(path.join(__dirname + "/views/signin.html"));
   }
 };
 //set port
 var port = process.env.PORT || 1515;
+
+//Variable to check if user logs in with local or google account
+let login;
 
 //*******************consts/vars/lets declared above********************* */
 // app.use(cors())
@@ -41,6 +47,8 @@ app.use(
     keys: ["key1", "key2"],
   })
 );
+
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 app.get("/welcome", isLoggedIn, (req, res) => {
@@ -102,6 +110,8 @@ app.get(
   }),
   //authenticate() redirect to 2nd para if fail to authenticate
   function (req, res) {
+    //Set login status to google
+    login = 'google';
     // Successful authentication, redirect too the route below
     res.redirect("/welcome");
   }
@@ -114,7 +124,7 @@ app.get("/logout", (req, res) => {
   //logout
   req.logout();
   //redirect to homepage
-  res.redirect("/");
+  res.redirect("/signin");
 });
 
 //******************************************* *********************/
@@ -230,22 +240,22 @@ con.connect((err) => {
 /*******************************************
  * Express server side
  */
-app.get(`/regis`, (req, res) => {
-  res.render(`pages/regis.ejs`);
+app.get(`/signup`, (req, res) => {
+  res.sendFile(path.join(__dirname + "/views/signup.html"));
 });
 
 //post method handler that create a new account in Mysql
 // regis with out using google
-app.post(`/regis`, (req, res) => {
+app.post(`/signup`, (req, res) => {
   console.log(req.body.name);
   console.log(req.body.email);
   console.log(req.body.password);
-  console.log(req.body);
+  //console.log(req.body);
   if (req.body) {
     con.query(`INSERT INTO user SET ?`, req.body, (err, result) => {
       if (err) throw err;
       console.log(result);
-      res.redirect(`/`);
+      res.redirect('/signin');
     });
   }
 });
@@ -281,6 +291,10 @@ app.post("/google", (req, res) => {
 
 //************05-11 edit ends ****************
 app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname + "/views/signup.html"));
+});
+
+app.get("/signin", (req, res) => {
   res.sendFile(path.join(__dirname + "/views/signin.html"));
 });
 
@@ -292,6 +306,10 @@ app.get("/isostats", (req, res) => {
 // Send to about us page
 app.get("/aboutus", function (req, res) {
   res.sendFile(path.join(__dirname + "/views/aboutus.html"));
+});
+
+app.get("/invalid", function (req, res) {
+  res.sendFile(path.join(__dirname + "/views/signin_invalid.html"));
 });
 
 // Send to Map page.
@@ -343,9 +361,15 @@ app.use(express.static(__dirname + "/view"));
 app.use(express.static(__dirname + "/script"));
 //Store all JS and CSS in Scripts folder.
 
-// app.get("/myAccount", isLoggedIn, (req, res) => {
-app.get("/myAccount", (req, res) => {
-  useremail = req.user._json.email;
+app.get("/myAccount", isLoggedIn, (req, res) => {
+// app.get("/myAccount", (req, res) => {
+  if (login === 'google'){
+    useremail = req.user._json.email;
+  } else {
+    useremail = req.user[0].email;
+    console.log(useremail);
+  }
+  console.log("Testing this" + req.user);
   console.log(useremail);
   con.query(`SELECT * FROM user WHERE email = '${useremail}'`, (err, rows) => {
     if (err) throw err;
@@ -364,7 +388,11 @@ app.get("/myAccount", (req, res) => {
 
 //app.get("/editInfo", isLoggedIn, (req, res) => {
 app.get("/editInfo", (req, res) => {
-  useremail = req.user._json.email;
+  if (login === 'google'){
+    useremail = req.user._json.email;
+  } else {
+    useremail = req.user[0].email;
+  }
   console.log("This is the email" + useremail);
   con.query(`SELECT * FROM user WHERE email = '${useremail}'`, (err, rows) => {
     if (err) throw err;
@@ -451,10 +479,13 @@ app.post("/editInfo", (req, res) => {
  * Express server side, LEADERBOARDS
  */
 
-//app.get("/leaderboard", isLoggedIn, (req, res) => {
-app.get("/leaderboard", (req, res) => {
-  useremail = useremail = req.user._json.email;
-
+app.get("/leaderboard", isLoggedIn, (req, res) => {
+// app.get("/leaderboard", (req, res) => {
+  if (login === 'google'){
+    useremail = req.user._json.email;
+  } else {
+    useremail = req.user[0].email;
+  }
   // //Grab user name
   // let getName = `SELECT isowaytion.Name FROM isowaytion WHERE email = '${useremail}'`;
 
@@ -462,7 +493,7 @@ app.get("/leaderboard", (req, res) => {
   // let username = name[0].Name;
 
   //Grab points info from database
-  let getPoints = `SELECT * FROM reward ORDER BY reward.Points DESC;`;
+  let getPoints = `SELECT user.Name, user.Point FROM user ORDER BY user.Point DESC;`;
 
   con.query(getPoints, (err, leaderboardData) => {
     if (err) throw err;
@@ -470,8 +501,8 @@ app.get("/leaderboard", (req, res) => {
     //Genereate array of leaderboard data from returned array of objects
     let leaderboard = [];
     leaderboardData.forEach((row) => {
-      leaderboard.push(row.Email);
-      leaderboard.push(row.Points);
+      leaderboard.push(row.Name);
+      leaderboard.push(row.Point);
     });
 
     //Load leaderboard page
@@ -506,14 +537,52 @@ app.post("/auth", function (request, response) {
   }
 });
 
+
+/************************************
+ * Local Login Functionality
+ */
+
+ //paspInit() is a authentication interface connects to setup.js
+//the function email is passed to setup.js after the data of user is fetched from mysql
+paspInit(passport,  (email) => {
+  return new Promise(function (resolve, reject){
+  con.query(`select email, password from user where email = ?`, [email]
+      , (err, res,fields) => {
+          if (err) {
+              reject(err)
+          } else {
+              // console.log("user-----------------------------------");
+              // console.log("res[0]['password']")
+              // console.log(res[0])
+              login = 'local';
+              resolve(JSON.parse(JSON.stringify(res)))
+          }
+      })
+  })
+})
+
+app.post(`/signin`, passport.authenticate(`local`, {
+  successRedirect: `/map`,
+  failureRedirect: `/invalid`,
+  failureFlash: true
+}));
+
 app.post("/mapmap", (req, res) => {
   // data from map.js
   // currently data is only first route
   // when I try to put all the route, it shows error "entity is too large"
   // console.log(req.body.data);
+<<<<<<< HEAD
 
   // this is paths of a route
   let routes = new Array(req.body.data.length);
+=======
+  
+  // console.log(req.body.data[0][0]);
+  // console.log(res);
+  // // this is paths of a route
+  var gg = [];
+>>>>>>> 1bc448b81c4acdc293632106aceccc380dd7f64c
   for (let i = 0; i < req.body.data.length; i++) {
     let length = req.body.data[i].length;
     console.log(
@@ -521,6 +590,7 @@ app.post("/mapmap", (req, res) => {
         i + 1
       }======================================`
     );
+<<<<<<< HEAD
     routes[i] = new Array(length);
     for (let j = 0; j < length; j++) {
       routes[i][j] = polyline.decode(
@@ -532,4 +602,49 @@ app.post("/mapmap", (req, res) => {
   console.log(routes);
 
   res.send(routes);
+=======
+    // console.log(req.body.data.length);
+    // console.log(length);
+    
+    
+    gg[i]=[];
+    for (let j = 0; j < length; j++) {
+          // console.log(polyline.decode(req.body.data[i][j]["encoded_lat_lngs"])[0]);
+          gg[i][j]=polyline.decode(req.body.data[i][j]["encoded_lat_lngs"])[0]
+          // gg.push(polyline.decode(req.body.data[i][j]["encoded_lat_lngs"])[0])
+        }
+        
+        
+  
+    for (let j = 0; j < length; j++) {
+      // console.log(polyline.decode(req.body.data[i][j]["encoded_lat_lngs"])[0]);
+      console.log(gg[i][j]);
+      
+    }
+  }    
+  
+  let testpp = new Promise((resl,rej)=>{
+    if(gg){
+      resl(gg)
+    }else{
+      rej(Error(`gg`))
+    }
+  })
+  testpp.then((fromResl)=>{
+    app.get(`/mapmap`,(req,res)=>{
+      // console.log(fromResl);
+      
+      res.json(fromResl);
+      
+    })
+  }).catch((fromRej)=>{
+    console.log(fromRej);
+    
+  })
+  
+>>>>>>> 1bc448b81c4acdc293632106aceccc380dd7f64c
 });
+
+
+
+
