@@ -116,23 +116,23 @@ AutocompleteDirectionsHandler.prototype.route = function () {
         //text of first steps of first route
 
         // console.log(result.routes[0].overview_path[0]);
-        var test = result.routes[0].overview_path[0].lat;
+        var test = result.routes[0].overview_polyline;
+        console.log(test);
 
         // Object.entries(test).forEach(([key,value])=>{
         //   console.log(key);
         //   console.log(value);
         // })
-
         // console.log(result);
         // console.log(result.geocoded_waypoints[0].place_id);
         // // place id
         // console.log(test);
 
-        let data = [];
-
-        for (let i = 0; i < result["routes"].length; i++) {
-          data.push(result["routes"][i]["legs"][0]["steps"]);
-        }
+        // let data = [];
+  //previous version using legs
+        // for (let i = 0; i < result["routes"].length; i++) {
+        //   data.push(result["routes"][i]["legs"][0]["steps"]);
+        // }
 
         // currently this is just one of routes
         // let data = result["routes"][0]["legs"][0]["steps"];
@@ -144,33 +144,49 @@ AutocompleteDirectionsHandler.prototype.route = function () {
             Accept: "application/json",
             "Content-Type": "application/json",
           },
-
           //make sure to serialize your JSON body
           body: JSON.stringify({
-            data,
+            test,
+            //data,
           }),
         })
           // get data from '/mapmap' route
+          // .then((res) => console.log(res.body))  
           .then((res) => res.json())
-
           // parse data from string to array
           // push each Lat,Lng into heatMapData array as an object
           .then((res) => {
-            let data = JSON.stringify(res);
-            console.log(data);
-            data = JSON.parse(data);
-
-            let arrLength = data.length;
-
-            for (let i = 0; i < arrLength; i++) {
-              let subLength = data[i].length;
-
-              for (let j = 0; j < subLength; j++) {
-                heatMapData.push(
-                  new google.maps.LatLng(data[i][j][0], data[i][j][1])
-                );
-              }
+            // console.log(res);
+            // console.log(JSON.stringify(res));
+            console.log(res[0][0]);
+            console.log(res[0][1]);
+            
+            
+            for(let i =0;i<res.length;i++){
+              // console.log(`testing${i}[0]`);
+              // console.log(res[i][0]);
+              // console.log(`testing${i}[1]`);
+              // console.log(res[i][1]);
+              heatMapData.push(
+                new google.maps.LatLng(res[i][0],res[i][1]),9
+              )
             }
+            // let data = JSON.stringify(res);
+            // console.log(data);
+            // data = JSON.parse(data);
+            let arrLength=res.length;
+            // let arrLength = data.length;
+
+            // for (let i = 0; i < arrLength; i++) {
+            //   let subLength = res[i].length
+            //   let subLength = data[i].length;
+
+            //   for (let j = 0; j < subLength; j++) {
+            //     heatMapData.push(
+            //       new google.maps.LatLng(data[i][j][0], data[i][j][1])
+            //     );
+            //   }
+            // }
 
             // update heatmap layer
             heatmap.setMap(heatmap.getMap());
