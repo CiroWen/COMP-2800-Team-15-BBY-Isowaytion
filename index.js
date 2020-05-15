@@ -201,23 +201,23 @@ let currentInfo = new Array(LENGTH);
 
 //**************05-11 edit************************
 //Ciro's local mysql for testing purpose.
-const con = mysql.createConnection({
-  host     : 'localhost',
-  //where the info is hoste
-  user     : 'root',
-  //the user name of db
-  password : 'isowaytion15',
-  //the pswd for user
-  database : 'isowaytion'
-  //name of db
-});
-
-// var con = mysql.createConnection({
-//   host: "205.250.9.115",
-//   user: "root",
-//   password: "123",
-//   database: "isowaytion",
+// const con = mysql.createConnection({
+//   host     : 'localhost',
+//   //where the info is hoste
+//   user     : 'root',
+//   //the user name of db
+//   password : 'isowaytion15',
+//   //the pswd for user
+//   database : 'isowaytion'
+//   //name of db
 // });
+
+var con = mysql.createConnection({
+  host: "205.250.9.115",
+  user: "root",
+  password: "123",
+  database: "isowaytion",
+});
 
 // initial connection
 con.connect((err) => {
@@ -298,11 +298,6 @@ app.get("/signin", (req, res) => {
   res.sendFile(path.join(__dirname + "/views/signin.html"));
 });
 
-// Send to isostats page
-app.get("/isostats", (req, res) => {
-  res.render("pages/isostats");
-});
-
 // Send to about us page
 app.get("/aboutus", function (req, res) {
   res.sendFile(path.join(__dirname + "/views/aboutus.html"));
@@ -365,7 +360,9 @@ app.get("/myAccount", isLoggedIn, (req, res) => {
   // app.get("/myAccount", (req, res) => {
   if (login === "google") {
     useremail = req.user._json.email;
+    userPic = req.user._json.picture;
   } else {
+    userPic = "../Images/ryan_profile.png";
     useremail = req.user[0].email;
     console.log(useremail);
   }
@@ -378,10 +375,12 @@ app.get("/myAccount", isLoggedIn, (req, res) => {
     console.log(rows);
     //Store in user info array, {email, name, address}
     currentInfo = [rows[0].Email, rows[0].Name, rows[0].Address];
+    profilePic = userPic;
 
     //pass info to account page when rendered
     res.render("pages/myAccount", {
       currentInfo: currentInfo,
+      profilePic: profilePic,
     });
   });
 });
@@ -475,6 +474,50 @@ app.post("/editInfo", (req, res) => {
 //   console.log("1 record inserted");
 // });
 
+
+/*******************************************
+ * Isostats
+ */
+
+// Grab the users points for isostats page.
+// app.get("/isostats", isLoggedIn, (req, res) => {
+  app.get("/isostats", (req, res) => {
+    if (login === "google") {
+      useremail = req.user._json.email;
+      userPic = req.user._json.picture;
+    } else {
+      useremail = req.user[0].email;
+      userPic = "../Images/ryan_profile.png";
+    }
+    
+    // fullName = req.user._json.name;
+    console.log(useremail);
+    con.query(`SELECT * FROM user WHERE email = '${useremail}'`, (err, rows) => {
+      if (err) throw err;
+  
+      console.log("Data received from isowaytion.");
+      console.log(rows);
+      //Store points and number of routes taken in a variable.
+      //name = fullName;
+      name = rows[0].Name;
+      profilePic = userPic;
+      routeNum = rows[0].Name; // Name is temporary because we dont have a routeNum row.
+      points = rows[0].Point;
+      if (points == null) {
+        points = 0;
+      }
+  
+      //pass info to isostats page when rendered
+      res.render("pages/isostats", {
+        points: points,
+        routeNum: routeNum,
+        profilePic: profilePic,
+        name: name,
+      });
+    });
+  });
+
+
 /*******************************************
  * Express server side, LEADERBOARDS
  */
@@ -492,6 +535,19 @@ app.get("/leaderboard", isLoggedIn, (req, res) => {
   //Grab name from query
   // let username = name[0].Name;
 
+  con.query(`SELECT * FROM user WHERE email = '${useremail}'`, (err, rows) => {
+    if (err) throw err;
+
+    console.log("Data received from isowaytion.");
+    console.log(rows);
+    //Store in user info array, {email, name, address}
+    name = rows[0].Name;
+    points = rows[0].Point;
+    if (points == null) {
+      points = 0;
+    }
+  });
+
   //Grab points info from database
   let getPoints = `SELECT user.Name, user.Point FROM user ORDER BY user.Point DESC;`;
 
@@ -501,16 +557,23 @@ app.get("/leaderboard", isLoggedIn, (req, res) => {
     //Genereate array of leaderboard data from returned array of objects
     let leaderboard = [];
     leaderboardData.forEach((row) => {
+      let point = row.Point;
+      if (point == null) {
+        point = 0;
+      }
       leaderboard.push(row.Name);
-      leaderboard.push(row.Point);
+      leaderboard.push(point);
     });
 
     //Load leaderboard page
     res.render("pages/leaderboard", {
       userData: leaderboard,
+      name: name,
+      points: points,
     });
   });
-});
+});  
+
 
 // // Check mySQL for corrent information
 app.post("/auth", function (request, response) {

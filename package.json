@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/CiroGuangchengWen/COMP-2800-Team-15-BBY-Isowaytion#readme",
   "dependencies": {
+    "array-flatten": "^3.0.0",
     "body-parser": "^1.19.0",
     "cookie-session": "^1.4.0",
     "ejs": "^3.1.2",
@@ -29,6 +30,7 @@
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
     "polyline": "^0.2.0",
+    "qs": "^6.9.4",
     "url": "^0.11.0"
   }
 }
