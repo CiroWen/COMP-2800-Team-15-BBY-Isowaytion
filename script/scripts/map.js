@@ -1,23 +1,5 @@
-function heat(googleMap) {
-  var heatMapData = [
-    { location: new google.maps.LatLng(49.25964, -123.02757), weight: 0.5 },
-    { location: new google.maps.LatLng(49.26007, -123.02753), weight: 3 },
-    { location: new google.maps.LatLng(49.26008, -123.02387), weight: 2 },
-    { location: new google.maps.LatLng(49.25825, -123.02373), weight: 0.5 },
-    { location: new google.maps.LatLng(49.25826, -123.02757), weight: 0.2 },
-    { location: new google.maps.LatLng(49.25514, -123.0235), weight: 0.3 },
-    { location: new google.maps.LatLng(49.25469, -123.01976), weight: 3 },
-    { location: new google.maps.LatLng(49.22758, -123.00755), weight: 1 },
-  ];
-
-  let points = new google.maps.MVCArray(heatMapData);
-
-  var heatmap = new google.maps.visualization.HeatmapLayer({
-    data: points,
-    map: googleMap,
-  });
-  heatmap.setMap(googleMap);
-}
+var heatMapData = [];
+var heatmap;
 
 function initMap() {
   var map = new google.maps.Map(document.getElementById("map"), {
@@ -26,9 +8,20 @@ function initMap() {
     zoom: 13,
   });
 
-  heat(map);
+  heatMapData = new google.maps.MVCArray();
+
+  heatmap = new google.maps.visualization.HeatmapLayer({
+    data: getPoint(),
+    map: map,
+  });
+
+  heatmap.setMap(map);
 
   new AutocompleteDirectionsHandler(map);
+}
+
+function getPoint() {
+  return heatMapData;
 }
 
 /**
@@ -156,7 +149,24 @@ AutocompleteDirectionsHandler.prototype.route = function () {
           }),
         })
           .then((res) => res.json())
-          .then((data) => console.log(JSON.stringify(data)));
+          .then((res) => {
+            let data = JSON.stringify(res);
+            console.log(data);
+            data = JSON.parse(data);
+
+            let arrLength = data.length;
+
+            for (let i = 0; i < arrLength; i++) {
+              let subLength = data[i].length;
+
+              for (let j = 0; j < subLength; j++) {
+                heatMapData.push(
+                  new google.maps.LatLng(data[i][j][0], data[i][j][1])
+                );
+              }
+            }
+            heatmap.setMap(heatmap.getMap());
+          });
 
         me.directionsRenderer.setDirections(result);
       } else {
