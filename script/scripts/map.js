@@ -115,7 +115,7 @@ AutocompleteDirectionsHandler.prototype.route = function () {
         // console.log(result.routes[0].legs[0].steps[0].distance.text)
         //text of first steps of first route
 
-        console.log(result.routes[0].overview_path[0]);
+        // console.log(result.routes[0].overview_path[0]);
         var test = result.routes[0].overview_path[0].lat;
 
         // Object.entries(test).forEach(([key,value])=>{
@@ -123,8 +123,10 @@ AutocompleteDirectionsHandler.prototype.route = function () {
         //   console.log(value);
         // })
 
-        console.log(result);
-        console.log(test);
+        // console.log(result);
+        // console.log(result.geocoded_waypoints[0].place_id);
+        // // place id
+        // console.log(test);
 
         let data = [];
 

@@ -66,6 +66,21 @@ label {
   width: 10rem;
 }
 
+.auth {
+  color: #ff4858;
+  font-size: 1rem !important;
+}
+
+a:active {
+  color: #ff4858 !important;
+  text-decoration: none;
+}
+
+a:link {
+  color: #ff4858;
+  text-decoration: none;
+}
+
 #easter {
   background: transparent;
   border: none !important;
@@ -431,4 +446,13 @@ label {
     -webkit-animation-timing-function: ease-out;
     animation-timing-function: ease-out;
   }
+}
+
+a#signup {
+  font-size: x-large;
+}
+
+p#invalid {
+  color: #ff4858;
+  font-weight: bold;
 }
