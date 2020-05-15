@@ -185,6 +185,11 @@ const LENGTH = 3;
 //Current user info, array
 let currentInfo = new Array(LENGTH);
 
+// Current users isostats
+let points = 0;
+let routeNum = 0;
+let name;
+
 /******************************************
  * Accessing user database
  */
@@ -448,6 +453,36 @@ app.post("/editInfo", (req, res) => {
 // });
 
 /*******************************************
+ * Isostats
+ */
+
+// Grab the users points for isostats page.
+// app.get("/isostats", isLoggedIn, (req, res) => {
+  app.get("/isostats", (req, res) => {
+    useremail = req.user._json.email;
+    console.log(useremail);
+    con.query(`SELECT * FROM user WHERE email = '${useremail}'`, (err, rows) => {
+      if (err) throw err;
+  
+      console.log("Data received from isowaytion.");
+      console.log(rows);
+      //Store points and number of routes taken in a variable.
+      routeNum = rows[0].Name; // Name is temporary because we dont have a routeNum row.
+      points = rows[0].Point;
+      if (points == null) {
+        points = 0;
+      }
+  
+      //pass info to isostats page when rendered
+      res.render("pages/isostats", {
+        points: points,
+        routeNum: routeNum,
+      });
+    });
+  });
+
+
+/*******************************************
  * Express server side, LEADERBOARDS
  */
 
@@ -460,6 +495,19 @@ app.get("/leaderboard", (req, res) => {
 
   //Grab name from query
   // let username = name[0].Name;
+
+  con.query(`SELECT * FROM user WHERE email = '${useremail}'`, (err, rows) => {
+    if (err) throw err;
+
+    console.log("Data received from isowaytion.");
+    console.log(rows);
+    //Store in user info array, {email, name, address}
+    name = rows[0].Name;
+    points = rows[0].Point;
+    if (points == null) {
+      points = 0;
+    }
+  });
 
   //Grab points info from database
   let getPoints = `SELECT * FROM reward ORDER BY reward.Points DESC;`;
@@ -477,9 +525,11 @@ app.get("/leaderboard", (req, res) => {
     //Load leaderboard page
     res.render("pages/leaderboard", {
       userData: leaderboard,
+      name: name,
+      points: points,
     });
   });
-});
+});  
 
 // // Check mySQL for corrent information
 app.post("/auth", function (request, response) {

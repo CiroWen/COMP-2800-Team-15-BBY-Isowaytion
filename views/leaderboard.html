@@ -48,9 +48,8 @@
               </div>
             </ul>
           </div>
-
         </div>
-        <button id="info1">
+        <!-- <button id="info1">
           <li id="title"><b>Jay</b></li>
           <li id="points"><b>68</b></li>
         </button>
@@ -77,7 +76,7 @@
         <button id="info1">
           <li id="title"><b>Mike</b></li>
           <li id="points"><b>5</b></li>
-        </button>
+        </button> -->
       </ul>
     </div>
     <script src="https://kit.fontawesome.com/df012b2a98.js" crossorigin="anonymous"></script>
@@ -91,33 +90,7 @@
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
     </script>
 
-    <script>
-      // Get the modal
-      var modal = document.getElementById("myModal");
-
-      // Get the button that opens the modal
-      var btn = document.getElementById("info1");
-
-      // Get the <span> element that closes the modal
-      var span = document.getElementsByClassName("close")[0];
-
-      // When the user clicks the button, open the modal 
-      btn.onclick = function () {
-        modal.style.display = "block";
-      }
-
-      // When the user clicks on <span> (x), close the modal
-      span.onclick = function () {
-        modal.style.display = "none";
-      }
-
-      // When the user clicks anywhere outside of the modal, close it
-      window.onclick = function (event) {
-        if (event.target == modal) {
-          modal.style.display = "none";
-        }
-      }
-    </script>
+    <script src="/script/scripts/leaderboard.js"></script>
 </body>
 
 </html>

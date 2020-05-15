@@ -66,12 +66,33 @@ nav {
   padding-right: 40px;
 }
 
+#userInfo {
+  display: flex;
+  padding: 5px;
+  border-color: #ff4858;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 10px;
+  width: 100%;
+  background-color: white;
+  color: #ff4858;
+  font: "TeXGyreAdventorBold";
+}
+
 #info1 {
   display: flex;
   padding: 5px;
   border-color: rgb(199, 199, 199);
   border-bottom-style: solid;
   border-width: thin;
+  width: 100%;
+  border-top-style: none;
+  border-left: none;
+  border-right: none;
+  background-color: white;
+  border-bottom-color: rgb(202, 202, 202);
+  color: #ff4858;
+  font: "TeXGyreAdventorBold";
 }
 
 #info1:hover {
@@ -98,13 +119,12 @@ li {
   display: flex;
 }
 
-button#info1 {
-  width: 100%;
-  border-top-style: none;
-  border-left: none;
-  border-right: none;
-  background-color: white;
-  border-bottom-color: rgb(202, 202, 202);
+#user {
+  display: flex;
+  padding: 5px;
+  border-color: rgb(199, 199, 199);
+  border-bottom-style: solid;
+  border-width: thin;
 }
 
 /* The Modal (background) */
@@ -127,8 +147,8 @@ button#info1 {
   background-color: #fefefe;
   margin: auto;
   padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
+  border: 1px solid #ff4858;
+  width: 50%;
 }
 
 /* The Close Button */

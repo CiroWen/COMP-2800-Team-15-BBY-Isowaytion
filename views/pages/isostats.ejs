@@ -23,58 +23,41 @@
     </div>
     </br>
     <div class="outer">
+
         <div class="header bounce-in-top">
             <div class="dot"><b>DK</b></div>
             </br>
             <h2 class="text-pop-up-top">Daichi Keber</h2>
         </div>
+        <form action="/isostats" method="POST">
         <div class="info swing-in-top-fwd ">
             <ul>
-                <div id="info1">
-                    <li id="title"><b>Points</b></li>
-                    <li id="points"><b>
-                        <!-- determine where this stat will be in database -->
-                        <%= userData[i] %>
-                    </b></li>
-                </div>
-                <div id="info2">
-                    <li id="title"><b>Number of Routes</b></li>
-                    <li id="points"><b>
-                        <!-- determine where this stat will be in database -->
-                        <%= userData[i] %>
-                    </b></li>
-                </div>
-                <div id="info3">
-                    <li id="title"><b>Days using the App</b></li>
-                    <li id="points"><b>
-                        <!-- determine where this stat will be in database -->
-                        <%= userData[i] %>
-                    </b></li>
-                </div>
+                    <div id="info1">
+                        <li id="title"><b>Points</b></li>
+                        <li id="points"><b><%= points %></b></li>
+                    </div>
+                    <div id="info2">
+                        <li id="title"><b>Number of Routes</b></li>
+                        <li id="points"><b><%= points %></b></li>
+                    </div>
+                    <div id="info3">
+                        <li id="title"><b>Days using the App</b></li>
+                        <li id="points"><b><%= points %></b></li>
+                    </div>
             </ul>
             <ul id="stars">
-                <% if (userData[i] < 10) { %>
+                <% if (points < 10 || points == null) { %>
                         <li>
                             <img src="../Images/star.png">
                         </li>
-                    <% } %> else if (userData[i] >= 10 && userData[i] < 20) { %>
-                        <li>
-                            <img src="../Images/star.png">
-                        </li>
-                        <li>
-                            <img src="../Images/star.png">
-                        </li>
-                    <% } %> else if (userData[i] >= 20 && userData[i] < 30) { %>
+                    <% } else if (points >= 10 && points < 20) { %>
                         <li>
                             <img src="../Images/star.png">
                         </li>
                         <li>
                             <img src="../Images/star.png">
                         </li>
-                        <li>
-                            <img src="../Images/star.png">
-                        </li>
-                    <% } %> else if (userData[i] >= 30 && userData[i] < 50) { %>
+                    <% } else if (points >= 20 && points < 30) { %>
                         <li>
                             <img src="../Images/star.png">
                         </li>
@@ -84,10 +67,20 @@
                         <li>
                             <img src="../Images/star.png">
                         </li>
+                    <% } else if (points >= 30 && points < 50) { %>
                         <li>
                             <img src="../Images/star.png">
                         </li>
-                    <% } %> else if (userData[i] >= 50) { %>
+                        <li>
+                            <img src="../Images/star.png">
+                        </li>
+                        <li>
+                            <img src="../Images/star.png">
+                        </li>
+                        <li>
+                            <img src="../Images/star.png">
+                        </li>
+                    <% } else { %>
                         <li>
                             <img src="../Images/star.png">
                         </li>
@@ -107,6 +100,7 @@
             <h5>You're an IsoExpert!</h5>
         </div>
         <p class="footer">COMP2800 Team Horton</p>
+    </form>
     </div>
     <script src="https://kit.fontawesome.com/df012b2a98.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
