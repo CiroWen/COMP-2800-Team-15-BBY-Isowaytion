@@ -1,10 +1,4 @@
-function initMap() {
-  var map = new google.maps.Map(document.getElementById("map"), {
-    mapTypeControl: false,
-    center: { lat: 49.2488, lng: -122.9805 },
-    zoom: 13,
-  });
-
+function heat(googleMap) {
   var heatMapData = [
     { location: new google.maps.LatLng(49.25964, -123.02757), weight: 0.5 },
     { location: new google.maps.LatLng(49.26007, -123.02753), weight: 3 },
@@ -16,11 +10,23 @@ function initMap() {
     { location: new google.maps.LatLng(49.22758, -123.00755), weight: 1 },
   ];
 
+  let points = new google.maps.MVCArray(heatMapData);
+
   var heatmap = new google.maps.visualization.HeatmapLayer({
-    data: heatMapData,
-    map: map,
+    data: points,
+    map: googleMap,
   });
-  heatmap.setMap(map);
+  heatmap.setMap(googleMap);
+}
+
+function initMap() {
+  var map = new google.maps.Map(document.getElementById("map"), {
+    mapTypeControl: false,
+    center: { lat: 49.2488, lng: -122.9805 },
+    zoom: 13,
+  });
+
+  heat(map);
 
   new AutocompleteDirectionsHandler(map);
 }
