@@ -367,10 +367,10 @@ app.get("/myAccount", isLoggedIn, (req, res) => {
   if (login === "google") {
     useremail = req.user._json.email;
     userPic = req.user._json.picture;
-    
   } else {
     useremail = req.user[0].email;
     console.log(useremail);
+    userPic = "../Images/ryan_profile.png";
   }
   // console.log(useremail);
   // console.log(userPic);
@@ -492,6 +492,7 @@ app.post("/editInfo", (req, res) => {
       userPic = req.user._json.picture;
     } else {
       useremail = req.user[0].email;
+      userPic = "../Images/ryan_profile.png";
     }
     
     // fullName = req.user._json.name;
