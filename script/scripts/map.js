@@ -168,7 +168,7 @@ AutocompleteDirectionsHandler.prototype.route = function () {
               // console.log(`testing${i}[1]`);
               // console.log(res[i][1]);
               heatMapData.push(
-                new google.maps.LatLng(res[i][0],res[i][1]),9
+                new google.maps.LatLng(res[i][0],res[i][1]),
               )
             }
             // let data = JSON.stringify(res);
