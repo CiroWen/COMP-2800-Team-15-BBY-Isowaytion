@@ -25,7 +25,6 @@
     "cookies": "^0.8.0",
     "core-util-is": "^1.0.2",
     "cors": "^2.8.5",
-<<<<<<< Updated upstream
     "destroy": "^1.0.4",
     "ee-first": "^1.1.1",
     "ejs": "^3.1.2",
@@ -50,18 +49,6 @@
     "mime-db": "^1.44.0",
     "mime-types": "^2.1.27",
     "minimatch": "^3.0.4",
-=======
-    "debug": "^4.1.1",
-    "depd": "^2.0.0",
-    "ejs": "^3.1.2",
-    "encodeurl": "^1.0.2",
-    "escape-html": "^1.0.3",
-    "express": "^4.17.1",
-    "express-flash": "0.0.2",
-    "finalhandler": "^1.1.2",
-    "i": "^0.3.6",
-    "merge-descriptors": "^1.0.1",
->>>>>>> Stashed changes
     "mysql": "^2.18.1",
     "negotiator": "^0.6.2",
     "oauth": "^0.9.15",
