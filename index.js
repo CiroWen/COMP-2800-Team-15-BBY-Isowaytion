@@ -6,7 +6,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(express.static(__dirname + "scripts"));
 app.use(express.static(__dirname + "scripts/scripts"));
-
+var coordinates;
 const path = require("path");
 const router = express.Router();
 const bodyParser = require("body-parser");
@@ -201,23 +201,23 @@ let currentInfo = new Array(LENGTH);
 
 //**************05-11 edit************************
 //Ciro's local mysql for testing purpose.
-// const con = mysql.createConnection({
-//   host     : 'localhost',
-//   //where the info is hoste
-//   user     : 'root',
-//   //the user name of db
-//   password : 'isowaytion15',
-//   //the pswd for user
-//   database : 'isowaytion'
-//   //name of db
-// });
-
-var con = mysql.createConnection({
-  host: "205.250.9.115",
-  user: "root",
-  password: "123",
-  database: "isowaytion",
+const con = mysql.createConnection({
+  host     : 'localhost',
+  //where the info is hoste
+  user     : 'root',
+  //the user name of db
+  password : 'isowaytion15',
+  //the pswd for user
+  database : 'isowaytion'
+  //name of db
 });
+
+// var con = mysql.createConnection({
+//   host: "205.250.9.115",
+//   user: "root",
+//   password: "123",
+//   database: "isowaytion",
+// });
 
 // initial connection
 con.connect((err) => {
@@ -572,8 +572,11 @@ app.post("/mapmap", (req, res) => {
   // currently data is only first route
   // when I try to put all the route, it shows error "entity is too large"
   // console.log(req.body.data);
-
-  // this is paths of a route
+  
+  // console.log(req.body.data[0][0]);
+  // console.log(res);
+  // // this is paths of a route
+  var gg = [];
   for (let i = 0; i < req.body.data.length; i++) {
     let length = req.body.data[i].length;
     console.log(
@@ -581,9 +584,47 @@ app.post("/mapmap", (req, res) => {
         i + 1
       }======================================`
     );
-
+    // console.log(req.body.data.length);
+    // console.log(length);
+    
+    
+    gg[i]=[];
     for (let j = 0; j < length; j++) {
-      console.log(polyline.decode(req.body.data[i][j]["encoded_lat_lngs"])[0]);
+          // console.log(polyline.decode(req.body.data[i][j]["encoded_lat_lngs"])[0]);
+          gg[i][j]=polyline.decode(req.body.data[i][j]["encoded_lat_lngs"])[0]
+          // gg.push(polyline.decode(req.body.data[i][j]["encoded_lat_lngs"])[0])
+        }
+        
+        
+  
+    for (let j = 0; j < length; j++) {
+      // console.log(polyline.decode(req.body.data[i][j]["encoded_lat_lngs"])[0]);
+      console.log(gg[i][j]);
+      
     }
-  }
+  }    
+  
+  let testpp = new Promise((resl,rej)=>{
+    if(gg){
+      resl(gg)
+    }else{
+      rej(Error(`gg`))
+    }
+  })
+  testpp.then((fromResl)=>{
+    app.get(`/mapmap`,(req,res)=>{
+      // console.log(fromResl);
+      
+      res.json(fromResl);
+      
+    })
+  }).catch((fromRej)=>{
+    console.log(fromRej);
+    
+  })
+  
 });
+
+
+
+
