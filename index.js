@@ -111,7 +111,7 @@ app.get(
   //authenticate() redirect to 2nd para if fail to authenticate
   function (req, res) {
     //Set login status to google
-    login = 'google';
+    login = "google";
     // Successful authentication, redirect too the route below
     res.redirect("/welcome");
   }
@@ -255,7 +255,7 @@ app.post(`/signup`, (req, res) => {
     con.query(`INSERT INTO user SET ?`, req.body, (err, result) => {
       if (err) throw err;
       console.log(result);
-      res.redirect('/signin');
+      res.redirect("/signin");
     });
   }
 });
@@ -362,8 +362,8 @@ app.use(express.static(__dirname + "/script"));
 //Store all JS and CSS in Scripts folder.
 
 app.get("/myAccount", isLoggedIn, (req, res) => {
-// app.get("/myAccount", (req, res) => {
-  if (login === 'google'){
+  // app.get("/myAccount", (req, res) => {
+  if (login === "google") {
     useremail = req.user._json.email;
   } else {
     useremail = req.user[0].email;
@@ -388,7 +388,7 @@ app.get("/myAccount", isLoggedIn, (req, res) => {
 
 //app.get("/editInfo", isLoggedIn, (req, res) => {
 app.get("/editInfo", (req, res) => {
-  if (login === 'google'){
+  if (login === "google") {
     useremail = req.user._json.email;
   } else {
     useremail = req.user[0].email;
@@ -480,8 +480,8 @@ app.post("/editInfo", (req, res) => {
  */
 
 app.get("/leaderboard", isLoggedIn, (req, res) => {
-// app.get("/leaderboard", (req, res) => {
-  if (login === 'google'){
+  // app.get("/leaderboard", (req, res) => {
+  if (login === "google") {
     useremail = req.user._json.email;
   } else {
     useremail = req.user[0].email;
@@ -537,52 +537,49 @@ app.post("/auth", function (request, response) {
   }
 });
 
-
 /************************************
  * Local Login Functionality
  */
 
- //paspInit() is a authentication interface connects to setup.js
+//paspInit() is a authentication interface connects to setup.js
 //the function email is passed to setup.js after the data of user is fetched from mysql
-paspInit(passport,  (email) => {
-  return new Promise(function (resolve, reject){
-  con.query(`select email, password from user where email = ?`, [email]
-      , (err, res,fields) => {
-          if (err) {
-              reject(err)
-          } else {
-              // console.log("user-----------------------------------");
-              // console.log("res[0]['password']")
-              // console.log(res[0])
-              login = 'local';
-              resolve(JSON.parse(JSON.stringify(res)))
-          }
-      })
-  })
-})
+paspInit(passport, (email) => {
+  return new Promise(function (resolve, reject) {
+    con.query(
+      `select email, password from user where email = ?`,
+      [email],
+      (err, res, fields) => {
+        if (err) {
+          reject(err);
+        } else {
+          // console.log("user-----------------------------------");
+          // console.log("res[0]['password']")
+          // console.log(res[0])
+          login = "local";
+          resolve(JSON.parse(JSON.stringify(res)));
+        }
+      }
+    );
+  });
+});
 
-app.post(`/signin`, passport.authenticate(`local`, {
-  successRedirect: `/map`,
-  failureRedirect: `/invalid`,
-  failureFlash: true
-}));
+app.post(
+  `/signin`,
+  passport.authenticate(`local`, {
+    successRedirect: `/map`,
+    failureRedirect: `/invalid`,
+    failureFlash: true,
+  })
+);
 
 app.post("/mapmap", (req, res) => {
   // data from map.js
   // currently data is only first route
   // when I try to put all the route, it shows error "entity is too large"
   // console.log(req.body.data);
-<<<<<<< HEAD
 
   // this is paths of a route
   let routes = new Array(req.body.data.length);
-=======
-  
-  // console.log(req.body.data[0][0]);
-  // console.log(res);
-  // // this is paths of a route
-  var gg = [];
->>>>>>> 1bc448b81c4acdc293632106aceccc380dd7f64c
   for (let i = 0; i < req.body.data.length; i++) {
     let length = req.body.data[i].length;
     console.log(
@@ -590,7 +587,6 @@ app.post("/mapmap", (req, res) => {
         i + 1
       }======================================`
     );
-<<<<<<< HEAD
     routes[i] = new Array(length);
     for (let j = 0; j < length; j++) {
       routes[i][j] = polyline.decode(
@@ -602,49 +598,4 @@ app.post("/mapmap", (req, res) => {
   console.log(routes);
 
   res.send(routes);
-=======
-    // console.log(req.body.data.length);
-    // console.log(length);
-    
-    
-    gg[i]=[];
-    for (let j = 0; j < length; j++) {
-          // console.log(polyline.decode(req.body.data[i][j]["encoded_lat_lngs"])[0]);
-          gg[i][j]=polyline.decode(req.body.data[i][j]["encoded_lat_lngs"])[0]
-          // gg.push(polyline.decode(req.body.data[i][j]["encoded_lat_lngs"])[0])
-        }
-        
-        
-  
-    for (let j = 0; j < length; j++) {
-      // console.log(polyline.decode(req.body.data[i][j]["encoded_lat_lngs"])[0]);
-      console.log(gg[i][j]);
-      
-    }
-  }    
-  
-  let testpp = new Promise((resl,rej)=>{
-    if(gg){
-      resl(gg)
-    }else{
-      rej(Error(`gg`))
-    }
-  })
-  testpp.then((fromResl)=>{
-    app.get(`/mapmap`,(req,res)=>{
-      // console.log(fromResl);
-      
-      res.json(fromResl);
-      
-    })
-  }).catch((fromRej)=>{
-    console.log(fromRej);
-    
-  })
-  
->>>>>>> 1bc448b81c4acdc293632106aceccc380dd7f64c
 });
-
-
-
-

@@ -1,12 +1,5 @@
-<<<<<<< HEAD
 var heatMapData = [];
 var heatmap;
-=======
-
-function testing(empty, callbk){
-
-}
->>>>>>> 1bc448b81c4acdc293632106aceccc380dd7f64c
 
 function initMap() {
   var map = new google.maps.Map(document.getElementById("map"), {
@@ -14,37 +7,16 @@ function initMap() {
     center: { lat: 49.2488, lng: -122.9805 },
     zoom: 13,
   });
-<<<<<<< HEAD
 
   heatMapData = new google.maps.MVCArray();
 
   heatmap = new google.maps.visualization.HeatmapLayer({
     data: getPoint(),
-=======
-  var heatMapData = [
-    { location: new google.maps.LatLng(49.25964, -123.02757), weight: 0.5 },
-    { location: new google.maps.LatLng(49.26007, -123.02753), weight: 3 },
-    { location: new google.maps.LatLng(49.26008, -123.02387), weight: 2 },
-    { location: new google.maps.LatLng(49.25825, -123.02373), weight: 0.5 },
-    { location: new google.maps.LatLng(49.25826, -123.02757), weight: 0.2 },
-    { location: new google.maps.LatLng(49.25514, -123.0235), weight: 0.3 },
-    { location: new google.maps.LatLng(49.25469, -123.01976), weight: 3 },
-    { location: new google.maps.LatLng(49.22758, -123.00755), weight: 1 },
-  ];
-
-    //getting the decoded data fomr index.js
-         
-
-
-  var heatmap = new google.maps.visualization.HeatmapLayer({
-    data: heatMapData,
->>>>>>> 1bc448b81c4acdc293632106aceccc380dd7f64c
     map: map,
   });
 
   heatmap.setMap(map);
 
-  
   new AutocompleteDirectionsHandler(map);
 }
 
@@ -153,7 +125,7 @@ AutocompleteDirectionsHandler.prototype.route = function () {
 
         // console.log(result);
         // console.log(result.geocoded_waypoints[0].place_id);
-        // // place id 
+        // // place id
         // console.log(test);
 
         let data = [];
@@ -176,7 +148,6 @@ AutocompleteDirectionsHandler.prototype.route = function () {
           //make sure to serialize your JSON body
           body: JSON.stringify({
             data,
-<<<<<<< HEAD
           }),
         })
           // get data from '/mapmap' route
@@ -205,59 +176,6 @@ AutocompleteDirectionsHandler.prototype.route = function () {
             heatmap.setMap(heatmap.getMap());
           });
 
-=======
-          })
-        }).then((body)=>{
-          console.log(JSON.parse(body)[0][0][0]);
-          const parsed = JSON.parse(body)
-          console.log(parsed.length);
-          console.log(parsed[0].length);
-          console.log(parsed[0][0].length);
-          console.log(parsed[0][0][0].length);
-          let cord ={};
-          parsed.forEach((e=>{
-            e.forEach((j=>{
-              console.log(j);
-              j.forEach((k=>{
-                // heatMapData.push(`{ location: new google.maps.LatLng(${k[0]}, ${k[1]}), weight: 1 },`)
-                console.log(k);
-                
-              }))
-              
-            }))
-          }))
-        })
-
-        
-        //getting the decoded data fomr index.js
-        fetch(`/mapmap`).then(
-          (res)=>{
-            return res.text()
-            
-          }
-        ).then((body)=>{
-          console.log(JSON.parse(body)[0][0][0]);
-          const parsed = JSON.parse(body)
-          console.log(parsed.length);
-          console.log(parsed[0].length);
-          console.log(parsed[0][0].length);
-          console.log(parsed[0][0][0].length);
-          let cord ={};
-          parsed.forEach((e=>{
-            e.forEach((j=>{
-              console.log(j);
-              j.forEach((k=>{
-                // heatMapData.push(`{ location: new google.maps.LatLng(${k[0]}, ${k[1]}), weight: 1 },`)
-                console.log(k);
-                
-              }))
-              
-            }))
-          }))
-        })
-
-        
->>>>>>> 1bc448b81c4acdc293632106aceccc380dd7f64c
         me.directionsRenderer.setDirections(result);
       } else {
         window.alert("Directions request failed due to " + status);
