@@ -22,14 +22,14 @@
       <h2 class="title bounce-bottom heartbeat">
         Sign In
       </h2>
-      <form action="/google" method="POST" class="slide-in-blurred-top">
+      <form action="/signin" method="POST" class="slide-in-blurred-top">
         <div class="form-group">
           <label for="exampleInputEmail1">Email address</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email">
+          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email" name='email' required='true'>
         </div>
         <div class="form-group">
           <label for="exampleInputPassword1">Password</label>
-          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name='password' required='true'>
         </div>
         <div class="form-check">
           <input type="checkbox" class="form-check-input" id="exampleCheck1">
@@ -37,8 +37,10 @@
         </div>
         <div class="button_group">
           <button class="btn btn-outline-primary signin">Sign In</button>
-          <button class="btn btn-outline-primary" type="submit" formaction="/google"><i class="fab fa-google"></i> Google</button>
+          <button class="btn btn-outline-primary" formaction="/google" method="GET"><i class="fab fa-google"></i> Google</button>
         </div>
+        </br>
+        <a href="/" id="signup">Create an account.</a>
         </div>
       </form>
 

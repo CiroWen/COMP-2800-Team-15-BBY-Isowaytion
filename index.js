@@ -8,18 +8,24 @@ const path = require("path");
 const router = express.Router();
 const bodyParser = require("body-parser");
 const passport = require(`passport`);
+const flash = require(`express-flash`);
 const cookieSession = require("cookie-session");
 require(`./passport-setup`);
+const paspInit = require(`./passport-setup`);
 const mysql = require(`mysql`);
 const isLoggedIn = (req, res, next) => {
   if (req.user) {
     next();
   } else {
     res.sendStatus(401);
+    res.sendFile(path.join(__dirname + "/views/signin.html"));
   }
 };
 //set port
 var port = process.env.PORT || 1515;
+
+//Variable to check if user logs in with local or google account
+let login;
 
 //*******************consts/vars/lets declared above********************* */
 // app.use(cors())
@@ -37,6 +43,8 @@ app.use(
     keys: ["key1", "key2"],
   })
 );
+
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -99,6 +107,8 @@ app.get(
   }),
   //authenticate() redirect to 2nd para if fail to authenticate
   function (req, res) {
+    //Set login status to google
+    login = 'google';
     // Successful authentication, redirect too the route below
     res.redirect("/welcome");
   }
@@ -111,7 +121,7 @@ app.get("/logout", (req, res) => {
   //logout
   req.logout();
   //redirect to homepage
-  res.redirect("/");
+  res.redirect("/signin");
 });
 
 //******************************************* *********************/
@@ -242,7 +252,7 @@ app.post(`/signup`, (req, res) => {
     con.query(`INSERT INTO user SET ?`, req.body, (err, result) => {
       if (err) throw err;
       console.log(result);
-      res.redirect(`/map`);
+      res.redirect('/signin');
     });
   }
 });
@@ -278,6 +288,10 @@ app.post("/google", (req, res) => {
 
 //************05-11 edit ends ****************
 app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname + "/views/signup.html"));
+});
+
+app.get("/signin", (req, res) => {
   res.sendFile(path.join(__dirname + "/views/signin.html"));
 });
 
@@ -340,10 +354,15 @@ app.use(express.static(__dirname + "/view"));
 app.use(express.static(__dirname + "/script"));
 //Store all JS and CSS in Scripts folder.
 
-// app.get("/myAccount", isLoggedIn, (req, res) => {
-app.get("/myAccount", (req, res) => {
-  useremail = req.user._json.email;
-  console.log(req.user);
+app.get("/myAccount", isLoggedIn, (req, res) => {
+// app.get("/myAccount", (req, res) => {
+  if (login === 'google'){
+    useremail = req.user._json.email;
+  } else {
+    useremail = req.user[0].email;
+    console.log(useremail);
+  }
+  console.log("Testing this" + req.user);
   console.log(useremail);
   con.query(`SELECT * FROM user WHERE email = '${useremail}'`, (err, rows) => {
     if (err) throw err;
@@ -362,7 +381,11 @@ app.get("/myAccount", (req, res) => {
 
 //app.get("/editInfo", isLoggedIn, (req, res) => {
 app.get("/editInfo", (req, res) => {
-  useremail = req.user._json.email;
+  if (login === 'google'){
+    useremail = req.user._json.email;
+  } else {
+    useremail = req.user[0].email;
+  }
   console.log("This is the email" + useremail);
   con.query(`SELECT * FROM user WHERE email = '${useremail}'`, (err, rows) => {
     if (err) throw err;
@@ -449,10 +472,13 @@ app.post("/editInfo", (req, res) => {
  * Express server side, LEADERBOARDS
  */
 
-//app.get("/leaderboard", isLoggedIn, (req, res) => {
-app.get("/leaderboard", (req, res) => {
-  useremail = useremail = req.user._json.email;
-
+app.get("/leaderboard", isLoggedIn, (req, res) => {
+// app.get("/leaderboard", (req, res) => {
+  if (login === 'google'){
+    useremail = req.user._json.email;
+  } else {
+    useremail = req.user[0].email;
+  }
   // //Grab user name
   // let getName = `SELECT isowaytion.Name FROM isowaytion WHERE email = '${useremail}'`;
 
@@ -503,3 +529,33 @@ app.post("/auth", function (request, response) {
     response.end();
   }
 });
+
+
+/************************************
+ * Local Login Functionality
+ */
+
+ //paspInit() is a authentication interface connects to setup.js
+//the function email is passed to setup.js after the data of user is fetched from mysql
+paspInit(passport,  (email) => {
+  return new Promise(function (resolve, reject){
+  con.query(`select email, password from user where email = ?`, [email]
+      , (err, res,fields) => {
+          if (err) {
+              reject(err)
+          } else {
+              // console.log("user-----------------------------------");
+              // console.log("res[0]['password']")
+              // console.log(res[0])
+              login = 'local';
+              resolve(JSON.parse(JSON.stringify(res)))
+          }
+      })
+  })
+})
+
+app.post(`/signin`, passport.authenticate(`local`, {
+  successRedirect: `/map`,
+  failureRedirect: `/signin`,
+  failureFlash: true
+}));

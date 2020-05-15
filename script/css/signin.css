@@ -432,3 +432,7 @@ label {
     animation-timing-function: ease-out;
   }
 }
+
+a#signup{
+  font-size: x-large;
+}

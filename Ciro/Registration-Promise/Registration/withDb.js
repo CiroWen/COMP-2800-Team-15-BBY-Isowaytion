@@ -123,6 +123,7 @@ const isLoggedIn = (req, res, next) => {
 
 
 app.get(`/`, (req, res) => {
+    console.log(req);
     console.log(`Uses's email: ${chalk.blueBright(req.user)} is loaded on \`/\``);
     console.log(`Uses's current authentiaceted status: ${chalk.blueBright(req.isAuthenticated())}`);
     if(req.user){
@@ -183,7 +184,7 @@ app.get('/logout', (req, res) => {
 })
 
 
-const port = 1515
+const port = 2000
 app.listen(port, () => {
     console.log(`Ciro testing on ${chalk.blueBright(port)}`);
 })
