@@ -47,6 +47,21 @@ label {
   color: #ff4858;
 }
 
+.auth {
+  color: #ff4858;
+  font-size: 1rem !important;
+}
+
+a:active {
+  color: #ff4858 !important;
+  text-decoration: none;
+}
+
+a:link {
+  color: #ff4858;
+  text-decoration: none;
+}
+
 .title {
   text-align: center;
   margin-bottom: 2rem;
@@ -415,9 +430,9 @@ label {
   }
 }
 
-a#signin{
+a#signin {
   font-size: x-large;
 }
-form a{
+form a {
   text-align: center;
 }
