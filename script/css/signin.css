@@ -436,3 +436,8 @@ label {
 a#signup{
   font-size: x-large;
 }
+
+p#invalid{
+  color: #ff4858;
+  font-weight: bold;
+}

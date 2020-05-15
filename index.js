@@ -308,6 +308,10 @@ app.get("/aboutus", function (req, res) {
   res.sendFile(path.join(__dirname + "/views/aboutus.html"));
 });
 
+app.get("/invalid", function (req, res) {
+  res.sendFile(path.join(__dirname + "/views/signin_invalid.html"));
+});
+
 // Send to Map page.
 app.get("/map", function (req, res) {
   // con.query(`SELECT email FROM user WHERE email =\"${req.user._json.email}\"`,(dbReq,dbRes)=>{
@@ -559,9 +563,10 @@ paspInit(passport,  (email) => {
 
 app.post(`/signin`, passport.authenticate(`local`, {
   successRedirect: `/map`,
-  failureRedirect: `/signin`,
+  failureRedirect: `/invalid`,
   failureFlash: true
 }));
+
 app.post("/mapmap", (req, res) => {
   // data from map.js
   // currently data is only first route
