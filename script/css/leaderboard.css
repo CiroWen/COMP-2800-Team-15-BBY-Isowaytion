@@ -13,15 +13,23 @@ body {
 .top {
   display: flex;
   color: #ff4858;
-  height: 15%;
+  height: 12%;
   text-align: center;
+
   padding-top: 2rem;
-  padding-left: 1rem;
+  padding-left: 0.5rem;
 }
 
 .fas {
   font-size: 2rem;
   padding-top: 0.5rem;
+}
+
+#currentUser:hover {
+  border-color: #ff4858;
+  border-style: solid;
+  border-width: thin;
+  border-radius: 10px;
 }
 
 .title {
@@ -59,12 +67,34 @@ nav {
   padding-right: 40px;
 }
 
+#userInfo {
+  display: flex;
+  padding: 5px;
+  border-color: #ff4858;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 10px;
+  width: 100%;
+  background-color: white;
+  color: #ff4858;
+  font: "TeXGyreAdventorBold";
+}
+
+
 #info1 {
   display: flex;
   padding: 5px;
   border-color: rgb(199, 199, 199);
   border-bottom-style: solid;
   border-width: thin;
+  width: 100%;
+  border-top-style: none;
+  border-left: none;
+  border-right: none;
+  background-color: white;
+  border-bottom-color: rgb(202, 202, 202);
+  color: #ff4858;
+  font: "TeXGyreAdventorBold";
 }
 
 #info1:hover {
@@ -76,7 +106,7 @@ nav {
 
 #title {
   display: flex;
-  flex-grow: 3;
+  flex-grow: 5;
 }
 
 ul {
@@ -132,4 +162,55 @@ li {
     filter: blur(0);
     opacity: 1;
   }
+}
+#stretch {
+  display: flex;
+}
+
+#user {
+  display: flex;
+  padding: 5px;
+  border-color: rgb(199, 199, 199);
+  border-bottom-style: solid;
+  border-width: thin;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  margin: auto;
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #ffffff !important;
+  opacity: 0.8;
+  margin: auto;
+  padding: 20px;
+  width: 80% !important;
+  color: #495057 !important;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
 }

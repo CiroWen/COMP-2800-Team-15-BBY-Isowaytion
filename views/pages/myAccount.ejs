@@ -23,12 +23,14 @@
         </br>
         <!-- User's Name -->
         <div class="header">
+            <form action="/myAccount" method="post"></form>
+            <div class="dot"><img src="<%= profilePic %>"</div>
+        </br>
+    </br>
             <div class="head">
-                <form action="/myAccount" method="post">
                     <h1 id="username" class="text-pop-up-top"><%= currentInfo[1] %></h1>
                 </form>
             </div>
-            <!-- <div class="dot"><b>DK</b></div> -->
         </div>
         <!-- Account info Options -->
         <div class="info bounce-in-top-later">
@@ -44,9 +46,6 @@
                 </div>
                 <div id="info4">
                     <li id="title4"><a href="/aboutus"><strong>About Us</strong></a></li>
-                </div>
-                <div id="info5">
-                    <li id="title5"><strong>Help</strong></li>
                 </div>
             </ul>
         </div>
