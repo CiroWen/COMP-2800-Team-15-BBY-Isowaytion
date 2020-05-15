@@ -148,7 +148,11 @@ AutocompleteDirectionsHandler.prototype.route = function () {
             data,
           }),
         })
+          // get data from '/mapmap' route
           .then((res) => res.json())
+
+          // parse data from string to array
+          // push each Lat,Lng into heatMapData array as an object
           .then((res) => {
             let data = JSON.stringify(res);
             console.log(data);
@@ -165,6 +169,8 @@ AutocompleteDirectionsHandler.prototype.route = function () {
                 );
               }
             }
+
+            // update heatmap layer
             heatmap.setMap(heatmap.getMap());
           });
 
