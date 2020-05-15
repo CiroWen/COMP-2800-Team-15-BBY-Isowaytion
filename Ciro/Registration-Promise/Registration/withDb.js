@@ -20,28 +20,28 @@ app.use(pasp.session());
 //setup
 
 //server connection setup.
-const db = mysql.createConnection({
-    host: '205.250.9.115',
-    //where the info is hoste
-    user: 'root',
-    //the user name of db
-    password: '123',
-    //the pswd for user
-    database: 'isowaytion'
-    //name of db
-});
+// const db = mysql.createConnection({
+//     host: '205.250.9.115',
+//     //where the info is hoste
+//     user: 'root',
+//     //the user name of db
+//     password: '123',
+//     //the pswd for user
+//     database: 'isowaytion'
+//     //name of db
+// });
 
 //local connection setup.
-// const db = mysql.createConnection({
-//     host     : 'localhost',
-//     //where the info is hoste
-//     user     : 'root',
-//     //the user name of db
-//     password : 'isowaytion15',
-//     //the pswd for user
-//     database : 'isowaytion'
-//     //name of db
-//   });
+const db = mysql.createConnection({
+    host     : 'localhost',
+    //where the info is hoste
+    user     : 'root',
+    //the user name of db
+    password : 'isowaytion15',
+    //the pswd for user
+    database : 'isowaytion'
+    //name of db
+  });
 
 //connect to database
 db.connect((err) => {
@@ -158,10 +158,10 @@ app.post(`/login`, pasp.authenticate(`local`, {
 
 //post method handler that create a new account in Mysql
 app.post(`/regis`, (req, res) => {
-    // console.log(req.body.name);
-    // console.log(req.body.email);
-    // console.log(req.body.password);
-    // console.log(req.body);
+    console.log(req.body.name);
+    console.log(req.body.email);
+    console.log(req.body.password);
+    console.log(req.body);
     if(req.body){
         db.query(`INSERT INTO user SET ?`,req.body,(err,result)=>{
             if(err) throw err;
