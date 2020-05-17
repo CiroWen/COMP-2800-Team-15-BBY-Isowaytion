@@ -16,6 +16,7 @@ const cookieSession = require("cookie-session");
 require(`./passport-setup`);
 const paspInit = require(`./passport-setup`);
 const mysql = require(`mysql`);
+const bcrypt = require(`bcrypt`)
 const isLoggedIn = (req, res, next) => {
   if (req.user) {
     next();
@@ -43,7 +44,7 @@ app.use("/", router);
 app.set("view engine", "ejs");
 app.use(
   cookieSession({
-    name: "Ciro's cookies",
+    name: "Team Horton's cookies",
     keys: ["key1", "key2"],
   })
 );
@@ -53,6 +54,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.get("/welcome", isLoggedIn, (req, res) => {
   useremail = req.user._json.email;
+  
   //res.send(`welcome ${req.user.Email}`)
   // res.sendFile(`./pages/signup.html`);
   //error at line above: path must be absolute or specify root ro res.sedFile()
@@ -201,23 +203,23 @@ let currentInfo = new Array(LENGTH);
 
 //**************05-11 edit************************
 //Ciro's local mysql for testing purpose.
-// const con = mysql.createConnection({
-//   host     : 'localhost',
-//   //where the info is hoste
-//   user     : 'root',
-//   //the user name of db
-//   password : 'isowaytion15',
-//   //the pswd for user
-//   database : 'isowaytion'
-//   //name of db
-// });
-
-var con = mysql.createConnection({
-  host: "205.250.9.115",
-  user: "root",
-  password: "123",
-  database: "isowaytion",
+const con = mysql.createConnection({
+  host     : 'localhost',
+  //where the info is hoste
+  user     : 'root',
+  //the user name of db
+  password : 'isowaytion15',
+  //the pswd for user
+  database : 'isowaytion'
+  //name of db
 });
+
+// var con = mysql.createConnection({
+//   host: "205.250.9.115",
+//   user: "root",
+//   password: "123",
+//   database: "isowaytion",
+// });
 
 // initial connection
 con.connect((err) => {
@@ -246,13 +248,25 @@ app.get(`/signup`, (req, res) => {
 
 //post method handler that create a new account in Mysql
 // regis with out using google
-app.post(`/signup`, (req, res) => {
+app.post(`/signup`, async (req, res) => {
   console.log(req.body.name);
   console.log(req.body.email);
   console.log(req.body.password);
+  console.log(await bcrypt.hash(req.body.password,10));
+  const password = await bcrypt.hash(req.body.password,10)
   //console.log(req.body);
+  // if (req.body) {
+  //   const regisInfo = {
+  //     name: `${req.user._json.name}`,
+  //     email: `${req.user._json.email}`,
+  //   };
   if (req.body) {
-    con.query(`INSERT INTO user SET ?`, req.body, (err, result) => {
+    const regisInfo = {
+      name: `${req.body.name}`,
+      email: `${req.body.email}`,
+      password:`${password}`
+    };
+    con.query(`INSERT INTO user SET ?`, regisInfo, (err, result) => {
       if (err) throw err;
       console.log(result);
       res.redirect("/signin");

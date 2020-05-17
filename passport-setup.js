@@ -1,5 +1,5 @@
 const pasp = require(`passport`)
-
+const bcrypt = require(`bcrypt`)
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const localSetup = require(`passport-local`).Strategy
@@ -67,7 +67,8 @@ async function paspInit(pasp, getUserByEmail) {
 
         try {
             if (user[0].password) {
-                if ( user[0].password.indexOf(user[0].password) == 0 && user[0].password.indexOf(password) == 0 && user[0].password === password) {
+                if(bcrypt.compare(password,user[0].password)){
+                // if ( user[0].password.indexOf(user[0].password) == 0 && user[0].password.indexOf(password) == 0 && user[0].password === password) {
                     //see if password matches user[0] is the user from db, and user is the user input from website
                     return callbk(null, user)
                     //return the user if the password matches
