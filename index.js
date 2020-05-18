@@ -203,23 +203,23 @@ let currentInfo = new Array(LENGTH);
 
 //**************05-11 edit************************
 //Ciro's local mysql for testing purpose.
-// const con = mysql.createConnection({
-//   host     : 'localhost',
-//   //where the info is hoste
-//   user     : 'root',
-//   //the user name of db
-//   password : 'isowaytion15',
-//   //the pswd for user
-//   database : 'isowaytion'
-//   //name of db
-// });
-
-var con = mysql.createConnection({
-  host: "205.250.9.115",
-  user: "root",
-  password: "123",
-  database: "isowaytion",
+const con = mysql.createConnection({
+  host     : 'localhost',
+  //where the info is hoste
+  user     : 'root',
+  //the user name of db
+  password : 'isowaytion15',
+  //the pswd for user
+  database : 'isowaytion'
+  //name of db
 });
+
+// var con = mysql.createConnection({
+//   host: "205.250.9.115",
+//   user: "root",
+//   password: "123",
+//   database: "isowaytion",
+// });
 
 // initial connection
 con.connect((err) => {
@@ -655,51 +655,53 @@ app.post("/mapmap", (req, res) => {
   // when I try to put all the route, it shows error "entity is too large"
   // console.log(req.body.test);
   // console.log(polyline.decode(req.body.test))
-//sending the decoded coordinates array to map.js  
-  const decodedCoor = polyline.decode(req.body.test)
-  console.log(decodedCoor);
-  console.log(`----------------------`);
-  console.log(decodedCoor.length);
+
+  const encodedCoors = req.body.data
+  // encodedCoors is an array that consists of coordinates 
+  // for all results of directions
   
-  console.log(decodedCoor[0][0]);
-  for(let i=0;i<decodedCoor.length;i++){
-    if(decodedCoor[i]){
-    con.query(`select * from coordinates where lat=${decodedCoor[i][0]} and lng=${decodedCoor[i][1]}`,(err,res,fields)=>{
+  let decodedCoors = []
+  for(let i =0;i<encodedCoors.length;i++){
+    decodedCoors.push(polyline.decode(encodedCoors[i]))
+  }
+  //create an array to store the decodedCoordinates
+
+  //**************Testing purpose************** */
+  // console.log(decodedCoors.length);
+  // console.log(decodedCoors);
+  // console.log(decodedCoors.length);
+  // console.log(decodedCoors[0].length)
+  // console.log(decodedCoors[0][0]);
+  // console.log(decodedCoors[0][0][0]);
+  // console.log(decodedCoors[1][0]);
+    //**************Testing purpose************** */
+
+
+  //since the decodedCoors[0]means first route and decodedCoors[0][0]
+  //means the first coordinate info of first route
+  //nested for-loop to insert into database.
+for(let k =0;k<decodedCoors.length;k++){
+  for(let i=0;i<decodedCoors[k].length;i++){
+    if(decodedCoors[k][i]){
+    con.query(`select * from coordinates where lat=${decodedCoors[k][i][0]} and lng=${decodedCoors[k][i][1]}`,(err,res,fields)=>{
       if(res){
         if(res.length!=0){
-            con.query(`update coordinates set frequency = frequency+1 Where lat=${decodedCoor[i][0]} and lng=${decodedCoor[i][1]}`)
+            con.query(`update coordinates set frequency = frequency+1 Where lat=${decodedCoors[k][i][0]} and lng=${decodedCoors[k][i][0]}`)
         }else{
-          con.query(`INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoor[i][0]},${decodedCoor[i][1]},1)`)
-          
+          con.query(`INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[k][i][0]},${decodedCoors[k][i][1]},1)`)
         }
       }else{
         console.log(`error occured`);
-        
       }
-      // console.log(`errbelow`);
-      // console.log(err);
-      // console.log(`resbelow`);
-      // console.log(res);
-      
-      // console.log(res[0].id);
-      
-      
-      
-      
     })
     }
   }
-  
-  res.send(decodedCoor)
+}
+  res.send(decodedCoors)
+//response by seding by the decoded coordinate array
 
 
-  
-
-
-
-
-
-
+  //*************Testing********* */
   // // this is paths of a route
   // let routes = new Array(req.body.data.length);
   // for (let i = 0; i < req.body.data.length; i++) {
@@ -720,4 +722,5 @@ app.post("/mapmap", (req, res) => {
   // console.log(routes);
 
   // res.send(routes);
+  //*************Testing********* */
 });

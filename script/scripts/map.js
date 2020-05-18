@@ -99,8 +99,13 @@ AutocompleteDirectionsHandler.prototype.route = function () {
       provideRouteAlternatives: true,
     },
     function (result, status) {
+      //the codes start from here to SetDirection(result) is where we process our heatmap
+      //or any costomized function
       if (status === "OK") {
-        // // console.log(result);
+        console.log(result);
+        //result has all the data for google map, example below accesses the test filed
+        //of a route that google responses
+
         // result.routes.forEach((e)=>{
         //   console.log(e.legs[0].distance.text);
         //   //texts of distance of each direction
@@ -108,6 +113,16 @@ AutocompleteDirectionsHandler.prototype.route = function () {
         //   //texts of time duration of each direciton
         //   //processing code here.
         // })
+
+
+        //array to store the encoded coordinates
+        let data = []
+          result.routes.forEach((e)=>{
+            data.push(e.overview_polyline)
+          })
+          // console.log(data);
+          
+        //***********Testing purpose************ */  
         // console.log(result.routes[0].legs[0].distance.text);
         //distance content of first direction
 
@@ -116,8 +131,8 @@ AutocompleteDirectionsHandler.prototype.route = function () {
         //text of first steps of first route
 
         // console.log(result.routes[0].overview_path[0]);
-        var test = result.routes[0].overview_polyline;
-        console.log(test);
+        // var test = result.routes[0].overview_polyline;
+        // console.log(test);
 
         // Object.entries(test).forEach(([key,value])=>{
         //   console.log(key);
@@ -136,7 +151,10 @@ AutocompleteDirectionsHandler.prototype.route = function () {
 
         // currently this is just one of routes
         // let data = result["routes"][0]["legs"][0]["steps"];
+        //***********Testing purpose************ */  
 
+
+        //fecth.post function passing the data array to back-end index.js
         fetch("/mapmap", {
           method: "POST",
           mode: "cors",
@@ -146,37 +164,43 @@ AutocompleteDirectionsHandler.prototype.route = function () {
           },
           //make sure to serialize your JSON body
           body: JSON.stringify({
-            test,
-            //data,
+            data,
           }),
         })
-          // get data from '/mapmap' route
-          // .then((res) => console.log(res.body))  
+          // .then() gets the data that passed back by res.send(decodedCoors)
           .then((res) => res.json())
-          // parse data from string to array
-          // push each Lat,Lng into heatMapData array as an object
           .then((res) => {
+
+            //*******Testing purpose********* */
+            // console.log(`reshere`);
             // console.log(res);
+            // console.log(res.length);
+            // console.log(res[0].length);
+            // console.log(res[0][0].length);
+            
+            
             // console.log(JSON.stringify(res));
-            console.log(res[0][0]);
-            console.log(res[0][1]);
+            // console.log(res[0][0]);
+            // console.log(res[0][1]);
+            //*******Testing purpose********* */
             
-            
-            for(let i =0;i<res.length;i++){
+            //a nested loop to push all coordinates into headmap data array
+          for(let k =0;k<res.length;k++){
+             for(let i =0;i<res[k].length;i++){
+              //testing
               // console.log(`testing${i}[0]`);
               // console.log(res[i][0]);
               // console.log(`testing${i}[1]`);
               // console.log(res[i][1]);
               heatMapData.push(
-                new google.maps.LatLng(res[i][0],res[i][1]),
+                new google.maps.LatLng(res[k][i][0],res[k][i][1]),
               )
             }
+          }
+            //*******Testing purpose********* */
             // let data = JSON.stringify(res);
             // console.log(data);
             // data = JSON.parse(data);
-            let arrLength=res.length;
-            // let arrLength = data.length;
-
             // for (let i = 0; i < arrLength; i++) {
             //   let subLength = res[i].length
             //   let subLength = data[i].length;
@@ -187,7 +211,8 @@ AutocompleteDirectionsHandler.prototype.route = function () {
             //     );
             //   }
             // }
-
+            //*******Testing purpose********* */
+            
             // update heatmap layer
             heatmap.setMap(heatmap.getMap());
           });
