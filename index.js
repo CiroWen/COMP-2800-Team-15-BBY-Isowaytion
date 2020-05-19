@@ -686,7 +686,7 @@ for(let k =0;k<decodedCoors.length;k++){
     con.query(`select * from coordinates where lat=${decodedCoors[k][i][0]} and lng=${decodedCoors[k][i][1]}`,(err,res,fields)=>{
       if(res){
         if(res.length!=0){
-            con.query(`update coordinates set frequency = frequency+1 Where lat=${decodedCoors[k][i][0]} and lng=${decodedCoors[k][i][0]}`)
+            con.query(`update coordinates set frequency = frequency+1 Where lat=${decodedCoors[k][i][0]} and lng=${decodedCoors[k][i][1]}`)
         }else{
           con.query(`INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[k][i][0]},${decodedCoors[k][i][1]},1)`)
         }

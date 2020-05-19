@@ -5,7 +5,7 @@ function initMap() {
   var map = new google.maps.Map(document.getElementById("map"), {
     mapTypeControl: false,
     center: { lat: 49.2488, lng: -122.9805 },
-    zoom: 13,
+    zoom: 17,
   });
 
   heatMapData = new google.maps.MVCArray();
@@ -17,12 +17,65 @@ function initMap() {
 
   heatmap.setMap(map);
 
-  new AutocompleteDirectionsHandler(map);
+    new AutocompleteDirectionsHandler(map);
+    // getting current location
+   infoWindow = new google.maps.InfoWindow
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {
+       lat: position.coords.latitude,
+       lng: position.coords.longitude
+    };
+    console.log(`${pos.lat}and ${pos.lng}`);
+    //current location for 
+    var geocoder = new google.maps.Geocoder;
+    var latLng = {lat:parseFloat(pos.lat),lng:parseFloat(pos.lng)}
+    
+    geocoder.geocode({'location':latLng},function(results,status){
+      if(status===`OK`){
+        console.log(results);
+        //results here has place_id that might be useful to auto add it as origin
+        if(results[0]){
+          var marker = new google.maps.Marker({
+            position:latLng,
+            map:map
+          })
+          infoWindow.setPosition(pos);
+          infoWindow.setContent(`Your current location is ${results[0].formatted_address}`);
+          infoWindow.open(map,marker);
+        }
+      }
+    })
+  // getting current location
+    
+    map.setCenter(pos);
+  }, function() {
+    handleLocationError(true, infoWindow, map.getCenter());
+  });
+} else {
+  // Browser doesn't support Geolocation
+  alert(`Your browser doesn't support navigator`)
+  
 }
+ 
+
+  
+  // getting current location
+}
+//initMap() ends here
 
 function getPoint() {
   return heatMapData;
 }
+
+function changeMap(){
+  
+}
+
+
+
+
 
 /**
  * @constructor
@@ -33,7 +86,8 @@ function AutocompleteDirectionsHandler(map) {
   this.destinationPlaceId = null;
   this.travelMode = "WALKING";
   this.directionsService = new google.maps.DirectionsService();
-  this.directionsRenderer = new google.maps.DirectionsRenderer();
+  this.directionsRenderer = new google.maps.DirectionsRenderer(google.maps.DirectionsRendererOptions);
+  // this.directionsRendereOptions = new Interface(google.maps.DirectionsRendererOptions);
   this.directionsRenderer.setMap(map);
   this.directionsRenderer.setPanel(document.getElementById("bottom-panel"));
 
@@ -65,6 +119,8 @@ AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function (
   mode
 ) {
   var me = this;
+  
+  
   autocomplete.bindTo("bounds", this.map);
 
   autocomplete.addListener("place_changed", function () {
@@ -98,7 +154,7 @@ AutocompleteDirectionsHandler.prototype.route = function () {
       travelMode: this.travelMode,
       provideRouteAlternatives: true,
     },
-    function (result, status) {
+      function (result, status) {
       //the codes start from here to SetDirection(result) is where we process our heatmap
       //or any costomized function
       if (status === "OK") {
@@ -212,12 +268,21 @@ AutocompleteDirectionsHandler.prototype.route = function () {
             //   }
             // }
             //*******Testing purpose********* */
-            
+
             // update heatmap layer
             heatmap.setMap(heatmap.getMap());
           });
 
         me.directionsRenderer.setDirections(result);
+
+        me.directionsRenderer.setOptions({
+          routeIndex:1,
+          suppressPolylines:true,
+          //true to unable the 
+          // draggable:true,
+          //allows user to drag the direction
+        })
+        
       } else {
         window.alert("Directions request failed due to " + status);
       }
