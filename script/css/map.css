@@ -29,6 +29,12 @@ i {
   margin-top: 1rem;
 }
 
+.adp-listsel {
+  background-color: rgba(247, 75, 90, 0.658) !important;
+  color: white !important;
+  font-weight: bold;
+}
+
 .logo {
   height: 100%;
   margin: 0;
