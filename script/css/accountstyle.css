@@ -104,6 +104,14 @@ img {
   padding-right: 40px;
 }
 
+.share-btn {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
 #info1 {
   display: flex;
   padding: 5px;
