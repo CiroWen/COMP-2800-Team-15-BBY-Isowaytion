@@ -83,10 +83,6 @@ i {
   border-color: #4d90fe;
 }
 
-#bottom-panel {
-  line-height: 30px;
-}
-
 #bottom-panel select,
 #bottom-panel input {
   font-size: 15px;
@@ -104,12 +100,54 @@ i {
   width: 100%;
   overflow-y: auto;
   margin: auto;
-  background-color: rgb(231, 231, 231);
-  border: 2px solid #949494;
+  background-color: #ff4858;
+  color: #fff !important;
+  line-height: 30px;
+  border: 0px solid #fff;
 }
 
 #bottom-panel h5 {
   text-align: center;
+}
+
+.adp-warnbox {
+  display: none;
+}
+
+.adp-placemark {
+  margin-top: 0px !important;
+  border-top: 2px solid #ff4858 !important;
+  font-weight: bold !important;
+}
+
+.adp-listheader {
+  font-weight: bold;
+  border-bottom: 2px solid #ff4858 !important;
+}
+
+.adp-list {
+  padding: 0px !important;
+}
+
+.adp-legal {
+  color: #fff !important;
+}
+
+.adp-summary {
+  color: #fff !important;
+  font-weight: bold !important;
+}
+
+td {
+  background-color: #fff !important;
+  color: #ff4858 !important;
+  border-top: 1px solid #fff !important;
+  border-bottom: 1px solid #fff !important;
+}
+
+tr {
+  border-top: 1px solid #fff !important;
+  border-bottom: 1px solid #fff !important;
 }
 
 input {
