@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Isowaytion</title>
     <link rel="stylesheet" href="css/map.css" />
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <link rel="icon" href="../Images/favicon.ico" />
@@ -24,22 +24,20 @@
       /></a>
     </div>
 
-    <form action="/map" method="POST">
+      <!-- Asks user to input the time that they will use the route -->
       <label for="appt">Please provide a time for your departure.</label>
       <input 
       id="appt"
       class="time"
-      type="time"
-      min="00:00"
-      max="24:00"
-      name="appt">
+      type="time">
       
       <input
       id="input-time"
       class="time" 
-      type="submit">
-    </form>
+      type="submit"
+      value="Submit">
 
+    <!-- Input box for start position -->
     <input
       id="origin-input"
       class="controls form-control"
@@ -47,6 +45,7 @@
       placeholder="Origin"
     />
 
+    <!-- Input box for destination -->
     <input
       id="destination-input"
       class="controls form-control"
@@ -55,14 +54,13 @@
     />
     <!-- <button onclick="toggleHeatmap()">Toggle Heatmap</button> -->
 
-    
+    <!-- Panel that shows each step for the directions. -->
     <div id="map" class="roll-in-top"></div>
     <div id="bottom-panel"><h5>Directions</h5></div>
   </body>
   <script
     src="https://code.jquery.com/jquery-3.5.1.min.js"
-    
-    
+       
   ></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="./scripts/map.js"></script>

@@ -107,6 +107,12 @@ i {
   border-color: #ff4858;
 }
 
+#submit-button {
+  border-radius: 2px 0 0 2px;
+  border-color: #ff4858;
+  border-style: thin;
+}
+
 #bottom-panel select,
 #bottom-panel input {
   font-size: 15px;

@@ -6,7 +6,10 @@ var routeChoice;
 function initMap() {
   var map = new google.maps.Map(document.getElementById("map"), {
     mapTypeControl: false,
-    center: { lat: 49.2488, lng: -122.9805 },
+    center: {
+      lat: 49.2488,
+      lng: -122.9805
+    },
     zoom: 17,
   });
 
@@ -33,9 +36,14 @@ function initMap() {
         // console.log(`${pos.lat}and ${pos.lng}`);
         //current location for
         var geocoder = new google.maps.Geocoder();
-        var latLng = { lat: parseFloat(pos.lat), lng: parseFloat(pos.lng) };
+        var latLng = {
+          lat: parseFloat(pos.lat),
+          lng: parseFloat(pos.lng)
+        };
 
-        geocoder.geocode({ location: latLng }, function (results, status) {
+        geocoder.geocode({
+          location: latLng
+        }, function (results, status) {
           if (status === `OK`) {
             // console.log(results);
             //results here has place_id that might be useful to auto add it as origin
@@ -52,7 +60,7 @@ function initMap() {
             }
           }
         });
-  //       // getting current location
+        //       // getting current location
 
         map.setCenter(pos);
       },
@@ -156,12 +164,15 @@ AutocompleteDirectionsHandler.prototype.route = function () {
   }
   var me = this;
 
-  this.directionsService.route(
-    {
+  this.directionsService.route({
       // origin: {'placeId': this.originPlaceId},
       // destination: {'placeId': this.destinationPlaceId},
-      origin: { placeId: this.originPlaceId },
-      destination: { placeId: this.destinationPlaceId },
+      origin: {
+        placeId: this.originPlaceId
+      },
+      destination: {
+        placeId: this.destinationPlaceId
+      },
       travelMode: this.travelMode,
       provideRouteAlternatives: true,
     },
@@ -170,7 +181,7 @@ AutocompleteDirectionsHandler.prototype.route = function () {
       //or any costomized function
       if (status === "OK") {
         console.log(result);
-        
+
         //result has all the data for google map, example below accesses the test filed
         //of a route that google responses
 
@@ -225,18 +236,18 @@ AutocompleteDirectionsHandler.prototype.route = function () {
 
         //fecth.post function passing the data array to back-end index.js
         fetch("/mapmap", {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          //make sure to serialize your JSON body
-          body: JSON.stringify({
-            data,
-            routes
-          }),
-        })
+            method: "POST",
+            mode: "cors",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            //make sure to serialize your JSON body
+            body: JSON.stringify({
+              data,
+              routes
+            }),
+          })
           // .then() gets the data that passed back by res.send(decodedCoors)
           .then((res) => res.json())
           .then((res) => {
@@ -295,6 +306,8 @@ AutocompleteDirectionsHandler.prototype.route = function () {
           //allows user to drag the direction
         });
 
+        var time = document.getElementById('appt').value;
+        
         //***********storing the chosen route********************
         //fetch the select
         setTimeout(() => {
@@ -308,8 +321,8 @@ AutocompleteDirectionsHandler.prototype.route = function () {
               const totalList = document
                 .querySelector(".adp-list")
                 .getElementsByTagName("b");
-                console.log(`totalList of route here`);
-                
+              console.log(`totalList of route here`);
+
               console.log(totalList);
               //turn a collection into array
               const listArr = Array.from(totalList);
@@ -324,54 +337,65 @@ AutocompleteDirectionsHandler.prototype.route = function () {
                     "click",
                     (e) => {
                       // This will get the data
-                      routeChoice=result.routes[i].summary
-                      fetch("/mapmapRoute", {
-                        method: "POST",
-                        mode: "cors",
-                        headers: {
-                          Accept: "application/json",
-                          "Content-Type": "application/json",
-                        },
-                        //make sure to serialize your JSON body
-                        body: JSON.stringify({
-                          routeChoice,
-                          
-                        }),
-                      }).then((res)=>{
-                        // console.log(res);
-                        
-                      })
-                      
+                      routeChoice = result.routes[i].summary
+
                       console.log(`current choice here ${routeChoice}`);
-                      
+                      console.log(time);
+
                       // console.log(totalList[i]);
                       // console.log(
-                        // `Summary in result: ${result.routes[i].summary}`
+                      // `Summary in result: ${result.routes[i].summary}`
                       // );
                     }
                   );
                 }
-              
+
+                // Add event listener to post the time and route choice.
+                let data = document.getElementById('input-time');
+
+                console.log(time);
+                data.addEventListener("click", (e) => {
+
+                  if (routeChoice == undefined) {
+                    window.alert("Please select a route from the directions panel.");
+                  } else if (time === "") {
+                    window.alert("Please submit a time you will travel.")
+                  } else {
+                    fetch("/upload", {
+                      method: "POST",
+                      mode: "cors",
+                      headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                      },
+                      //make sure to serialize your JSON body
+                      body: JSON.stringify({
+                        routeChoice,
+                        time,
+                      }),
+                    }).then((res) => {
+                      // console.log(res);
+  
+                    })
+                  }
+                })
               }
             }
           })();
         }, 500);
-        
-        
         //***********storing the chosen route********************
       } else {
         window.alert("Directions request failed due to " + status);
       }
-    }
-  );
+    });
 };
 
 
-// Lets the backend know what time the user plans to use this route
-let time = document.getElementById("input-time");
+// // Lets the backend know what time the user plans to use this route
+// let time = document.getElementById("input-time");
 
-time.addEventListener("click", sendTime);
+// time.addEventListener("click", sendTime);
 
-function sendTime() {
-    let departure = document.getElementById("appt");
-}
+// function sendTime() {
+//     let departure = document.getElementById("appt");
+// }

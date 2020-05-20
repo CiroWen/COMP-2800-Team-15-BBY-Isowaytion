@@ -2,7 +2,9 @@ const express = require("express");
 const app = express();
 const url = require("url");
 const polyline = require("polyline");
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({
+  extended: true
+}));
 app.use(express.static("public"));
 app.use(express.static(__dirname + "scripts"));
 app.use(express.static(__dirname + "scripts/scripts"));
@@ -17,9 +19,9 @@ require(`./passport-setup`);
 const paspInit = require(`./passport-setup`);
 const mysql = require(`mysql`);
 const bcrypt = require(`bcrypt`)
-var routes =[] ;
+var routes = [];
 var decodedCoors = []
-var coorIsSent=0;
+var coorIsSent = 0;
 const isLoggedIn = (req, res, next) => {
   if (req.user) {
     next();
@@ -36,7 +38,9 @@ let login;
 
 //*******************consts/vars/lets declared above********************* */
 // app.use(cors())
-app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.json({
+  limit: "50mb"
+}));
 app.use(
   bodyParser.urlencoded({
     limit: "50mb",
@@ -57,7 +61,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.get("/welcome", isLoggedIn, (req, res) => {
   useremail = req.user._json.email;
-  
+
   //res.send(`welcome ${req.user.Email}`)
   // res.sendFile(`./pages/signup.html`);
   //error at line above: path must be absolute or specify root ro res.sedFile()
@@ -206,23 +210,23 @@ let currentInfo = new Array(LENGTH);
 
 //**************05-11 edit************************
 // Ciro's local mysql for testing purpose.
-const con = mysql.createConnection({
-  host     : 'localhost',
-  //where the info is hoste
-  user     : 'root',
-  //the user name of db
-  password : 'isowaytion15',
-  //the pswd for user
-  database : 'isowaytion'
-  //name of db
-});
-
-// var con = mysql.createConnection({
-//   host: "205.250.9.115",
-//   user: "root",
-//   password: "123",
-//   database: "isowaytion",
+// const con = mysql.createConnection({
+//   host: 'localhost',
+//   //where the info is hoste
+//   user: 'root',
+//   //the user name of db
+//   password: 'isowaytion15',
+//   //the pswd for user
+//   database: 'isowaytion'
+//   //name of db
 // });
+
+var con = mysql.createConnection({
+  host: "205.250.9.115",
+  user: "root",
+  password: "123",
+  database: "isowaytion",
+});
 
 // var con = mysql.createConnection({
 //   host: "205.250.9.115",
@@ -262,8 +266,8 @@ app.post(`/signup`, async (req, res) => {
   console.log(req.body.name);
   console.log(req.body.email);
   console.log(req.body.password);
-  console.log(await bcrypt.hash(req.body.password,10));
-  const password = await bcrypt.hash(req.body.password,10)
+  console.log(await bcrypt.hash(req.body.password, 10));
+  const password = await bcrypt.hash(req.body.password, 10)
   //console.log(req.body);
   // if (req.body) {
   //   const regisInfo = {
@@ -274,7 +278,7 @@ app.post(`/signup`, async (req, res) => {
     const regisInfo = {
       name: `${req.body.name}`,
       email: `${req.body.email}`,
-      password:`${password}`
+      password: `${password}`
     };
     con.query(`INSERT INTO user SET ?`, regisInfo, (err, result) => {
       if (err) throw err;
@@ -505,41 +509,41 @@ app.post("/editInfo", (req, res) => {
 
 // Grab the users points for isostats page.
 // app.get("/isostats", isLoggedIn, (req, res) => {
-  app.get("/isostats", (req, res) => {
-    if (login === "google") {
-      useremail = req.user._json.email;
-      userPic = req.user._json.picture;
-    } else {
-      useremail = req.user[0].email;
-      userPic = "../Images/ryan_profile.png";
+app.get("/isostats", (req, res) => {
+  if (login === "google") {
+    useremail = req.user._json.email;
+    userPic = req.user._json.picture;
+  } else {
+    useremail = req.user[0].email;
+    userPic = "../Images/ryan_profile.png";
+  }
+
+  // fullName = req.user._json.name;
+  console.log(useremail);
+  con.query(`SELECT * FROM user WHERE email = '${useremail}'`, (err, rows) => {
+    if (err) throw err;
+
+    console.log("Data received from isowaytion.");
+    console.log(rows);
+    //Store points and number of routes taken in a variable.
+    //name = fullName;
+    name = rows[0].Name;
+    profilePic = userPic;
+    routeNum = rows[0].Name; // Name is temporary because we dont have a routeNum row.
+    points = rows[0].Point;
+    if (points == null) {
+      points = 0;
     }
-    
-    // fullName = req.user._json.name;
-    console.log(useremail);
-    con.query(`SELECT * FROM user WHERE email = '${useremail}'`, (err, rows) => {
-      if (err) throw err;
-  
-      console.log("Data received from isowaytion.");
-      console.log(rows);
-      //Store points and number of routes taken in a variable.
-      //name = fullName;
-      name = rows[0].Name;
-      profilePic = userPic;
-      routeNum = rows[0].Name; // Name is temporary because we dont have a routeNum row.
-      points = rows[0].Point;
-      if (points == null) {
-        points = 0;
-      }
-  
-      //pass info to isostats page when rendered
-      res.render("pages/isostats", {
-        points: points,
-        routeNum: routeNum,
-        profilePic: profilePic,
-        name: name,
-      });
+
+    //pass info to isostats page when rendered
+    res.render("pages/isostats", {
+      points: points,
+      routeNum: routeNum,
+      profilePic: profilePic,
+      name: name,
     });
   });
+});
 
 
 /*******************************************
@@ -596,7 +600,7 @@ app.get("/leaderboard", isLoggedIn, (req, res) => {
       points: points,
     });
   });
-});  
+});
 
 
 // // Check mySQL for corrent information
@@ -667,16 +671,16 @@ app.post("/mapmap", (req, res) => {
   // console.log(polyline.decode(req.body.test))
 
   const encodedCoors = req.body.data
-   routes = req.body.routes
-  
-  
-  
-  
+  routes = req.body.routes
+
+
+
+
   // encodedCoors is an array that consists of coordinates 
   // for all results of directions
-  
+
   // let decodedCoors = []
-  for(let i =0;i<encodedCoors.length;i++){
+  for (let i = 0; i < encodedCoors.length; i++) {
     decodedCoors.push(polyline.decode(encodedCoors[i]))
   }
   //create an array to store the decodedCoordinates
@@ -689,32 +693,32 @@ app.post("/mapmap", (req, res) => {
   // console.log(decodedCoors[0][0]);
   // console.log(decodedCoors[0][0][0]);
   // console.log(decodedCoors[1][0]);
-    //**************Testing purpose************** */
+  //**************Testing purpose************** */
 
 
   //since the decodedCoors[0]means first route and decodedCoors[0][0]
   //means the first coordinate info of first route
   //nested for-loop to insert into database.
- for(let k =0;k<decodedCoors.length;k++){
-  for(let i=0;i<decodedCoors[k].length;i++){
-    if(decodedCoors[k][i]){
-    con.query(`select * from coordinates where lat=${decodedCoors[k][i][0]} and lng=${decodedCoors[k][i][1]}`,(err,res,fields)=>{
-      if(res){
-        if(res.length!=0){
-            // con.query(`update coordinates set frequency = frequency+1 Where lat=${decodedCoors[k][i][0]} and lng=${decodedCoors[k][i][1]}`)
-            // comment out since the search doesnt increment the frequency, upload does
-        }else{
-          con.query(`INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[k][i][0]},${decodedCoors[k][i][1]},null)`)
-        }
-      }else{
-        console.log(`error occured`);
+  for (let k = 0; k < decodedCoors.length; k++) {
+    for (let i = 0; i < decodedCoors[k].length; i++) {
+      if (decodedCoors[k][i]) {
+        con.query(`select * from coordinates where lat=${decodedCoors[k][i][0]} and lng=${decodedCoors[k][i][1]}`, (err, res, fields) => {
+          if (res) {
+            if (res.length != 0) {
+              // con.query(`update coordinates set frequency = frequency+1 Where lat=${decodedCoors[k][i][0]} and lng=${decodedCoors[k][i][1]}`)
+              // comment out since the search doesnt increment the frequency, upload does
+            } else {
+              con.query(`INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[k][i][0]},${decodedCoors[k][i][1]},null)`)
+            }
+          } else {
+            console.log(`error occured`);
+          }
+        })
       }
-    })
     }
   }
- }
   res.send(decodedCoors)
-//response by sending back the decoded coordinate array
+  //response by sending back the decoded coordinate array
 
 
   //*************Testing********* */
@@ -741,14 +745,7 @@ app.post("/mapmap", (req, res) => {
   //*************Testing********* */
 });
 
-
-//app.get("/editInfo", isLoggedIn, (req, res) => {
-  app.post("/map", (req, res) => {
-    
-    let time = req.body;
-    console.log(time);
-    });
-app.post("/mapmapRoute",(req,res)=>{
+app.post("/mapmapRoute", (req, res) => {
   // getting the click event for each summary of route
   //req body comes from map.js
   console.log(req.body.routeChoice);
@@ -760,34 +757,51 @@ app.post("/mapmapRoute",(req,res)=>{
   // console.log(decodedCoors);
   console.log(indexRoute);
   console.log(decodedCoors[indexRoute].length);
-  console.log(decodedCoors[indexRoute][0])  
+  console.log(decodedCoors[indexRoute][0])
   console.log(decodedCoors[indexRoute][0][0]);
-  
-  if(coorIsSent==0){
-    
+
+  if (coorIsSent == 0) {
     // con.query()
   }
   // console.log(req.body.routes);  
 })
 
+app.post("/upload", (req, res) => {
 
-app.post("upload",(req,res)=>{
-  if(coorIsSent==0){
-    for(let i =0;i<decodedCoors[indexRoute].length;i++){
-      if(decodedCoors[indexRoute][i]){
-        con.query(`select * from coordinates where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`,(err,res,fields)=>{
-          if(res){
-            if(res.length!=0){
-              con.query(`update coordinates set frequency = frequency+1 Where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`)
-              
-          }else{
-            con.query(`INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[indexRoute][i][0]},${decodedCoors[indexRoute][i][1]},null)`)
-          }
-        }else{
-          console.log(`error occured`);  
-          }
-        })
-      }
-    }
-  }
+  let time = req.body.time;
+  console.log(time);
+
+  console.log(req.body.routeChoice);
+  let inputRoute = req.body.routeChoice
+  let indexRoute = routes.indexOf(inputRoute)
+
+  // //the routes from /mapmap
+  // console.log(routes);
+  // //decoded coordinates 
+  // console.log(decodedCoors);
+  console.log(indexRoute);
+  console.log(decodedCoors[indexRoute].length);
+  console.log(decodedCoors[indexRoute][0])
+  console.log(decodedCoors[indexRoute][0][0]);
+
+
+  // if (coorIsSent == 0) {
+  //   for (let i = 0; i < decodedCoors[indexRoute].length; i++) {
+  //     if (decodedCoors[indexRoute][i]) {
+  //       con.query(`select * from coordinates where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`, (err, res, fields) => {
+  //         if (res) {
+  //           if (res.length != 0) {
+  //             con.query(`update coordinates set frequency = frequency+1 Where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`)
+  //             console.log('updated');
+  //           } else {
+  //             con.query(`INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[indexRoute][i][0]},${decodedCoors[indexRoute][i][1]},null)`)
+  //             console.log('updated');
+  //           }
+  //         } else {
+  //           console.log(`error occured`);
+  //         }
+  //       })
+  //     }
+  //   }
+  // }
 })
