@@ -24,18 +24,21 @@
       /></a>
     </div>
 
-    <div>
+    <form action="/map" method="GET">
+      <label for="appt">Please provide a time for your departure.</label>
       <input 
       id="appt"
       class="time"
       type="time"
+      min="00:00"
+      max="24:00"
       name="appt">
       
       <input
       id="input-time"
       class="time" 
       type="submit">
-    </div>
+    </form>
 
     <input
       id="origin-input"

@@ -724,3 +724,10 @@ for(let k =0;k<decodedCoors.length;k++){
   // res.send(routes);
   //*************Testing********* */
 });
+
+
+//app.get("/editInfo", isLoggedIn, (req, res) => {
+  app.get("/map", (req, res) => {
+    
+    console.log(req.body);
+    });
