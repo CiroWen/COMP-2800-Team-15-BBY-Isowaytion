@@ -328,3 +328,13 @@ AutocompleteDirectionsHandler.prototype.route = function () {
     }
   );
 };
+
+
+// Lets the backend know what time the user plans to use this route
+let time = document.getElementById("input-time");
+
+time.addEventListener("click", sendTime);
+
+function sendTime() {
+    let departure = document.getElementById("appt");
+}

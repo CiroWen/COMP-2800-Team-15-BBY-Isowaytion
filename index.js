@@ -202,7 +202,7 @@ let currentInfo = new Array(LENGTH);
  */
 
 //**************05-11 edit************************
-//Ciro's local mysql for testing purpose.
+// Ciro's local mysql for testing purpose.
 // const con = mysql.createConnection({
 //   host     : 'localhost',
 //   //where the info is hoste
