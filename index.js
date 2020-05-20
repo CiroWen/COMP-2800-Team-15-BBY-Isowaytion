@@ -17,6 +17,9 @@ require(`./passport-setup`);
 const paspInit = require(`./passport-setup`);
 const mysql = require(`mysql`);
 const bcrypt = require(`bcrypt`)
+var routes =[] ;
+var decodedCoors = []
+var coorIsSent=0;
 const isLoggedIn = (req, res, next) => {
   if (req.user) {
     next();
@@ -203,23 +206,23 @@ let currentInfo = new Array(LENGTH);
 
 //**************05-11 edit************************
 //Ciro's local mysql for testing purpose.
-// const con = mysql.createConnection({
-//   host     : 'localhost',
-//   //where the info is hoste
-//   user     : 'root',
-//   //the user name of db
-//   password : 'isowaytion15',
-//   //the pswd for user
-//   database : 'isowaytion'
-//   //name of db
-// });
-
-var con = mysql.createConnection({
-  host: "205.250.9.115",
-  user: "root",
-  password: "123",
-  database: "isowaytion",
+const con = mysql.createConnection({
+  host     : 'localhost',
+  //where the info is hoste
+  user     : 'root',
+  //the user name of db
+  password : 'isowaytion15',
+  //the pswd for user
+  database : 'isowaytion'
+  //name of db
 });
+
+// var con = mysql.createConnection({
+//   host: "205.250.9.115",
+//   user: "root",
+//   password: "123",
+//   database: "isowaytion",
+// });
 
 // initial connection
 con.connect((err) => {
@@ -653,14 +656,19 @@ app.post("/mapmap", (req, res) => {
   // data from map.js
   // currently data is only first route
   // when I try to put all the route, it shows error "entity is too large"
-  // console.log(req.body.test);
+  console.log(req.body);
   // console.log(polyline.decode(req.body.test))
 
   const encodedCoors = req.body.data
+   routes = req.body.routes
+  
+  
+  
+  
   // encodedCoors is an array that consists of coordinates 
   // for all results of directions
   
-  let decodedCoors = []
+  // let decodedCoors = []
   for(let i =0;i<encodedCoors.length;i++){
     decodedCoors.push(polyline.decode(encodedCoors[i]))
   }
@@ -680,15 +688,16 @@ app.post("/mapmap", (req, res) => {
   //since the decodedCoors[0]means first route and decodedCoors[0][0]
   //means the first coordinate info of first route
   //nested for-loop to insert into database.
-for(let k =0;k<decodedCoors.length;k++){
+ for(let k =0;k<decodedCoors.length;k++){
   for(let i=0;i<decodedCoors[k].length;i++){
     if(decodedCoors[k][i]){
     con.query(`select * from coordinates where lat=${decodedCoors[k][i][0]} and lng=${decodedCoors[k][i][1]}`,(err,res,fields)=>{
       if(res){
         if(res.length!=0){
-            con.query(`update coordinates set frequency = frequency+1 Where lat=${decodedCoors[k][i][0]} and lng=${decodedCoors[k][i][1]}`)
+            // con.query(`update coordinates set frequency = frequency+1 Where lat=${decodedCoors[k][i][0]} and lng=${decodedCoors[k][i][1]}`)
+            // comment out since the search doesnt increment the frequency, upload does
         }else{
-          con.query(`INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[k][i][0]},${decodedCoors[k][i][1]},1)`)
+          con.query(`INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[k][i][0]},${decodedCoors[k][i][1]},null)`)
         }
       }else{
         console.log(`error occured`);
@@ -696,9 +705,9 @@ for(let k =0;k<decodedCoors.length;k++){
     })
     }
   }
-}
+ }
   res.send(decodedCoors)
-//response by seding by the decoded coordinate array
+//response by sending back the decoded coordinate array
 
 
   //*************Testing********* */
@@ -724,3 +733,48 @@ for(let k =0;k<decodedCoors.length;k++){
   // res.send(routes);
   //*************Testing********* */
 });
+
+
+app.post("/mapmapRoute",(req,res)=>{
+  // getting the click event for each summary of route
+  //req body comes from map.js
+  console.log(req.body.routeChoice);
+  let inputRoute = req.body.routeChoice
+  let indexRoute = routes.indexOf(inputRoute)
+  // //the routes from /mapmap
+  // console.log(routes);
+  // //decoded coordinates 
+  // console.log(decodedCoors);
+  console.log(indexRoute);
+  console.log(decodedCoors[indexRoute].length);
+  console.log(decodedCoors[indexRoute][0])  
+  console.log(decodedCoors[indexRoute][0][0]);
+  
+  if(coorIsSent==0){
+    
+    // con.query()
+  }
+  // console.log(req.body.routes);  
+})
+
+
+app.post("upload",(req,res)=>{
+  if(coorIsSent==0){
+    for(let i =0;i<decodedCoors[indexRoute].length;i++){
+      if(decodedCoors[indexRoute][i]){
+        con.query(`select * from coordinates where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`,(err,res,fields)=>{
+          if(res){
+            if(res.length!=0){
+              con.query(`update coordinates set frequency = frequency+1 Where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`)
+              
+          }else{
+            con.query(`INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[indexRoute][i][0]},${decodedCoors[indexRoute][i][1]},null)`)
+          }
+        }else{
+          console.log(`error occured`);  
+          }
+        })
+      }
+    }
+  }
+})

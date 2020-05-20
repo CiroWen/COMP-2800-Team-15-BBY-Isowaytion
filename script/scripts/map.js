@@ -1,6 +1,7 @@
 var heatMapData = [];
 var heatmap;
 var render;
+var routeChoice;
 
 function initMap() {
   var map = new google.maps.Map(document.getElementById("map"), {
@@ -20,49 +21,49 @@ function initMap() {
 
   new AutocompleteDirectionsHandler(map);
   // getting current location
-  // infoWindow = new google.maps.InfoWindow();
+  infoWindow = new google.maps.InfoWindow();
 
-  // if (navigator.geolocation) {
-  //   navigator.geolocation.getCurrentPosition(
-  //     function (position) {
-  //       var pos = {
-  //         lat: position.coords.latitude,
-  //         lng: position.coords.longitude,
-  //       };
-  //       console.log(`${pos.lat}and ${pos.lng}`);
-  //       //current location for
-  //       var geocoder = new google.maps.Geocoder();
-  //       var latLng = { lat: parseFloat(pos.lat), lng: parseFloat(pos.lng) };
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        var pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+        // console.log(`${pos.lat}and ${pos.lng}`);
+        //current location for
+        var geocoder = new google.maps.Geocoder();
+        var latLng = { lat: parseFloat(pos.lat), lng: parseFloat(pos.lng) };
 
-  //       geocoder.geocode({ location: latLng }, function (results, status) {
-  //         if (status === `OK`) {
-  //           console.log(results);
-  //           //results here has place_id that might be useful to auto add it as origin
-  //           if (results[0]) {
-  //             var marker = new google.maps.Marker({
-  //               position: latLng,
-  //               map: map,
-  //             });
-  //             infoWindow.setPosition(pos);
-  //             infoWindow.setContent(
-  //               `Your current location is ${results[0].formatted_address}`
-  //             );
-  //             infoWindow.open(map, marker);
-  //           }
-  //         }
-  //       });
+        geocoder.geocode({ location: latLng }, function (results, status) {
+          if (status === `OK`) {
+            // console.log(results);
+            //results here has place_id that might be useful to auto add it as origin
+            if (results[0]) {
+              var marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+              });
+              infoWindow.setPosition(pos);
+              infoWindow.setContent(
+                `Your current location is ${results[0].formatted_address}`
+              );
+              infoWindow.open(map, marker);
+            }
+          }
+        });
   //       // getting current location
 
-  //       map.setCenter(pos);
-  //     },
-  //     function () {
-  //       handleLocationError(true, infoWindow, map.getCenter());
-  //     }
-  //   );
-  // } else {
-  //   // Browser doesn't support Geolocation
-  //   handleLocationError(false, infoWindow, map.getCenter());
-  // }
+        map.setCenter(pos);
+      },
+      function () {
+        handleLocationError(true, infoWindow, map.getCenter());
+      }
+    );
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
 
   // getting current location
 }
@@ -169,6 +170,7 @@ AutocompleteDirectionsHandler.prototype.route = function () {
       //or any costomized function
       if (status === "OK") {
         console.log(result);
+        
         //result has all the data for google map, example below accesses the test filed
         //of a route that google responses
 
@@ -182,8 +184,10 @@ AutocompleteDirectionsHandler.prototype.route = function () {
 
         //array to store the encoded coordinates
         let data = [];
+        let routes = []
         result.routes.forEach((e) => {
           data.push(e.overview_polyline);
+          routes.push(e.summary)
         });
 
         // console.log(data);
@@ -230,6 +234,7 @@ AutocompleteDirectionsHandler.prototype.route = function () {
           //make sure to serialize your JSON body
           body: JSON.stringify({
             data,
+            routes
           }),
         })
           // .then() gets the data that passed back by res.send(decodedCoors)
@@ -289,18 +294,26 @@ AutocompleteDirectionsHandler.prototype.route = function () {
           // draggable:true,
           //allows user to drag the direction
         });
+
+        //***********storing the chosen route********************
+        //fetch the select
         setTimeout(() => {
           (function () {
             const arr = result.routes;
             const arrSize = arr.length;
+            console.log(`arrSize here`);
             console.log(arrSize);
 
             if (arrSize > 1) {
               const totalList = document
                 .querySelector(".adp-list")
                 .getElementsByTagName("b");
+                console.log(`totalList of route here`);
+                
               console.log(totalList);
+              //turn a collection into array
               const listArr = Array.from(totalList);
+              console.log(`ListArr here`);
               console.log(listArr);
 
               if (totalList !== null) {
@@ -311,17 +324,41 @@ AutocompleteDirectionsHandler.prototype.route = function () {
                     "click",
                     (e) => {
                       // This will get the data
-                      console.log(totalList[i]);
-                      console.log(
-                        `Summary in result: ${result.routes[i].summary}`
-                      );
+                      routeChoice=result.routes[i].summary
+                      fetch("/mapmapRoute", {
+                        method: "POST",
+                        mode: "cors",
+                        headers: {
+                          Accept: "application/json",
+                          "Content-Type": "application/json",
+                        },
+                        //make sure to serialize your JSON body
+                        body: JSON.stringify({
+                          routeChoice,
+                          
+                        }),
+                      }).then((res)=>{
+                        // console.log(res);
+                        
+                      })
+                      
+                      console.log(`current choice here ${routeChoice}`);
+                      
+                      // console.log(totalList[i]);
+                      // console.log(
+                        // `Summary in result: ${result.routes[i].summary}`
+                      // );
                     }
                   );
                 }
+              
               }
             }
           })();
-        }, 1000);
+        }, 500);
+        
+        
+        //***********storing the chosen route********************
       } else {
         window.alert("Directions request failed due to " + status);
       }
