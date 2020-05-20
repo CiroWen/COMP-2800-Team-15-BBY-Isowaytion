@@ -727,7 +727,8 @@ for(let k =0;k<decodedCoors.length;k++){
 
 
 //app.get("/editInfo", isLoggedIn, (req, res) => {
-  app.get("/map", (req, res) => {
+  app.post("/map", (req, res) => {
     
-    console.log(req.body);
+    let time = req.body;
+    console.log(time);
     });
