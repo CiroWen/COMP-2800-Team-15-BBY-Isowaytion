@@ -209,23 +209,23 @@ let currentInfo = new Array(LENGTH);
 
 //**************05-11 edit************************
 //Ciro's local mysql for testing purpose.
-const con = mysql.createConnection({
-  host     : 'localhost',
-  //where the info is hoste
-  user     : 'root',
-  //the user name of db
-  password : 'isowaytion15',
-  //the pswd for user
-  database : 'isowaytion'
-  //name of db
-});
-
-// var con = mysql.createConnection({
-//   host: "205.250.9.115",
-//   user: "root",
-//   password: "123",
-//   database: "isowaytion",
+// const con = mysql.createConnection({
+//   host     : 'localhost',
+//   //where the info is hoste
+//   user     : 'root',
+//   //the user name of db
+//   password : 'isowaytion15',
+//   //the pswd for user
+//   database : 'isowaytion'
+//   //name of db
 // });
+
+var con = mysql.createConnection({
+  host: "205.250.9.115",
+  user: "root",
+  password: "123",
+  database: "isowaytion",
+});
 
 // initial connection
 con.connect((err) => {
@@ -821,18 +821,27 @@ app.post("/maptime", (req, res) => {
     
     durationArr=durationTime.split(" ");
     inputArr=timeOfDept.split(":");
-    inputHr = inputArr[0]
-    inputMin = inputArr[1]
+    inputHr = parseInt(inputArr[0])*60*60
+    inputMin = parseInt(inputArr[1])*60
     
     if(durationArr.length==2&&durationArr[1] ==`mins`||'min'){
-      durationMin = durationArr[0]
-      console.log(durationArr);  
+
+      console.log(`firstIF`);
+      
+      
     }else if (durationArr.length==4){
-      durationMin =durationArr[3]
-      durationHr = durationArr[0]
+      durationMin =parseInt(durationArr[1])*60
+      durationHr = parseInt(durationArr[0])*60*60
     }
 
-
+    console.log(durationMin);
+    console.log(durationHr);
+    console.log(inputMin);
+    console.log(inputHr);
+    
+    
+    
+    
     
 
     con.query(`CREATE EVENT \`isowaytion\`.\`${timeOfDept}2\`
