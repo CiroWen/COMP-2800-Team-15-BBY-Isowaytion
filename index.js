@@ -21,7 +21,7 @@ var routes = [];
 var decodedCoors = [];
 var coorIsSent = 0;
 var indexRoute = 0;
-var time ;
+var time;
 const isLoggedIn = (req, res, next) => {
   if (req.user) {
     next();
@@ -737,7 +737,7 @@ app.post("/mapmapRoute", (req, res) => {
   // getting the click event for each summary of route
   //then store them to the global variable in index.js -->
   //req body comes from map.js
-  
+
   console.log(`running under post /mapmapRoute`);
   console.log(req.body.routeChoice);
   let inputRoute = req.body.routeChoice;
@@ -759,7 +759,7 @@ app.post("/mapmapRoute", (req, res) => {
 
 app.post("/upload", (req, res) => {
   console.log(`running under post /upload`);
-  
+
   if (coorIsSent == 0) {
     for (let i = 0; i < decodedCoors[indexRoute].length; i++) {
       if (decodedCoors[indexRoute][i]) {
@@ -786,41 +786,42 @@ app.post("/upload", (req, res) => {
   }
 });
 
+// app.post("/map", (req, res) => {
+//   console.log(`running under post /map`);
+//   // console.log(req.body.time1);
+//   time = req.body.time1;
+//   console.log(time);
 
-app.post("/map",(req,res)=>{
-  console.log(`running under post /map`);
-  // console.log(req.body.time1);
-  time = req.body.time1
-  console.log(time);
-  
-  if(decodedCoors[indexRoute]==undefined){
-    console.log(`undeifined`);
-    res.redirect(`/map`)
-    
-  }
-  if (coorIsSent == 0) {
-    for (let i = 0; i < decodedCoors[indexRoute].length; i++) {
-      if (decodedCoors[indexRoute][i]) {
-        con.query(
-          `select * from coordinates where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`,
-          (err, res, fields) => {
-            if (res) {
-              if (res.length != 0) {
-                con.query(
-                  `update coordinates set frequency = frequency+1 Where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`
-                );
-              } else {
-                con.query(
-                  `INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[indexRoute][i][0]},${decodedCoors[indexRoute][i][1]},1)`
-                );
-              }
-            } else {
-              console.log(`error occured`);
-            }
-          }
-        );
-      }
-    }
-  }
-  
-})
+//   if (decodedCoors[indexRoute] == undefined) {
+//     console.log(`undeifined`);
+//     res.redirect(`/map`);
+//   }
+//   if (coorIsSent == 0) {
+//     for (let i = 0; i < decodedCoors[indexRoute].length; i++) {
+//       if (decodedCoors[indexRoute][i]) {
+//         con.query(
+//           `select * from coordinates where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`,
+//           (err, res, fields) => {
+//             if (res) {
+//               if (res.length != 0) {
+//                 con.query(
+//                   `update coordinates set frequency = frequency+1 Where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`
+//                 );
+//               } else {
+//                 con.query(
+//                   `INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[indexRoute][i][0]},${decodedCoors[indexRoute][i][1]},1)`
+//                 );
+//               }
+//             } else {
+//               console.log(`error occured`);
+//             }
+//           }
+//         );
+//       }
+//     }
+//   }
+// });
+
+app.post("/maptime", (req, res) => {
+  console.log(req.body);
+});

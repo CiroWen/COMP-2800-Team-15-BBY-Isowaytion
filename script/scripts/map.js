@@ -392,4 +392,27 @@ AutocompleteDirectionsHandler.prototype.route = function () {
   );
 };
 
+$(document).ready(function () {
+  $("#myModal").modal("hide");
+});
 
+document.getElementById("input-time").addEventListener("click", (e) => {
+  const timeData = document.getElementById("appt").value;
+
+  if (timeData === "") {
+    $("#myModal").modal("show");
+  } else {
+    console.log(timeData);
+    fetch("/maptime", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        timeData,
+      }),
+    });
+  }
+});
