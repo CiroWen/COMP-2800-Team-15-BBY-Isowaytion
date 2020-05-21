@@ -205,6 +205,8 @@ AutocompleteDirectionsHandler.prototype.route = function () {
       //the codes start from here to SetDirection(result) is where we process our heatmap
       //or any costomized function
       if (status === "OK") {
+        console.log(`underStatus`);
+        
         console.log(result);
 
         //result has all the data for google map, example below accesses the test filed
@@ -358,6 +360,8 @@ AutocompleteDirectionsHandler.prototype.route = function () {
                   ].parentElement.parentElement.parentElement.addEventListener(
                     "click",
                     (e) => {
+                      console.log(result.routes[i].legs[0].duration.text);
+                      routeTime =result.routes[i].legs[0].duration.text
                       // This will get the data
                       routeChoice = result.routes[i].summary;
                       fetch("/mapmapRoute", {
@@ -370,6 +374,7 @@ AutocompleteDirectionsHandler.prototype.route = function () {
                         //make sure to serialize your JSON body
                         body: JSON.stringify({
                           routeChoice,
+                          routeTime
                         }),
                       }).then((res) => {
                         // console.log(res);
