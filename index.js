@@ -209,23 +209,23 @@ let currentInfo = new Array(LENGTH);
 
 //**************05-11 edit************************
 //Ciro's local mysql for testing purpose.
-const con = mysql.createConnection({
-  host     : 'localhost',
-  //where the info is hoste
-  user     : 'root',
-  //the user name of db
-  password : 'isowaytion15',
-  //the pswd for user
-  database : 'isowaytion'
-  //name of db
-});
-
-// var con = mysql.createConnection({
-//   host: "205.250.9.115",
-//   user: "root",
-//   password: "123",
-//   database: "isowaytion",
+// const con = mysql.createConnection({
+//   host     : 'localhost',
+//   //where the info is hoste
+//   user     : 'root',
+//   //the user name of db
+//   password : 'isowaytion15',
+//   //the pswd for user
+//   database : 'isowaytion'
+//   //name of db
 // });
+
+var con = mysql.createConnection({
+  host: "205.250.9.115",
+  user: "root",
+  password: "123",
+  database: "isowaytion",
+});
 
 // initial connection
 con.connect((err) => {
@@ -273,7 +273,9 @@ app.post(`/signup`, async (req, res) => {
       password: `${password}`,
     };
     con.query(`INSERT INTO user SET ?`, regisInfo, (err, result) => {
-      if (err) throw err;
+      if (err) {
+        res.redirect("/");
+      }
       console.log(result);
       res.redirect("/signin");
     });
