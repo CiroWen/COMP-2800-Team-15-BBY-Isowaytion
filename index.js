@@ -823,18 +823,27 @@ app.post("/maptime", (req, res) => {
     
     durationArr=durationTime.split(" ");
     inputArr=timeOfDept.split(":");
-    inputHr = inputArr[0]
-    inputMin = inputArr[1]
+    inputHr = parseInt(inputArr[0])*60*60
+    inputMin = parseInt(inputArr[1])*60
     
     if(durationArr.length==2&&durationArr[1] ==`mins`||'min'){
-      durationMin = durationArr[0]
-      console.log(durationArr);  
+
+      console.log(`firstIF`);
+      
+      
     }else if (durationArr.length==4){
-      durationMin =durationArr[3]
-      durationHr = durationArr[0]
+      durationMin =parseInt(durationArr[1])*60
+      durationHr = parseInt(durationArr[0])*60*60
     }
 
-
+    console.log(durationMin);
+    console.log(durationHr);
+    console.log(inputMin);
+    console.log(inputHr);
+    
+    
+    
+    
     
 
     con.query(`CREATE EVENT \`isowaytion\`.\`${timeOfDept}2\`
