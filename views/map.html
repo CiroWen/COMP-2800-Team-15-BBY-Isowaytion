@@ -26,16 +26,21 @@
 
       <!-- Asks user to input the time that they will use the route -->
       <label for="appt">Please provide a time for your departure.</label>
+      <form method="post">
       <input 
       id="appt"
       class="time"
-      type="time">
+      type="time"
+      name="time1"
+      />
       
       <input
       id="input-time"
       class="time" 
       type="submit"
-      value="Submit">
+      value="Submit"
+      
+      />
 
     <!-- Input box for start position -->
     <input
@@ -52,6 +57,7 @@
       type="text"
       placeholder="Destination"
     />
+  </form>
     <!-- <button onclick="toggleHeatmap()">Toggle Heatmap</button> -->
 
     <!-- Panel that shows each step for the directions. -->

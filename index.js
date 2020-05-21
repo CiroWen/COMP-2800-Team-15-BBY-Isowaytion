@@ -228,12 +228,6 @@ var con = mysql.createConnection({
   database: "isowaytion",
 });
 
-// var con = mysql.createConnection({
-//   host: "205.250.9.115",
-//   user: "root",
-//   password: "123",
-//   database: "isowaytion",
-// });
 
 // initial connection
 con.connect((err) => {
@@ -785,23 +779,37 @@ app.post("/upload", (req, res) => {
   console.log(decodedCoors[indexRoute][0][0]);
 
 
-  // if (coorIsSent == 0) {
-  //   for (let i = 0; i < decodedCoors[indexRoute].length; i++) {
-  //     if (decodedCoors[indexRoute][i]) {
-  //       con.query(`select * from coordinates where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`, (err, res, fields) => {
-  //         if (res) {
-  //           if (res.length != 0) {
-  //             con.query(`update coordinates set frequency = frequency+1 Where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`)
-  //             console.log('updated');
-  //           } else {
-  //             con.query(`INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[indexRoute][i][0]},${decodedCoors[indexRoute][i][1]},null)`)
-  //             console.log('updated');
-  //           }
-  //         } else {
-  //           console.log(`error occured`);
-  //         }
-  //       })
-  //     }
-  //   }
-  // }
+
+})
+
+
+//related to the submit button
+app.post("/map",(req,res)=>{
+  console.log(`hihi`)
+  console.log(req.body);
+  if(indexRoute===undefined){
+    console.log(`please choose a time and a route for your plan before submission `);
+    res.redirect("/index")
+  }
+  if (coorIsSent == 0) {
+    for (let i = 0; i < decodedCoors[indexRoute].length; i++) {
+      if (decodedCoors[indexRoute][i]) {
+        con.query(`select * from coordinates where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`, (err, res, fields) => {
+          if (res) {
+            if (res.length != 0) {
+              con.query(`update coordinates set frequency = frequency+1 Where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`)
+              console.log('updated');
+            } else {
+              con.query(`INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[indexRoute][i][0]},${decodedCoors[indexRoute][i][1]},null)`)
+              console.log('updated');
+            }
+          } else {
+            console.log(`error occured`);
+          }
+        })
+      }
+    }
+  }
+  res.redirect('/map')
+  
 })
