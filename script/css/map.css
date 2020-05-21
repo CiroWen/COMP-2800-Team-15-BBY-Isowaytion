@@ -89,6 +89,30 @@ i {
   border-color: #4d90fe;
 }
 
+.time {
+  border-radius: 2px 0 0 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  height: 32px;
+  outline: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  background-color: #fff;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  margin-left: 12px;
+  text-overflow: ellipsis;
+  width: 145px;
+  border-style: thin;
+  border-color: #ff4858;
+}
+
+#submit-button {
+  border-radius: 2px 0 0 2px;
+  border-color: #ff4858;
+  border-style: thin;
+}
+
 #bottom-panel select,
 #bottom-panel input {
   font-size: 15px;
