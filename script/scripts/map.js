@@ -7,7 +7,6 @@ var render;
 var routeChoice;
 //global Stirng to store the name of a route for indentifying user's hightlighted route
 
-
 //Google initMap() default function
 function initMap() {
   var map = new google.maps.Map(document.getElementById("map"), {
@@ -56,7 +55,7 @@ function initMap() {
 
         var geocoder = new google.maps.Geocoder();
         //google geocoder api for converting coordinate into String of location.
-      
+
         var latLng = { lat: parseFloat(pos.lat), lng: parseFloat(pos.lng) };
         //convert String of latitude and longtitude into floating number and make them a JSON.
 
@@ -64,7 +63,6 @@ function initMap() {
         geocoder.geocode({ location: latLng }, function (results, status) {
           if (status === `OK`) {
             //if the return status is valid.
-            // console.log(results);
             //results here has place_id that might be useful to auto add it as origin
             if (results[0]) {
               //if there is results from the API
@@ -99,13 +97,12 @@ function initMap() {
     // Browser doesn't support Geolocation
     handleLocationError(false, infoWindow, map.getCenter());
   }
-  
-} 
-  //********** getting current location code ends here************
+}
+//********** getting current location code ends here************
 
-  //initMap() function ends here
+//initMap() function ends here
 
-  //TBD
+//TBD
 // function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 //   infoWindow.setPosition(pos);
 //   infoWindow.setContent(
@@ -120,7 +117,6 @@ function initMap() {
 function getPoint() {
   return heatMapData;
 }
-
 
 /**
  * @constructor
@@ -188,7 +184,9 @@ AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function (
   });
 };
 
+// Get routes from user input and display it
 AutocompleteDirectionsHandler.prototype.route = function () {
+  // if origin point or destination point is not set, return this function
   if (!this.originPlaceId || !this.destinationPlaceId) {
     return;
   }
@@ -208,7 +206,7 @@ AutocompleteDirectionsHandler.prototype.route = function () {
       //or any costomized function
       if (status === "OK") {
         console.log(result);
-        
+
         //result has all the data for google map, example below accesses the test filed
         //of a route that google responses
 
@@ -222,10 +220,10 @@ AutocompleteDirectionsHandler.prototype.route = function () {
 
         //array to store the encoded coordinates
         let data = [];
-        let routes = []
+        let routes = [];
         result.routes.forEach((e) => {
           data.push(e.overview_polyline);
-          routes.push(e.summary)
+          routes.push(e.summary);
         });
 
         // console.log(data);
@@ -272,7 +270,7 @@ AutocompleteDirectionsHandler.prototype.route = function () {
           //make sure to serialize your JSON body
           body: JSON.stringify({
             data,
-            routes
+            routes,
           }),
         })
           // .then() gets the data that passed back by res.send(decodedCoors)
@@ -323,14 +321,13 @@ AutocompleteDirectionsHandler.prototype.route = function () {
             heatmap.setMap(heatmap.getMap());
           });
 
+        // render direction on map
         me.directionsRenderer.setDirections(result);
 
+        // options for rendering direction
         me.directionsRenderer.setOptions({
           routeIndex: 1,
           suppressPolylines: true,
-          //true to unable the
-          // draggable:true,
-          //allows user to drag the direction
         });
 
         //***********storing the chosen route********************
@@ -346,8 +343,8 @@ AutocompleteDirectionsHandler.prototype.route = function () {
               const totalList = document
                 .querySelector(".adp-list")
                 .getElementsByTagName("b");
-                console.log(`totalList of route here`);
-                
+              console.log(`totalList of route here`);
+
               console.log(totalList);
               //turn a collection into array
               const listArr = Array.from(totalList);
@@ -362,7 +359,7 @@ AutocompleteDirectionsHandler.prototype.route = function () {
                     "click",
                     (e) => {
                       // This will get the data
-                      routeChoice=result.routes[i].summary
+                      routeChoice = result.routes[i].summary;
                       fetch("/mapmapRoute", {
                         method: "POST",
                         mode: "cors",
@@ -373,29 +370,20 @@ AutocompleteDirectionsHandler.prototype.route = function () {
                         //make sure to serialize your JSON body
                         body: JSON.stringify({
                           routeChoice,
-                          
                         }),
-                      }).then((res)=>{
+                      }).then((res) => {
                         // console.log(res);
-                        
-                      })
-                      
+                      });
+
                       console.log(`current choice here ${routeChoice}`);
-                      
-                      // console.log(totalList[i]);
-                      // console.log(
-                        // `Summary in result: ${result.routes[i].summary}`
-                      // );
                     }
                   );
                 }
-              
               }
             }
           })();
         }, 500);
-        
-        
+
         //***********storing the chosen route********************
       } else {
         window.alert("Directions request failed due to " + status);
