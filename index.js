@@ -17,9 +17,10 @@ require(`./passport-setup`);
 const paspInit = require(`./passport-setup`);
 const mysql = require(`mysql`);
 const bcrypt = require(`bcrypt`)
-var routes =[] ;
+var routes = [] ;
 var decodedCoors = []
-var coorIsSent=0;
+var coorIsSent = 0;
+var indexRoute = 0;
 const isLoggedIn = (req, res, next) => {
   if (req.user) {
     next();
@@ -206,23 +207,23 @@ let currentInfo = new Array(LENGTH);
 
 //**************05-11 edit************************
 //Ciro's local mysql for testing purpose.
-const con = mysql.createConnection({
-  host     : 'localhost',
-  //where the info is hoste
-  user     : 'root',
-  //the user name of db
-  password : 'isowaytion15',
-  //the pswd for user
-  database : 'isowaytion'
-  //name of db
-});
-
-// var con = mysql.createConnection({
-//   host: "205.250.9.115",
-//   user: "root",
-//   password: "123",
-//   database: "isowaytion",
+// const con = mysql.createConnection({
+//   host     : 'localhost',
+//   //where the info is hoste
+//   user     : 'root',
+//   //the user name of db
+//   password : 'isowaytion15',
+//   //the pswd for user
+//   database : 'isowaytion'
+//   //name of db
 // });
+
+var con = mysql.createConnection({
+  host: "205.250.9.115",
+  user: "root",
+  password: "123",
+  database: "isowaytion",
+});
 
 // initial connection
 con.connect((err) => {
@@ -737,10 +738,11 @@ app.post("/mapmap", (req, res) => {
 
 app.post("/mapmapRoute",(req,res)=>{
   // getting the click event for each summary of route
+  //then store them to the global variable in index.js --> 
   //req body comes from map.js
   console.log(req.body.routeChoice);
   let inputRoute = req.body.routeChoice
-  let indexRoute = routes.indexOf(inputRoute)
+   indexRoute = routes.indexOf(inputRoute)
   // //the routes from /mapmap
   // console.log(routes);
   // //decoded coordinates 
@@ -758,7 +760,7 @@ app.post("/mapmapRoute",(req,res)=>{
 })
 
 
-app.post("upload",(req,res)=>{
+app.post("/upload",(req,res)=>{
   if(coorIsSent==0){
     for(let i =0;i<decodedCoors[indexRoute].length;i++){
       if(decodedCoors[indexRoute][i]){
