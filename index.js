@@ -810,46 +810,63 @@ app.post("/maptime", (req, res) => {
   let year = t.getFullYear();
   let month = t.getMonth()+1;
   let date = t.getDate();
-  let durationHr;
+  
   let durationMin;
   let durationArr = [];
-  let inputHr;
-  let inputMin;
-  let inputArr= []
-
-  if(durationTime!=undefined)
-  // console.log(parseInt(durationTime));
   
+  let inputMin=0;
+  let inputArr= []
+  let scheduleHr=0;
+  let scheduleMin=0
+  let scheduleOverflow=0;
+
+console.log(`test`);
+
+console.log(req.body);
+console.log(durationTime);
+
+
   if(req.body&&durationTime){
-    con.query(`CREATE EVENT \`isowaytion\`.\`${timeOfDept}\`
-    ON SCHEDULE AT '${year}-${month}-${date} ${timeOfDept}:00'
+    con.query(`CREATE EVENT \"isowaytion\".\"${timeOfDept}\"
+    ON SCHEDULE AT  ${year}-${month}-${date} ${timeOfDept}:00
     DO UPDATE 
     user SET Point = Point+1 WHERE Email =\"c3@c3\"`)
     
     durationArr=durationTime.split(" ");
     inputArr=timeOfDept.split(":");
-    inputHr = parseInt(inputArr[0])*60*60
-    inputMin = parseInt(inputArr[1])*60
+    inputMin = parseInt(inputArr[0])*60+parseInt(inputArr[1])
     
     
-    if(durationArr.length==2&&durationArr[1] ==`mins`||'min'){
+    
+    if(durationArr.length==2&&durationArr[1] ==`mins`||durationArr[1]=='min'){
 
-        console.log(`firstIF`);
-        durationMin =parseInt(durationArr[0])*60
+        console.log(`only min case`);
+        durationMin =parseInt(durationArr[0])
       
+    }else if(durationArr.length==2&&durationArr[1] =='hr'||durationArr[1]==`hrs`){
+      console.log(`only hr case`);
+      durationMin=parseInt(durationArr[0]*60)
     }else if (durationArr.length==4){
-      durationMin =parseInt(durationArr[1])*60
-      durationHr = parseInt(durationArr[0])*60*60
+      durationMin =parseInt(durationArr[2])+parseInt(durationArr[0])*60
+      
     }
 
-    
-    
-    
-    
+    scheduleMin = durationMin+inputMin
+    while(scheduleMin>=60){
+      scheduleHr++;
+      scheduleMin=scheduleMin-60;
+      if(scheduleHr>=60){
+        date++;
+      }
+    }
     
 
-    con.query(`CREATE EVENT \`isowaytion\`.\`${timeOfDept}2\`
-    ON SCHEDULE AT '${year}-${month}-${date} ${timeOfDept}:00'
+    console.log(`scheduleMinhere+${scheduleHr}+${scheduleMin}`);
+    
+    
+  
+    con.query(`CREATE EVENT \"isowaytion\".\"${timeOfDept}2\"
+    ON SCHEDULE AT ${year}-${month}-${date} ${scheduleHr}:${scheduleMin}:00
     DO UPDATE 
     user SET Point = Point-1 WHERE Email =\"c3@c3\"`)
   }
