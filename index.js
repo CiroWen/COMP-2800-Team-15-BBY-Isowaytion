@@ -1,7 +1,11 @@
 const express = require("express");
+//robust routing library
 const app = express();
+//setup app for convenient purpose
 const url = require("url");
+//TBD
 const polyline = require("polyline");
+//library that provides polylineDecode
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(express.static(__dirname + "scripts"));
@@ -22,9 +26,6 @@ var routes = [];
 
 var decodedCoors = [];
 //array to store decored Coordinates
-
-var coorIsSent = 0;
-// variable to indicate if the coordinates of a route is sent
 
 var indexRoute = 0;
 // to store currently chosen route by user, to determine which set of coordinates will be processed in our database.
@@ -648,9 +649,9 @@ app.post(
 
 // data from map.js
   // currently data is only first route
-  // when I try to put all the route, it shows error "entity is too large"
+  // when I try to put all the route, it shows error "entity is too large"ee
   //TBD
-app.post("/mapmap", (req, res) => {
+app.post("/mapmap", (req, res) => {e
   const encodedCoors = req.body.data;
   routes = req.body.routes;
 
@@ -695,6 +696,8 @@ app.post("/mapmapRoute", (req, res) => {
   let inputRoute = req.body.routeChoice;
   indexRoute = routes.indexOf(inputRoute);
  
+  durationTime=req.body.routeTime
+  console.log(durationTime);
 });
 
 //post maptime triggered once the submit button is clicked.
@@ -726,16 +729,20 @@ app.post("/maptime", (req, res) => {
   let scheduleOverflow=0;
   // if the shchedule time extend to second day
 
+  let 
   //fetching the useremail to assign point
   if (login === "google") {
     useremail = req.user._json.email;
   } else {
     useremail = req.user[0].email;
   }
+  console.log(req.body);
+  console.log(durationTime);
+  
   
   //to see if both user's input and google durationTime are defined
   if(req.body&&durationTime){
-    urationArr=durationTime.split(" ");
+    durationArr=durationTime.split(" ");
     //convert the duration time into array. e.g 1 hours --> [[1],[hours]]
 
     inputArr=timeOfDept.split(":");
@@ -773,7 +780,7 @@ app.post("/maptime", (req, res) => {
         scheduleHr=scheduleHr-60
       }
     }
-    
+    // console.log(coordIsSent);
     //Mysql query assigns point to the user who submits their schedule
     con.query(`UPDATE user SET Point = Point+1 WHERE Email="${useremail}`,(err,res)=>{
       if(err){
@@ -783,9 +790,10 @@ app.post("/maptime", (req, res) => {
         console.log(res);
       }
     })
-
+    // console.log(coordIsSent);
+    
     //coordinates haven't beed sent
-    if (coorIsSent == 0) {
+    // if (coorIsSent == 0) {
       //traveres all the latitudes and longtitude.
       for (let i = 0; i < decodedCoors[indexRoute].length; i++) {
         if (decodedCoors[indexRoute][i]) {
@@ -800,21 +808,27 @@ app.post("/maptime", (req, res) => {
             con.query(
               `select * from coordinates where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`,
                 (err, res, fields) => {
+                  console.log(`first query returns`);
+                  
                   if (res) {
                     if (res.length != 0) {
+                      
                       con.query(`CREATE EVENT isowaytion.${makeEventName(6)}
                       ON SCHEDULE AT "${year}-${month}-${date} ${timeOfDept}:00"
                       DO UPDATE coordinates set Frequency = Frequency+1 Where Lat=${decodedCoors[indexRoute][i][0]} and Lng=${decodedCoors[indexRoute][i][1]}`)
                       
+                      console.log(`mid of events`);
                       con.query(`CREATE EVENT isowaytion.${makeEventName(5)}
                       ON SCHEDULE AT "${year}-${month}-${date} ${scheduleHr}:${scheduleMin}:00"
                       DO UPDATE coordinates set Frequency = Frequency-1 Where Lat=${decodedCoors[indexRoute][i][0]} and Lng=${decodedCoors[indexRoute][i][1]}`)
-                      coorIsSent=1;
+                      // coorIsSent=1;
                     } else {
+                      console.log(`elsehere`);
+                      
                       con.query(
                         `INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[indexRoute][i][0]},${decodedCoors[indexRoute][i][1]},1)`
                       );
-                      coorIsSent=1;
+                      // coorIsSent=1;
                     }
                   } else {
                     console.log(`error occured`);
@@ -823,7 +837,7 @@ app.post("/maptime", (req, res) => {
               );
             }
           }
-        }
+        // } //coorissent bracket
     
 
   }
@@ -848,6 +862,6 @@ function makeEventName(length) {
 //setting the port to be listened when index.js in run
 app.listen(port, () =>
   console.log(
-    `Thank you for testing Isowaytion. ctrl + c to quit, visit localhost:${port} to test`
+    `Thank you for testing IsoWaytion. ctrl + c to quit, visit localhost:${port} to test`
   )
 );
