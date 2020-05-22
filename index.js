@@ -18,10 +18,13 @@ const cookieSession = require("cookie-session");
 require(`./passport-setup`);
 const paspInit = require(`./passport-setup`);
 const mysql = require(`mysql`);
-const bcrypt = require(`bcrypt`)
+const bcrypt = require(`bcrypt`);
 var routes = [];
-var decodedCoors = []
+var decodedCoors = [];
 var coorIsSent = 0;
+var indexRoute = 0;
+var timeOfDept;
+var durationTime;
 const isLoggedIn = (req, res, next) => {
   if (req.user) {
     next();
@@ -261,7 +264,7 @@ app.post(`/signup`, async (req, res) => {
   console.log(req.body.email);
   console.log(req.body.password);
   console.log(await bcrypt.hash(req.body.password, 10));
-  const password = await bcrypt.hash(req.body.password, 10)
+  const password = await bcrypt.hash(req.body.password, 10);
   //console.log(req.body);
   // if (req.body) {
   //   const regisInfo = {
@@ -272,12 +275,15 @@ app.post(`/signup`, async (req, res) => {
     const regisInfo = {
       name: `${req.body.name}`,
       email: `${req.body.email}`,
-      password: `${password}`
+      password: `${password}`,
     };
     con.query(`INSERT INTO user SET ?`, regisInfo, (err, result) => {
-      if (err) throw err;
-      console.log(result);
-      res.redirect("/signin");
+      if (err) {
+        res.redirect("/invalid_signup");
+      } else {
+        console.log(result);
+        res.redirect("/signin");
+      }
     });
   }
 });
@@ -327,6 +333,10 @@ app.get("/aboutus", function (req, res) {
 
 app.get("/invalid", function (req, res) {
   res.sendFile(path.join(__dirname + "/views/signin_invalid.html"));
+});
+
+app.get("/invalid_signup", function (req, res) {
+  res.sendFile(path.join(__dirname + "/views/signup_invalid.html"));
 });
 
 // Send to Map page.
@@ -496,7 +506,6 @@ app.post("/editInfo", (req, res) => {
 //   console.log("1 record inserted");
 // });
 
-
 /*******************************************
  * Isostats
  */
@@ -538,7 +547,6 @@ app.get("/isostats", (req, res) => {
     });
   });
 });
-
 
 /*******************************************
  * Express server side, LEADERBOARDS
@@ -595,7 +603,6 @@ app.get("/leaderboard", isLoggedIn, (req, res) => {
     });
   });
 });
-
 
 // // Check mySQL for corrent information
 app.post("/auth", function (request, response) {
@@ -664,18 +671,15 @@ app.post("/mapmap", (req, res) => {
   console.log(req.body);
   // console.log(polyline.decode(req.body.test))
 
-  const encodedCoors = req.body.data
-  routes = req.body.routes
+  const encodedCoors = req.body.data;
+  routes = req.body.routes;
 
-
-
-
-  // encodedCoors is an array that consists of coordinates 
+  // encodedCoors is an array that consists of coordinates
   // for all results of directions
 
   // let decodedCoors = []
   for (let i = 0; i < encodedCoors.length; i++) {
-    decodedCoors.push(polyline.decode(encodedCoors[i]))
+    decodedCoors.push(polyline.decode(encodedCoors[i]));
   }
   //create an array to store the decodedCoordinates
 
@@ -689,31 +693,34 @@ app.post("/mapmap", (req, res) => {
   // console.log(decodedCoors[1][0]);
   //**************Testing purpose************** */
 
-
   //since the decodedCoors[0]means first route and decodedCoors[0][0]
   //means the first coordinate info of first route
   //nested for-loop to insert into database.
   for (let k = 0; k < decodedCoors.length; k++) {
     for (let i = 0; i < decodedCoors[k].length; i++) {
       if (decodedCoors[k][i]) {
-        con.query(`select * from coordinates where lat=${decodedCoors[k][i][0]} and lng=${decodedCoors[k][i][1]}`, (err, res, fields) => {
-          if (res) {
-            if (res.length != 0) {
-              // con.query(`update coordinates set frequency = frequency+1 Where lat=${decodedCoors[k][i][0]} and lng=${decodedCoors[k][i][1]}`)
-              // comment out since the search doesnt increment the frequency, upload does
+        con.query(
+          `select * from coordinates where lat=${decodedCoors[k][i][0]} and lng=${decodedCoors[k][i][1]}`,
+          (err, res, fields) => {
+            if (res) {
+              if (res.length != 0) {
+                // con.query(`update coordinates set frequency = frequency+1 Where lat=${decodedCoors[k][i][0]} and lng=${decodedCoors[k][i][1]}`)
+                // comment out since the search doesnt increment the frequency, upload does
+              } else {
+                con.query(
+                  `INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[k][i][0]},${decodedCoors[k][i][1]},null)`
+                );
+              }
             } else {
-              con.query(`INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[k][i][0]},${decodedCoors[k][i][1]},null)`)
+              console.log(`error occured`);
             }
-          } else {
-            console.log(`error occured`);
           }
-        })
+        );
       }
     }
   }
-  res.send(decodedCoors)
+  res.send(decodedCoors);
   //response by sending back the decoded coordinate array
-
 
   //*************Testing********* */
   // // this is paths of a route
@@ -741,75 +748,116 @@ app.post("/mapmap", (req, res) => {
 
 app.post("/mapmapRoute", (req, res) => {
   // getting the click event for each summary of route
+  //then store them to the global variable in index.js -->
   //req body comes from map.js
-  console.log(req.body.routeChoice);
-  let inputRoute = req.body.routeChoice
-  let indexRoute = routes.indexOf(inputRoute)
+
+  console.log(`running under post /mapmapRoute`);
+  // console.log(req.body.routeChoice);
+  // console.log(req.body.routeTime);
+  
+  let inputRoute = req.body.routeChoice;
+  indexRoute = routes.indexOf(inputRoute);
+  durationTime = req.body.routeTime
+  console.log(durationTime);
+  console.log(indexRoute);
+  
+  
   // //the routes from /mapmap
   // console.log(routes);
-  // //decoded coordinates 
+  // //decoded coordinates
   // console.log(decodedCoors);
   console.log(indexRoute);
   console.log(decodedCoors[indexRoute].length);
-  console.log(decodedCoors[indexRoute][0])
+  console.log(decodedCoors[indexRoute][0]);
   console.log(decodedCoors[indexRoute][0][0]);
 
   if (coorIsSent == 0) {
     // con.query()
   }
-  // console.log(req.body.routes);  
-})
+  // console.log(req.body.routes);
+});
 
+// uploading coordinate to database to be further finished
 app.post("/upload", (req, res) => {
+  console.log(`running under post /upload`);
 
-  let time = req.body.time;
-  console.log(time);
-
-  console.log(req.body.routeChoice);
-  let inputRoute = req.body.routeChoice
-  let indexRoute = routes.indexOf(inputRoute)
-
-  // //the routes from /mapmap
-  // console.log(routes);
-  // //decoded coordinates 
-  // console.log(decodedCoors);
-  console.log(indexRoute);
-  console.log(decodedCoors[indexRoute].length);
-  console.log(decodedCoors[indexRoute][0])
-  console.log(decodedCoors[indexRoute][0][0]);
-
-
-
-})
-
-
-//related to the submit button
-app.post("/map",(req,res)=>{
-  console.log(`hihi`)
-  console.log(req.body);
-  if(indexRoute===undefined){
-    console.log(`please choose a time and a route for your plan before submission `);
-    res.redirect("/index")
-  }
   if (coorIsSent == 0) {
     for (let i = 0; i < decodedCoors[indexRoute].length; i++) {
       if (decodedCoors[indexRoute][i]) {
-        con.query(`select * from coordinates where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`, (err, res, fields) => {
-          if (res) {
-            if (res.length != 0) {
-              con.query(`update coordinates set frequency = frequency+1 Where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`)
-              console.log('updated');
+        con.query(
+          `select * from coordinates where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`,
+          (err, res, fields) => {
+            if (res) {
+              if (res.length != 0) {
+                con.query(
+                  `update coordinates set frequency = frequency+1 Where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`
+                );
+              } else {
+                con.query(
+                  `INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[indexRoute][i][0]},${decodedCoors[indexRoute][i][1]},null)`
+                );
+              }
             } else {
-              con.query(`INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[indexRoute][i][0]},${decodedCoors[indexRoute][i][1]},null)`)
-              console.log('updated');
+              console.log(`error occured`);
             }
-          } else {
-            console.log(`error occured`);
           }
-        })
+        );
       }
     }
   }
-  res.redirect('/map')
+});
+
+//
+app.post("/maptime", (req, res) => {
+  console.log(req.body.timeData);
+  timeOfDept = req.body.timeData
+  let t = new Date();
+  let year = t.getFullYear();
+  let month = t.getMonth()+1;
+  let date = t.getDate();
+  let durationHr;
+  let durationMin;
+  let durationArr = [];
+  let inputHr;
+  let inputMin;
+  let inputArr= []
+
+  if(durationTime!=undefined)
+  // console.log(parseInt(durationTime));
   
-})
+  if(req.body&&durationTime){
+    con.query(`CREATE EVENT \`isowaytion\`.\`${timeOfDept}\`
+    ON SCHEDULE AT '${year}-${month}-${date} ${timeOfDept}:00'
+    DO UPDATE 
+    user SET Point = Point+1 WHERE Email =\"c3@c3\"`)
+    
+    durationArr=durationTime.split(" ");
+    inputArr=timeOfDept.split(":");
+    inputHr = parseInt(inputArr[0])*60*60
+    inputMin = parseInt(inputArr[1])*60
+    
+    
+    if(durationArr.length==2&&durationArr[1] ==`mins`||'min'){
+
+        console.log(`firstIF`);
+        durationMin =parseInt(durationArr[0])*60
+      
+    }else if (durationArr.length==4){
+      durationMin =parseInt(durationArr[1])*60
+      durationHr = parseInt(durationArr[0])*60*60
+    }
+
+    
+    
+    
+    
+    
+
+    con.query(`CREATE EVENT \`isowaytion\`.\`${timeOfDept}2\`
+    ON SCHEDULE AT '${year}-${month}-${date} ${timeOfDept}:00'
+    DO UPDATE 
+    user SET Point = Point-1 WHERE Email =\"c3@c3\"`)
+  }
+});
+
+

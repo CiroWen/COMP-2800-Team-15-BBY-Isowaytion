@@ -433,6 +433,12 @@ a:link {
 a#signin {
   font-size: x-large;
 }
+
 form a {
   text-align: center;
+}
+
+p#invalid {
+  color: #ff4858;
+  font-weight: bold;
 }

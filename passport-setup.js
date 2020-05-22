@@ -42,10 +42,10 @@ pasp.use(new GoogleStrategy({
 
 
 
-async function paspInit(pasp, getUserByEmail) {
+ function paspInit(pasp, getUserByEmail) {
     const auth = async function (email, password, callbk) {
         var user;
-        getUserByEmail(email).then(function (result) {
+        getUserByEmail(email).then ( function (result) {
             // console.log("result from line8 in setup")
             // console.log(result)
             
@@ -53,7 +53,7 @@ async function paspInit(pasp, getUserByEmail) {
             // console.log(user[0].length);
             
             return result;
-        }).then(()=>{
+        }).then(async()=>{
             console.log("After fecthing user's data from DB");
             console.log(user);
             // console.log(user[0].password);
@@ -66,8 +66,7 @@ async function paspInit(pasp, getUserByEmail) {
         }
 
         try {
-            if (user[0].password) {
-                if(bcrypt.compare(password,user[0].password)){
+                if(await bcrypt.compare(password,user[0].password)){
                 // if ( user[0].password.indexOf(user[0].password) == 0 && user[0].password.indexOf(password) == 0 && user[0].password === password) {
                     //see if password matches user[0] is the user from db, and user is the user input from website
                     return callbk(null, user)
@@ -76,11 +75,8 @@ async function paspInit(pasp, getUserByEmail) {
                     return callbk(null, false, { message: `wrong password` })
                     //return message to login.ejs 
                 }
-            } else {
-                console.log("in Setup line 26" + user);
-                return callbk(null, false, { message: `No such user` })
-            }
-        } catch (e) {
+            } 
+        catch (e) {
             return callbk(e)
         }
         }).catch(console.log(`gg`)

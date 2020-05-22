@@ -1,32 +1,53 @@
 var heatMapData = [];
+//global array to store coordinates of researched routes for heatmap construction
 var heatmap;
+//global heatmap object
 var render;
+// TBD
 var routeChoice;
+//global Stirng to store the name of a route for indentifying user's hightlighted route
 
+//Google initMap() default function
 function initMap() {
   var map = new google.maps.Map(document.getElementById("map"), {
+    //locating where to initialized map in HTML page
     mapTypeControl: false,
+    //if allow user to change the type of map like:SATELLITE, ROADMAP,HYBRID,TERRAIN.
     center: {
       lat: 49.2488,
       lng: -122.9805
     },
+    //initial center when the map is loaded
     zoom: 17,
+    //the degree of zoom. the bigger the number is more detailed the map will be
   });
 
   heatMapData = new google.maps.MVCArray();
+  //TBD
 
+  //Declare heatmap layer of google.map
   heatmap = new google.maps.visualization.HeatmapLayer({
     data: getPoint(),
+    //the coordinates
     map: map,
+    //TBD
   });
 
   heatmap.setMap(map);
+  //attach to google map
 
   new AutocompleteDirectionsHandler(map);
-  // getting current location
-  infoWindow = new google.maps.InfoWindow();
+  //add AutocompleteDirectionHandler to map
 
+  //********** getting current location code starts here************
+  infoWindow = new google.maps.InfoWindow();
+  //popup window/textbox at a given coordinates
+
+  //HTML5 navigator function accessing user's coordinate after user's permission
   if (navigator.geolocation) {
+    //if user allow to access their coordinate/location
+
+    //function that gets user's coordinate/location
     navigator.geolocation.getCurrentPosition(
       function (position) {
         var pos = {
@@ -34,36 +55,48 @@ function initMap() {
           lng: position.coords.longitude,
         };
         // console.log(`${pos.lat}and ${pos.lng}`);
-        //current location for
+
         var geocoder = new google.maps.Geocoder();
+        //google geocoder api for converting coordinate into String of location.
+
         var latLng = {
           lat: parseFloat(pos.lat),
           lng: parseFloat(pos.lng)
         };
+        //convert String of latitude and longtitude into floating number and make them a JSON.
 
+        //request to Google geocoder API with latLng Json for String of location.
         geocoder.geocode({
           location: latLng
         }, function (results, status) {
           if (status === `OK`) {
-            // console.log(results);
+            //if the return status is valid.
             //results here has place_id that might be useful to auto add it as origin
             if (results[0]) {
+              //if there is results from the API
+
+              //add a Google marker on the map that visually indicates user's current location.
               var marker = new google.maps.Marker({
                 position: latLng,
                 map: map,
               });
               infoWindow.setPosition(pos);
+              //set the popup window/textbox to user's location
+
               infoWindow.setContent(
                 `Your current location is ${results[0].formatted_address}`
               );
+              //set contenct of the popup window/textbox with the String of location provided by Google.
+
               infoWindow.open(map, marker);
+              //TBD
             }
           }
         });
-        //       // getting current location
-
         map.setCenter(pos);
+        //ReSet the center of map to user's location
       },
+      //TBD
       function () {
         handleLocationError(true, infoWindow, map.getCenter());
       }
@@ -72,11 +105,12 @@ function initMap() {
     // Browser doesn't support Geolocation
     handleLocationError(false, infoWindow, map.getCenter());
   }
-
-  // getting current location
 }
-//initMap() ends here
+//********** getting current location code ends here************
 
+//initMap() function ends here
+
+//TBD
 // function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 //   infoWindow.setPosition(pos);
 //   infoWindow.setContent(
@@ -87,15 +121,15 @@ function initMap() {
 //   infoWindow.open(map);
 // }
 
+//global function returns coordinates array for heatmap display
 function getPoint() {
   return heatMapData;
 }
 
-function changeMap() {}
-
 /**
  * @constructor
  */
+//TBD
 function AutocompleteDirectionsHandler(map) {
   this.map = map;
   this.originPlaceId = null;
@@ -158,7 +192,9 @@ AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function (
   });
 };
 
+// Get routes from user input and display it
 AutocompleteDirectionsHandler.prototype.route = function () {
+  // if origin point or destination point is not set, return this function
   if (!this.originPlaceId || !this.destinationPlaceId) {
     return;
   }
@@ -180,6 +216,8 @@ AutocompleteDirectionsHandler.prototype.route = function () {
       //the codes start from here to SetDirection(result) is where we process our heatmap
       //or any costomized function
       if (status === "OK") {
+        console.log(`underStatus`);
+
         console.log(result);
 
         //result has all the data for google map, example below accesses the test filed
@@ -195,10 +233,10 @@ AutocompleteDirectionsHandler.prototype.route = function () {
 
         //array to store the encoded coordinates
         let data = [];
-        let routes = []
+        let routes = [];
         result.routes.forEach((e) => {
           data.push(e.overview_polyline);
-          routes.push(e.summary)
+          routes.push(e.summary);
         });
 
         // console.log(data);
@@ -245,7 +283,7 @@ AutocompleteDirectionsHandler.prototype.route = function () {
             //make sure to serialize your JSON body
             body: JSON.stringify({
               data,
-              routes
+              routes,
             }),
           })
           // .then() gets the data that passed back by res.send(decodedCoors)
@@ -296,18 +334,17 @@ AutocompleteDirectionsHandler.prototype.route = function () {
             heatmap.setMap(heatmap.getMap());
           });
 
+        // render direction on map
         me.directionsRenderer.setDirections(result);
 
+        // options for rendering direction
         me.directionsRenderer.setOptions({
           routeIndex: 1,
           suppressPolylines: true,
-          //true to unable the
-          // draggable:true,
-          //allows user to drag the direction
         });
 
         var time = document.getElementById('appt').value;
-        
+
         //***********storing the chosen route********************
         //fetch the select
         setTimeout(() => {
@@ -336,6 +373,8 @@ AutocompleteDirectionsHandler.prototype.route = function () {
                   ].parentElement.parentElement.parentElement.addEventListener(
                     "click",
                     (e) => {
+                      console.log(result.routes[i].legs[0].duration.text);
+                      routeTime = result.routes[i].legs[0].duration.text
                       // This will get the data
                       routeChoice = result.routes[i].summary
 
@@ -375,10 +414,28 @@ AutocompleteDirectionsHandler.prototype.route = function () {
                       }),
                     }).then((res) => {
                       // console.log(res);
-  
+
                     })
                   }
                 })
+                routeChoice = result.routes[i].summary;
+                fetch("/mapmapRoute", {
+                  method: "POST",
+                  mode: "cors",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                  },
+                  //make sure to serialize your JSON body
+                  body: JSON.stringify({
+                    routeChoice,
+                    routeTime
+                  }),
+                }).then((res) => {
+                  // console.log(res);
+                });
+
+                console.log(`current choice here ${routeChoice}`);
               }
             }
           })();
@@ -390,12 +447,27 @@ AutocompleteDirectionsHandler.prototype.route = function () {
     });
 };
 
+$(document).ready(function () {
+  $("#myModal").modal("hide");
+});
 
-// // Lets the backend know what time the user plans to use this route
-// let time = document.getElementById("input-time");
+document.getElementById("input-time").addEventListener("click", (e) => {
+  const timeData = document.getElementById("appt").value;
 
-// time.addEventListener("click", sendTime);
-
-// function sendTime() {
-//     let departure = document.getElementById("appt");
-// }
+  if (timeData === "") {
+    $("#myModal").modal("show");
+  } else {
+    console.log(timeData);
+    fetch("/maptime", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        timeData,
+      }),
+    });
+  }
+});
