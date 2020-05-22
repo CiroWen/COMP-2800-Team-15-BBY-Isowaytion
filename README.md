@@ -24,6 +24,30 @@ Please follow the instructions to set up your environment.
 
 5. SQL - Database Language
 
+//----------------------------Dependencies----------------------------//
+
+In order to use this code, you must download the following dependies.
+To download all of the required dependencies, run "npm i" 
+
+"array-flatten": "^3.0.0",
+"bcrypt": "^4.0.1",
+"body-parser": "^1.19.0",
+"cookie-session": "^1.4.0",
+"debug": "^4.1.1",
+"depd": "^2.0.0",
+"ejs": "^3.1.2",
+"express": "^4.17.1",
+"express-flash": "0.0.2",
+"mysql": "^2.18.1",
+"passport": "^0.4.1",
+"passport-google-oauth20": "^2.0.0",
+"passport-local": "^1.0.0",
+"path": "^0.12.7",
+"polyline": "^0.2.0",
+"qs": "^6.9.4",
+"url": "^0.11.0"
+
+
 //----------------------Testing Information--------------------------------//
 
 Our team has created a spreadsheet of tests to conduct to make sure the application is running properly. Based on our user stories we have detailed what steps are important to test. If anyone were to add additional features, we recommend adding tests to this document with a similar format to remain consistent. 
