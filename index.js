@@ -18,26 +18,49 @@ const paspInit = require(`./passport-setup`);
 const mysql = require(`mysql`);
 const bcrypt = require(`bcrypt`);
 var routes = [];
+//array to store route information
+
 var decodedCoors = [];
+//array to store decored Coordinates
+
 var coorIsSent = 0;
+// variable to indicate if the coordinates of a route is sent
+
 var indexRoute = 0;
+// to store currently chosen route by user, to determine which set of coordinates will be processed in our database.
+
 var timeOfDept;
+//the time of depature, format: 00:00
+
 var durationTime;
+//the expected duration time from Google to finish the route.
+
+var port = process.env.PORT || 1515;
+//set port
+
+let login;
+//Variable to check if user logs in with local or google account
+
+/**
+ * 
+ * @param {*} req reqeust info of user
+ * @param {*} res response process
+ * @param {*} next process next yeild statement in Google's generator function
+ */
 const isLoggedIn = (req, res, next) => {
   if (req.user) {
+    //if req.user is defined
     next();
+    //continue to preocess
   } else {
     res.sendStatus(401);
+    //error status msg
     res.sendFile(path.join(__dirname + "/views/signin.html"));
+    //redirect to signin page if login is failed.
   }
 };
-//set port
-var port = process.env.PORT || 1515;
 
-//Variable to check if user logs in with local or google account
-let login;
-
-//*******************consts/vars/lets declared above********************* */
+//TBD
 // app.use(cors())
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(
@@ -48,50 +71,66 @@ app.use(
 );
 app.use("/", router);
 app.set("view engine", "ejs");
+//set the page renderer to view and preprocessor ejs.
+
+//TBD
 app.use(
   cookieSession({
     name: "Team Horton's cookies",
     keys: ["key1", "key2"],
   })
 );
-
 app.use(flash());
+
 app.use(passport.initialize());
+//initialize the passport setup
 app.use(passport.session());
+//TBD
+
+
+/**
+ * When /welcome is visited.
+ */
 app.get("/welcome", isLoggedIn, (req, res) => {
   useremail = req.user._json.email;
+  //get the email of user by accesing Google's returned email value
 
-  //res.send(`welcome ${req.user.Email}`)
-  // res.sendFile(`./pages/signup.html`);
-  //error at line above: path must be absolute or specify root ro res.sedFile()
-
+  //generate the user with their name and email in database.
   con.query(
     `SELECT email FROM user WHERE email =\"${req.user._json.email}\"`,
     (dbReq, dbRes) => {
-      // console.log(res);
-      //console.log(dbRes[0].email);
-      // console.log(dbRes.length);
       if (dbRes.length == 0) {
-        //if the query returns an array with 0 length.
-        //then we fetch the user's info and push in database.
+        //if the response from mySql is empty. which means it's a new user
+
+        //JSON formating
         const regisInfo = {
           name: `${req.user._json.name}`,
           email: `${req.user._json.email}`,
         };
+
+        //create a new record for new user in database
         con.query(`INSERT INTO user SET ?`, regisInfo, (err, result) => {
-          if (err) console.log(err);
-          console.log(result);
+          if (err) {
+            console.log(err);
+          }
+
           res.redirect("/map");
+          //redirect the user to the map page
         });
       } else {
         res.redirect("/map");
+        //redirect the user to the map page
       }
     }
   );
 });
 
+// TBD (We can clean it?)
 app.get("/failed", (req, res) => res.send("sorry you failed to login"));
 app.get("/index", (req, res) => res.send(`welcome to IsoWaytion `));
+// TBD (We can clean it?)
+
+// process the post method from /google TBD
 app.post(
   "/google",
   passport.authenticate("google", {
@@ -135,64 +174,9 @@ app.get("/logout", (req, res) => {
   res.redirect("/signin");
 });
 
-//******************************************* *********************/
-//******************************************* *********************/
-//******************************************* *********************/
-//******************************************* *********************/
-//db part starts from here
-//connection for db. google `mpm mysql` for more info
 
-// app.get(`/tabletable`, (req, res) => {
-//   let query1 = 'CREATE TABLE c1(Email VARCHAR(100), Name VARCHAR(100), Address VARCHAR(100), PRIMARY KEY (Email))'
-//   //this is mysql command/syntax. all capital letter is the db reserved syntax
-//   //that creates a table named c1 with fileds Email, name, and address
 
-//   db.query(query1, (err, result) => {
-//     if (err) {
-//       console.log(err.sqlMessage);
-//       //prompting the sql err msg
-//       console.log(err);
-//       res.send(`<p>fail to create table</p><p>db feedback:${err.sqlMessage}`)
-//     }
-//     //you can see all the err msg here. so up above err.sqlMessage is used.
-//     else {
-//       console.log(result);
-//       res.send(`table created`);
-//     }
-//   })
-// })
 
-//simple sql query to fetch the data from db.
-// //here is just using the system table as a calculator.
-// db.query(`SELECT 1+1 AS solution`, (err, results, fileds) => {
-//   if (err) console.log('error');
-//   console.log(results);
-//   console.log(results[0].solution);
-// })
-
-//creating a user in our database.
-//just for testing and demo purpose
-app.get("/usercreating", (req, res) => {
-  let value = {
-    Email: useremail,
-    Name: "ciro",
-    Address: "metrotown",
-  };
-  let sql = "INSERT INTO c1 set ?";
-  let query = db.query(sql, value, (err, result) => {
-    if (err) {
-      console.log(`err occured ${err}`);
-    } else {
-      res.send("created");
-    }
-  });
-});
-
-app.listen(port, () =>
-  console.log(
-    `ciro listening on ${port} ctrl + c to quit, visit localhost:${port} to test`
-  )
-);
 
 /*********************************************************************************************************************************************
  * Account Page Server JS
@@ -661,41 +645,19 @@ app.post(
   })
 );
 
-app.post("/mapmap", (req, res) => {
-  // data from map.js
+
+// data from map.js
   // currently data is only first route
   // when I try to put all the route, it shows error "entity is too large"
-  console.log(`undermapmap`);
-  
-  
-  // console.log(polyline.decode(req.body.test))
-  
-  
+  //TBD
+app.post("/mapmap", (req, res) => {
   const encodedCoors = req.body.data;
   routes = req.body.routes;
 
-  // encodedCoors is an array that consists of coordinates
-  // for all results of directions
-
-  // let decodedCoors = []
   for (let i = 0; i < encodedCoors.length; i++) {
     decodedCoors.push(polyline.decode(encodedCoors[i]));
   }
-  //create an array to store the decodedCoordinates
 
-  //**************Testing purpose************** */
-  // console.log(decodedCoors.length);
-  // console.log(decodedCoors);
-  // console.log(decodedCoors.length);
-  // console.log(decodedCoors[0].length)
-  // console.log(decodedCoors[0][0]);
-  // console.log(decodedCoors[0][0][0]);
-  // console.log(decodedCoors[1][0]);
-  //**************Testing purpose************** */
-
-  //since the decodedCoors[0]means first route and decodedCoors[0][0]
-  //means the first coordinate info of first route
-  //nested for-loop to insert into database.
   for (let k = 0; k < decodedCoors.length; k++) {
     for (let i = 0; i < decodedCoors[k].length; i++) {
       if (decodedCoors[k][i]) {
@@ -720,200 +682,158 @@ app.post("/mapmap", (req, res) => {
       }
     }
   }
-  // console.log(decodedCoors);
   
   res.send(decodedCoors);
   //response by sending back the decoded coordinate array
-
-  //*************Testing********* */
-  // // this is paths of a route
-  // let routes = new Array(req.body.data.length);
-  // for (let i = 0; i < req.body.data.length; i++) {
-  //   let length = req.body.data[i].length;
-  //   console.log(
-  //     `======================================Route ${
-  //       i + 1
-  //     }======================================`
-  //   );
-  //   routes[i] = new Array(length);
-  //   for (let j = 0; j < length; j++) {
-  //     routes[i][j] = polyline.decode(
-  //       req.body.data[i][j]["encoded_lat_lngs"]
-  //     )[0];
-  //   }
-  // }
-
-  // console.log(routes);
-
-  // res.send(routes);
-  //*************Testing********* */
 });
 
-//where the user click on direction.
-app.post("/mapmapRoute", (req, res) => {
+  //where the user click on direction.
   // getting the click event for each summary of route
   //then store them to the global variable in index.js -->
   //req body comes from map.js
-
-  console.log(`running under post /mapmapRoute`);
-  // console.log(req.body.routeChoice);
-  // console.log(req.body.routeTime);
-  
-  // let inputRoute = req.body.routeChoice;
-  // indexRoute = routes.indexOf(inputRoute);
-  // durationTime = req.body.routeTime
-  // console.log(durationTime);
-  // console.log(indexRoute);
-  
-  
-  // // //the routes from /mapmap
-  // // console.log(routes);
-  // // //decoded coordinates
-  // // console.log(decodedCoors);
-  // console.log(indexRoute);
-  // console.log(decodedCoors[indexRoute].length);
-  // console.log(decodedCoors[indexRoute][0]);
-  // console.log(decodedCoors[indexRoute][0][0]);
-
-  if (coorIsSent == 0) {
-    // con.query()
-  }
-  // console.log(req.body.routes);
+app.post("/mapmapRoute", (req, res) => {
+  let inputRoute = req.body.routeChoice;
+  indexRoute = routes.indexOf(inputRoute);
+ 
 });
 
-// uploading coordinate to database to be further finished
-app.post("/upload", (req, res) => {
-  console.log(`running under post /upload`);
-
-  if (coorIsSent == 0) {
-    for (let i = 0; i < decodedCoors[indexRoute].length; i++) {
-      if (decodedCoors[indexRoute][i]) {
-        con.query(
-          `select * from coordinates where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`,
-          (err, res, fields) => {
-            if (res) {
-              if (res.length != 0) {
-                con.query(
-                  `update coordinates set frequency = frequency+1 Where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`
-                );
-              } else {
-                con.query(
-                  `INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[indexRoute][i][0]},${decodedCoors[indexRoute][i][1]},null)`
-                );
-              }
-            } else {
-              console.log(`error occured`);
-            }
-          }
-        );
-      }
-    }
-  }
-});
-
-
+//post maptime triggered once the submit button is clicked.
 app.post("/maptime", (req, res) => {
+  timeOfDept = req.body.timeData
+  //time info of depature time input from map.js
+  let t = new Date();
+  //generates a Date object.
+  let year = t.getFullYear();
+  //gets the current year: 2020
+  let month = t.getMonth()+1;
+  //gets the current month:5, getMonth returns 0 for Jan.
+
+  let date = t.getDate();
+  //gets current date :22
+
+  let durationMin;
+  //google expected duration time converted in minute unit.
+  let durationArr = [];
+  //an array to process the String of duration time from Goggle e.g.1 hours 2 mins
+  let inputMin=0;
+  //user input converted in minute unit
+  let inputArr= []
+  //an array to process the String of departure time from User's input
+  let scheduleHr=0;
+  //schedule hour for database event setup, indicates when the user will finish the route
+  let scheduleMin=0
+  //sechedule minute for databse event setup
+  let scheduleOverflow=0;
+  // if the shchedule time extend to second day
+
+  //fetching the useremail to assign point
   if (login === "google") {
     useremail = req.user._json.email;
   } else {
     useremail = req.user[0].email;
   }
   
-  // console.log(req.body.timeData);
-  timeOfDept = req.body.timeData
-  let t = new Date();
-  let year = t.getFullYear();
-  let month = t.getMonth()+1;
-  let date = t.getDate();
-  let durationMin;
-  let durationArr = [];
-  let inputMin=0;
-  let inputArr= []
-  let scheduleHr=0;
-  let scheduleMin=0
-  let scheduleOverflow=0;
-
-console.log(`testInMapTime`);
-console.log(coorIsSent);
-console.log(indexRoute);
-console.log(decodedCoors[0][0]);
-
-
-console.log(`timeofDept here: ${timeOfDept}`);
+  //to see if both user's input and google durationTime are defined
   if(req.body&&durationTime){
-//     con.query(`CREATE EVENT isowaytion.Untitled
-// ON SCHEDULE AT "2020-05-21 20:50:00"
-// DO UPDATE user SET Point = Point WHERE Email="c3@c3"`);
-    con.query(`CREATE EVENT isowaytion.${makeEventName(6)}
-    ON SCHEDULE AT "${year}-${month}-${date} ${timeOfDept}:00"
-    DO UPDATE 
-    user SET Point = Point+1 WHERE Email ="${useremail}"`,(err,res)=>{
-      if(err){
-        console.log(err); 
-      }
-      if(res){
-        con.query(
-          `select * from coordinates where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`,
-          (err, res, fields) => {
-            if (res) {
-              if (res.length != 0) {
-                con.query(
-                  `update coordinates set frequency = frequency+1 Where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`
-                );
-              } else {
-                con.query(
-                  `INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[indexRoute][i][0]},${decodedCoors[indexRoute][i][1]},null)`
-                );
-              }
-            } else {
-              console.log(`error occured`);
-            }
-          }
-        );
-      }
-    })
+    urationArr=durationTime.split(" ");
+    //convert the duration time into array. e.g 1 hours --> [[1],[hours]]
 
-    durationArr=durationTime.split(" ");
     inputArr=timeOfDept.split(":");
+    //convert the user input into array. e.g. 03:05 --> [[03],[05]]
+
     inputMin = parseInt(inputArr[0])*60+parseInt(inputArr[1])
+    //parse the String input into Integer to calculate
+
+    //deal with different cases
     if(durationArr.length==2&&durationArr[1] ==`mins`||durationArr[1]=='min'){
-        console.log(`only min case`);
+        //case duration time less that 1 hour
         durationMin =parseInt(durationArr[0])
+
     }else if(durationArr.length==2&&durationArr[1] =='hr'||durationArr[1]==`hrs`){
-      console.log(`only hr case`);
+      //case duration time has only hour
       durationMin=parseInt(durationArr[0]*60)
+
     }else if (durationArr.length==4){
+      //case duration time has both hour and minute
       durationMin =parseInt(durationArr[2])+parseInt(durationArr[0])*60
     }
+
     scheduleMin = durationMin+inputMin
+    //assign the sum of duration minutes and input minutes to scheduleMin
+    //for furthuer database event time assignment
+
+    //processing the schedule minutes
+    //when schedule minute is greater than 60, carry in to schedule hour
+    //when schedule hour is greater than 60, carry in to date
     while(scheduleMin>=60){
       scheduleHr++;
       scheduleMin=scheduleMin-60;
       if(scheduleHr>=60){
         date++;
+        scheduleHr=scheduleHr-60
       }
     }
-    console.log(`scheduleMinhere+${scheduleHr}+${scheduleMin}`);
-    console.log(`scheduleHr and ScheduleMin here ${scheduleHr} ${scheduleMin}`);
     
-    con.query(`CREATE EVENT isowaytion.${makeEventName(6)}
-    ON SCHEDULE AT "${year}-${month}-${date} ${scheduleHr}:${scheduleMin}:00"
-    DO UPDATE 
-    user SET Point = Point-1 WHERE Email ="${useremail}"`,(err,res)=>{
+    //Mysql query assigns point to the user who submits their schedule
+    con.query(`UPDATE user SET Point = Point+1 WHERE Email="${useremail}`,(err,res)=>{
       if(err){
         console.log(err);
-        
       }
       if(res){
         console.log(res);
-        
       }
-      
     })
+
+    //coordinates haven't beed sent
+    if (coorIsSent == 0) {
+      //traveres all the latitudes and longtitude.
+      for (let i = 0; i < decodedCoors[indexRoute].length; i++) {
+        if (decodedCoors[indexRoute][i]) {
+          //if the coordinate exists
+
+          /**
+           * run the select query to check if such coordinates in the database.
+           * if so, assign a event to increse the frequency indicating there is one more user is walking on the route
+           * and another event to decrese the frequency when their route is finished.
+           * if not, put all coordinated in the chosen route into database with default frequency 1
+           */
+            con.query(
+              `select * from coordinates where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`,
+                (err, res, fields) => {
+                  if (res) {
+                    if (res.length != 0) {
+                      con.query(`CREATE EVENT isowaytion.${makeEventName(6)}
+                      ON SCHEDULE AT "${year}-${month}-${date} ${timeOfDept}:00"
+                      DO UPDATE coordinates set Frequency = Frequency+1 Where Lat=${decodedCoors[indexRoute][i][0]} and Lng=${decodedCoors[indexRoute][i][1]}`)
+                      
+                      con.query(`CREATE EVENT isowaytion.${makeEventName(5)}
+                      ON SCHEDULE AT "${year}-${month}-${date} ${scheduleHr}:${scheduleMin}:00"
+                      DO UPDATE coordinates set Frequency = Frequency-1 Where Lat=${decodedCoors[indexRoute][i][0]} and Lng=${decodedCoors[indexRoute][i][1]}`)
+                      coorIsSent=1;
+                    } else {
+                      con.query(
+                        `INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[indexRoute][i][0]},${decodedCoors[indexRoute][i][1]},1)`
+                      );
+                      coorIsSent=1;
+                    }
+                  } else {
+                    console.log(`error occured`);
+                  }
+                }
+              );
+            }
+          }
+        }
+    
+
   }
 });
 
 
+/**
+ * a function that makes ramdom String for event initializing purporse
+ * @param {*} length length for randomized String
+ */
 function makeEventName(length) {
   var result           = '';
   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -925,3 +845,9 @@ function makeEventName(length) {
 }
 
 
+//setting the port to be listened when index.js in run
+app.listen(port, () =>
+  console.log(
+    `Thank you for testing Isowaytion. ctrl + c to quit, visit localhost:${port} to test`
+  )
+);

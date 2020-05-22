@@ -176,8 +176,10 @@ AutocompleteDirectionsHandler.prototype.setupPlaceChangedListener = function (
       return;
     }
     if (mode === "ORIG") {
+      //asisgn the returned placeID to local placeID for origin
       me.originPlaceId = place.place_id;
     } else {
+      //assign the returned placeID to local placeID for destination
       me.destinationPlaceId = place.place_id;
     }
     me.route();
@@ -194,74 +196,34 @@ AutocompleteDirectionsHandler.prototype.route = function () {
 
   this.directionsService.route(
     {
-      // origin: {'placeId': this.originPlaceId},
-      // destination: {'placeId': this.destinationPlaceId},
       origin: { placeId: this.originPlaceId },
       destination: { placeId: this.destinationPlaceId },
       travelMode: this.travelMode,
       provideRouteAlternatives: true,
     },
+    /**
+     * 
+     * @param {JSON} result information about the direction, such as duration time, start point, end point...
+     * @param {*} status status of data communication
+     */
     function (result, status) {
-      //the codes start from here to SetDirection(result) is where we process our heatmap
-      //or any costomized function
+      //*****************************HeatMap and Directions initializing starts *************************** */
+      //check the returned status from Google.
       if (status === "OK") {
-        console.log(`underStatus`);
         
-        console.log(result);
-
-        //result has all the data for google map, example below accesses the test filed
-        //of a route that google responses
-
-        // result.routes.forEach((e)=>{
-        //   console.log(e.legs[0].distance.text);
-        //   //texts of distance of each direction
-        //   console.log(e.legs[0].duration.text)
-        //   //texts of time duration of each direciton
-        //   //processing code here.
-        // })
-
-        //array to store the encoded coordinates
         let data = [];
+        //array to store the encoded polyline containing coordinates for entire direction
+
         let routes = [];
+        //array to store the summary for each route for identifying which route that is currently chosen by users.
+
+        //Traverse the result from Google and push the data we need into related array.
         result.routes.forEach((e) => {
           data.push(e.overview_polyline);
           routes.push(e.summary);
         });
 
-        // console.log(data);
-
-        //***********Testing purpose************ */
-        // console.log(result.routes[0].legs[0].distance.text);
-        //distance content of first direction
-
-        // console.log(result.routes[0].legs[0])
-        // console.log(result.routes[0].legs[0].steps[0].distance.text)
-        //text of first steps of first route
-
-        // console.log(result.routes[0].overview_path[0]);
-        // var test = result.routes[0].overview_polyline;
-        // console.log(test);
-
-        // Object.entries(test).forEach(([key,value])=>{
-        //   console.log(key);
-        //   console.log(value);
-        // })
-        // console.log(result);
-        // console.log(result.geocoded_waypoints[0].place_id);
-        // // place id
-        // console.log(test);
-
-        // let data = [];
-        //previous version using legs
-        // for (let i = 0; i < result["routes"].length; i++) {
-        //   data.push(result["routes"][i]["legs"][0]["steps"]);
-        // }
-
-        // currently this is just one of routes
-        // let data = result["routes"][0]["legs"][0]["steps"];
-        //***********Testing purpose************ */
-
-        //fecth.post function passing the data array to back-end index.js
+        //Post two arrays that declared above to back-end index.js for further process
         fetch("/mapmap", {
           method: "POST",
           mode: "cors",
@@ -275,57 +237,27 @@ AutocompleteDirectionsHandler.prototype.route = function () {
             routes,
           }),
         })
-          // .then() gets the data that passed back by res.send(decodedCoors)
+          // .then() gets the data that passed back by res.send(decodedCoors) from index.js
+          //res is a array with decoded coordinates
           .then((res) => res.json())
           .then((res) => {
-            //*******Testing purpose********* */
-            // console.log(`reshere`);
-            // console.log(res);
-            // console.log(res.length);
-            // console.log(res[0].length);
-            // console.log(res[0][0].length);
-
-            // console.log(JSON.stringify(res));
-            // console.log(res[0][0]);
-            // console.log(res[0][1]);
-            //*******Testing purpose********* */
-
             //a nested loop to push all coordinates into headmap data array
             for (let k = 0; k < res.length; k++) {
               for (let i = 0; i < res[k].length; i++) {
-                //testing
-                // console.log(`testing${i}[0]`);
-                // console.log(res[i][0]);
-                // console.log(`testing${i}[1]`);
-                // console.log(res[i][1]);
                 heatMapData.push(
                   new google.maps.LatLng(res[k][i][0], res[k][i][1])
                 );
               }
             }
-            //*******Testing purpose********* */
-            // let data = JSON.stringify(res);
-            // console.log(data);
-            // data = JSON.parse(data);
-            // for (let i = 0; i < arrLength; i++) {
-            //   let subLength = res[i].length
-            //   let subLength = data[i].length;
-
-            //   for (let j = 0; j < subLength; j++) {
-            //     heatMapData.push(
-            //       new google.maps.LatLng(data[i][j][0], data[i][j][1])
-            //     );
-            //   }
-            // }
-            //*******Testing purpose********* */
-
-            // update heatmap layer
+            
             heatmap.setMap(heatmap.getMap());
+            // update heatmap layer
           });
 
-        // render direction on map
+        
         me.directionsRenderer.setDirections(result);
-
+        // render direction on map
+        
         // options for rendering direction
         me.directionsRenderer.setOptions({
           routeIndex: 1,
@@ -334,6 +266,7 @@ AutocompleteDirectionsHandler.prototype.route = function () {
 
         //***********storing the chosen route********************
         //fetch the select
+        //TBD
         setTimeout(() => {
           (function () {
             const arr = result.routes;
@@ -397,6 +330,7 @@ AutocompleteDirectionsHandler.prototype.route = function () {
   );
 };
 
+//TBD
 $(document).ready(function () {
   $("#myModal").modal("hide");
 });
