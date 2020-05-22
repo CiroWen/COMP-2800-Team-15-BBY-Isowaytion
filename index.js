@@ -23,7 +23,6 @@ var coorIsSent = 0;
 var indexRoute = 0;
 var timeOfDept;
 var durationTime;
-var userEmail;
 const isLoggedIn = (req, res, next) => {
   if (req.user) {
     next();
@@ -666,9 +665,12 @@ app.post("/mapmap", (req, res) => {
   // data from map.js
   // currently data is only first route
   // when I try to put all the route, it shows error "entity is too large"
-  console.log(req.body);
+  console.log(`undermapmap`);
+  
+  
   // console.log(polyline.decode(req.body.test))
-
+  
+  
   const encodedCoors = req.body.data;
   routes = req.body.routes;
 
@@ -700,6 +702,7 @@ app.post("/mapmap", (req, res) => {
         con.query(
           `select * from coordinates where lat=${decodedCoors[k][i][0]} and lng=${decodedCoors[k][i][1]}`,
           (err, res, fields) => {
+            // console.log(decodedCoors);
             if (res) {
               if (res.length != 0) {
                 // con.query(`update coordinates set frequency = frequency+1 Where lat=${decodedCoors[k][i][0]} and lng=${decodedCoors[k][i][1]}`)
@@ -717,6 +720,8 @@ app.post("/mapmap", (req, res) => {
       }
     }
   }
+  // console.log(decodedCoors);
+  
   res.send(decodedCoors);
   //response by sending back the decoded coordinate array
 
@@ -744,6 +749,7 @@ app.post("/mapmap", (req, res) => {
   //*************Testing********* */
 });
 
+//where the user click on direction.
 app.post("/mapmapRoute", (req, res) => {
   // getting the click event for each summary of route
   //then store them to the global variable in index.js -->
@@ -753,21 +759,21 @@ app.post("/mapmapRoute", (req, res) => {
   // console.log(req.body.routeChoice);
   // console.log(req.body.routeTime);
   
-  let inputRoute = req.body.routeChoice;
-  indexRoute = routes.indexOf(inputRoute);
-  durationTime = req.body.routeTime
-  console.log(durationTime);
-  console.log(indexRoute);
+  // let inputRoute = req.body.routeChoice;
+  // indexRoute = routes.indexOf(inputRoute);
+  // durationTime = req.body.routeTime
+  // console.log(durationTime);
+  // console.log(indexRoute);
   
   
-  // //the routes from /mapmap
-  // console.log(routes);
-  // //decoded coordinates
-  // console.log(decodedCoors);
-  console.log(indexRoute);
-  console.log(decodedCoors[indexRoute].length);
-  console.log(decodedCoors[indexRoute][0]);
-  console.log(decodedCoors[indexRoute][0][0]);
+  // // //the routes from /mapmap
+  // // console.log(routes);
+  // // //decoded coordinates
+  // // console.log(decodedCoors);
+  // console.log(indexRoute);
+  // console.log(decodedCoors[indexRoute].length);
+  // console.log(decodedCoors[indexRoute][0]);
+  // console.log(decodedCoors[indexRoute][0][0]);
 
   if (coorIsSent == 0) {
     // con.query()
@@ -805,9 +811,13 @@ app.post("/upload", (req, res) => {
   }
 });
 
-//
+
 app.post("/maptime", (req, res) => {
-  console.log(login);
+  if (login === "google") {
+    useremail = req.user._json.email;
+  } else {
+    useremail = req.user[0].email;
+  }
   
   // console.log(req.body.timeData);
   timeOfDept = req.body.timeData
@@ -815,22 +825,21 @@ app.post("/maptime", (req, res) => {
   let year = t.getFullYear();
   let month = t.getMonth()+1;
   let date = t.getDate();
-  
   let durationMin;
   let durationArr = [];
-  
   let inputMin=0;
   let inputArr= []
   let scheduleHr=0;
   let scheduleMin=0
   let scheduleOverflow=0;
 
-console.log(`test`);
+console.log(`testInMapTime`);
+console.log(coorIsSent);
+console.log(indexRoute);
+console.log(decodedCoors[0][0]);
+
 
 console.log(`timeofDept here: ${timeOfDept}`);
-
-
-
   if(req.body&&durationTime){
 //     con.query(`CREATE EVENT isowaytion.Untitled
 // ON SCHEDULE AT "2020-05-21 20:50:00"
@@ -838,26 +847,44 @@ console.log(`timeofDept here: ${timeOfDept}`);
     con.query(`CREATE EVENT isowaytion.${makeEventName(6)}
     ON SCHEDULE AT "${year}-${month}-${date} ${timeOfDept}:00"
     DO UPDATE 
-    user SET Point = Point+1 WHERE Email ="c3@c3"`,(req,res)=>{
-      console.log(`hello`);
+    user SET Point = Point+1 WHERE Email ="${useremail}"`,(err,res)=>{
+      if(err){
+        console.log(err); 
+      }
+      if(res){
+        con.query(
+          `select * from coordinates where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`,
+          (err, res, fields) => {
+            if (res) {
+              if (res.length != 0) {
+                con.query(
+                  `update coordinates set frequency = frequency+1 Where lat=${decodedCoors[indexRoute][i][0]} and lng=${decodedCoors[indexRoute][i][1]}`
+                );
+              } else {
+                con.query(
+                  `INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[indexRoute][i][0]},${decodedCoors[indexRoute][i][1]},null)`
+                );
+              }
+            } else {
+              console.log(`error occured`);
+            }
+          }
+        );
+      }
     })
-    
+
     durationArr=durationTime.split(" ");
     inputArr=timeOfDept.split(":");
     inputMin = parseInt(inputArr[0])*60+parseInt(inputArr[1])
-
     if(durationArr.length==2&&durationArr[1] ==`mins`||durationArr[1]=='min'){
         console.log(`only min case`);
         durationMin =parseInt(durationArr[0])
-      
     }else if(durationArr.length==2&&durationArr[1] =='hr'||durationArr[1]==`hrs`){
       console.log(`only hr case`);
       durationMin=parseInt(durationArr[0]*60)
     }else if (durationArr.length==4){
       durationMin =parseInt(durationArr[2])+parseInt(durationArr[0])*60
-      
     }
-
     scheduleMin = durationMin+inputMin
     while(scheduleMin>=60){
       scheduleHr++;
@@ -872,8 +899,15 @@ console.log(`timeofDept here: ${timeOfDept}`);
     con.query(`CREATE EVENT isowaytion.${makeEventName(6)}
     ON SCHEDULE AT "${year}-${month}-${date} ${scheduleHr}:${scheduleMin}:00"
     DO UPDATE 
-    user SET Point = Point-1 WHERE Email ="c3@c3"`,(req,res)=>{
-      console.log(`hc`);
+    user SET Point = Point-1 WHERE Email ="${useremail}"`,(err,res)=>{
+      if(err){
+        console.log(err);
+        
+      }
+      if(res){
+        console.log(res);
+        
+      }
       
     })
   }
