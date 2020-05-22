@@ -23,6 +23,7 @@ var coorIsSent = 0;
 var indexRoute = 0;
 var timeOfDept;
 var durationTime;
+var userEmail;
 const isLoggedIn = (req, res, next) => {
   if (req.user) {
     next();
@@ -551,8 +552,10 @@ app.get("/leaderboard", isLoggedIn, (req, res) => {
   // app.get("/leaderboard", (req, res) => {
   if (login === "google") {
     useremail = req.user._json.email;
+    
   } else {
     useremail = req.user[0].email;
+    
   }
   // //Grab user name
   // let getName = `SELECT isowaytion.Name FROM isowaytion WHERE email = '${useremail}'`;
@@ -804,7 +807,9 @@ app.post("/upload", (req, res) => {
 
 //
 app.post("/maptime", (req, res) => {
-  console.log(req.body.timeData);
+  console.log(login);
+  
+  // console.log(req.body.timeData);
   timeOfDept = req.body.timeData
   let t = new Date();
   let year = t.getFullYear();
@@ -822,24 +827,26 @@ app.post("/maptime", (req, res) => {
 
 console.log(`test`);
 
-console.log(req.body);
-console.log(durationTime);
+console.log(`timeofDept here: ${timeOfDept}`);
+
 
 
   if(req.body&&durationTime){
-    con.query(`CREATE EVENT \"isowaytion\".\"${timeOfDept}\"
-    ON SCHEDULE AT  ${year}-${month}-${date} ${timeOfDept}:00
+//     con.query(`CREATE EVENT isowaytion.Untitled
+// ON SCHEDULE AT "2020-05-21 20:50:00"
+// DO UPDATE user SET Point = Point WHERE Email="c3@c3"`);
+    con.query(`CREATE EVENT isowaytion.${makeEventName(6)}
+    ON SCHEDULE AT "${year}-${month}-${date} ${timeOfDept}:00"
     DO UPDATE 
-    user SET Point = Point+1 WHERE Email =\"c3@c3\"`)
+    user SET Point = Point+1 WHERE Email ="c3@c3"`,(req,res)=>{
+      console.log(`hello`);
+    })
     
     durationArr=durationTime.split(" ");
     inputArr=timeOfDept.split(":");
     inputMin = parseInt(inputArr[0])*60+parseInt(inputArr[1])
-    
-    
-    
-    if(durationArr.length==2&&durationArr[1] ==`mins`||durationArr[1]=='min'){
 
+    if(durationArr.length==2&&durationArr[1] ==`mins`||durationArr[1]=='min'){
         console.log(`only min case`);
         durationMin =parseInt(durationArr[0])
       
@@ -859,17 +866,28 @@ console.log(durationTime);
         date++;
       }
     }
-    
-
     console.log(`scheduleMinhere+${scheduleHr}+${scheduleMin}`);
+    console.log(`scheduleHr and ScheduleMin here ${scheduleHr} ${scheduleMin}`);
     
-    
-  
-    con.query(`CREATE EVENT \"isowaytion\".\"${timeOfDept}2\"
-    ON SCHEDULE AT ${year}-${month}-${date} ${scheduleHr}:${scheduleMin}:00
+    con.query(`CREATE EVENT isowaytion.${makeEventName(6)}
+    ON SCHEDULE AT "${year}-${month}-${date} ${scheduleHr}:${scheduleMin}:00"
     DO UPDATE 
-    user SET Point = Point-1 WHERE Email =\"c3@c3\"`)
+    user SET Point = Point-1 WHERE Email ="c3@c3"`,(req,res)=>{
+      console.log(`hc`);
+      
+    })
   }
 });
+
+
+function makeEventName(length) {
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+     result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
 
 
