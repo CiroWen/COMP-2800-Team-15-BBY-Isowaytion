@@ -274,10 +274,11 @@ app.post(`/signup`, async (req, res) => {
     };
     con.query(`INSERT INTO user SET ?`, regisInfo, (err, result) => {
       if (err) {
-        res.redirect("/");
+        res.redirect("/invalid_signup");
+      } else {
+        console.log(result);
+        res.redirect("/signin");
       }
-      console.log(result);
-      res.redirect("/signin");
     });
   }
 });
@@ -327,6 +328,10 @@ app.get("/aboutus", function (req, res) {
 
 app.get("/invalid", function (req, res) {
   res.sendFile(path.join(__dirname + "/views/signin_invalid.html"));
+});
+
+app.get("/invalid_signup", function (req, res) {
+  res.sendFile(path.join(__dirname + "/views/signup_invalid.html"));
 });
 
 // Send to Map page.

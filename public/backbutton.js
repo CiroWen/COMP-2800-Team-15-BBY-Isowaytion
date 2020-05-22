@@ -8,4 +8,11 @@ function sendAccount(){
     //location.replace("http://isowaytion.com/myAccount");
 }
 
-document.getElementById("bck").onclick = sendAccount;
+function sendMap(){
+    console.log("Hello");
+    //For local development
+    location.replace("http://localhost:1515/map");
+
+    //Hosted App
+    //location.replace("http://isowaytion.com/map");
+}
