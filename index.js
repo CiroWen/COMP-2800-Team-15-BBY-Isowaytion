@@ -651,9 +651,13 @@ app.post(
   // currently data is only first route
   // when I try to put all the route, it shows error "entity is too large"ee
   //TBD
-app.post("/mapmap", (req, res) => {e
+app.post("/mapmap", (req, res) => {
   const encodedCoors = req.body.data;
   routes = req.body.routes;
+  let frequencyArr=[]
+  console.log(`mapmaphere`);
+  
+  
 
   for (let i = 0; i < encodedCoors.length; i++) {
     decodedCoors.push(polyline.decode(encodedCoors[i]));
@@ -665,24 +669,28 @@ app.post("/mapmap", (req, res) => {e
         con.query(
           `select * from coordinates where lat=${decodedCoors[k][i][0]} and lng=${decodedCoors[k][i][1]}`,
           (err, res, fields) => {
-            // console.log(decodedCoors);
+            
+
             if (res) {
-              if (res.length != 0) {
-                // con.query(`update coordinates set frequency = frequency+1 Where lat=${decodedCoors[k][i][0]} and lng=${decodedCoors[k][i][1]}`)
-                // comment out since the search doesnt increment the frequency, upload does
+              if (res[0]) {
+                frequencyArr.push(res[0].Frequency)                 
+                decodedCoors
               } else {
                 con.query(
-                  `INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[k][i][0]},${decodedCoors[k][i][1]},null)`
+                  `INSERT INTO coordinates(Lat,Lng,Frequency) VALUES(${decodedCoors[k][i][0]},${decodedCoors[k][i][1]},1)`
                 );
               }
             } else {
               console.log(`error occured`);
+
             }
           }
         );
       }
     }
   }
+  
+  
   
   res.send(decodedCoors);
   //response by sending back the decoded coordinate array
