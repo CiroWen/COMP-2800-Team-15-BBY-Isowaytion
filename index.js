@@ -209,23 +209,23 @@ let currentInfo = new Array(LENGTH);
 
 //**************05-11 edit************************
 //Ciro's local mysql for testing purpose.
-// const con = mysql.createConnection({
-//   host     : 'localhost',
-//   //where the info is hoste
-//   user     : 'root',
-//   //the user name of db
-//   password : 'isowaytion15',
-//   //the pswd for user
-//   database : 'isowaytion'
-//   //name of db
-// });
-
-var con = mysql.createConnection({
-  host: "205.250.9.115",
-  user: "root",
-  password: "123",
-  database: "isowaytion",
+const con = mysql.createConnection({
+  host     : 'localhost',
+  //where the info is hoste
+  user     : 'root',
+  //the user name of db
+  password : 'isowaytion15',
+  //the pswd for user
+  database : 'isowaytion'
+  //name of db
 });
+
+// var con = mysql.createConnection({
+//   host: "205.250.9.115",
+//   user: "root",
+//   password: "123",
+//   database: "isowaytion",
+// });
 
 // initial connection
 con.connect((err) => {
@@ -831,20 +831,17 @@ app.post("/maptime", (req, res) => {
     inputHr = parseInt(inputArr[0])*60*60
     inputMin = parseInt(inputArr[1])*60
     
+    
     if(durationArr.length==2&&durationArr[1] ==`mins`||'min'){
 
-      console.log(`firstIF`);
-      
+        console.log(`firstIF`);
+        durationMin =parseInt(durationArr[0])*60
       
     }else if (durationArr.length==4){
       durationMin =parseInt(durationArr[1])*60
       durationHr = parseInt(durationArr[0])*60*60
     }
 
-    console.log(durationMin);
-    console.log(durationHr);
-    console.log(inputMin);
-    console.log(inputHr);
     
     
     
