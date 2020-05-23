@@ -25,6 +25,8 @@ Package.json - Contains all of the app dependencies.
  
 Public Folder includes: 
 	The favicon.
+    backbutton.js
+    leaderboard.js
 Images - Includes all of the images we used for the app with the 
 images.
  
