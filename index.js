@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 //setup app for convenient purpose
 const url = require("url");
-//TBD
+//For google map rout generation
 const polyline = require("polyline");
 //library that provides polylineDecode
 app.use(express.urlencoded({ extended: true }));
@@ -42,13 +42,90 @@ var port = process.env.PORT || 1515;
 let login;
 //Variable to check if user logs in with local or google account
 
+//Length of userinfo array
+const LENGTH = 3;
+
+//Current user info, array for account info
+let currentInfo = new Array(LENGTH);
+
 /**
  * 
  * @param {*} req reqeust info of user
  * @param {*} res response process
  * @param {*} next process next yeild statement in Google's generator function
  */
-const isLoggedIn = (req, res, next) => {
+
+/***************************************************************
+ * Middleware setup
+ * */
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(
+  bodyParser.urlencoded({
+    limit: "50mb",
+    extended: false,
+  })
+);
+app.use("/", router);
+app.set("view engine", "ejs");
+//set the page renderer to view and preprocessor ejs.
+
+//Cookies setup
+app.use(
+  cookieSession({
+    name: "Team Horton's cookies",
+    keys: ["key1", "key2"],
+  })
+);
+app.use(flash());
+
+app.use(passport.initialize());
+//initialize the passport setup
+app.use(passport.session());
+
+// Add the router
+app.use(express.static(__dirname + "/view"));
+//Store all HTML files in view folder.
+app.use(express.static(__dirname + "/script"));
+//Store all JS and CSS in Scripts folder.
+
+/******************************************
+ * Accessing the database
+ */
+
+//Ciro's local mysql for testing purpose.
+// const con = mysql.createConnection({
+//   host     : 'localhost',
+//   //where the info is hoste
+//   user     : 'root',
+//   //the user name of db
+//   password : 'isowaytion15',
+//   //the pswd for user
+//   database : 'isowaytion'
+//   //name of db
+// });
+
+var con = mysql.createConnection({
+  host: "205.250.9.115",
+  user: "root",
+  password: "123",
+  database: "isowaytion",
+});
+
+// initial connection
+con.connect((err) => {
+  if (err) {
+    throw err;
+  }
+  console.log("db is connected");
+  //ciro is connected
+});
+
+/*************************************************
+ * User Signup and Signin routes
+ */
+
+ //Check if the user is currently logged in
+ const isLoggedIn = (req, res, next) => {
   if (req.user) {
     //if req.user is defined
     next();
@@ -61,37 +138,7 @@ const isLoggedIn = (req, res, next) => {
   }
 };
 
-//TBD
-// app.use(cors())
-app.use(bodyParser.json({ limit: "50mb" }));
-app.use(
-  bodyParser.urlencoded({
-    limit: "50mb",
-    extended: false,
-  })
-);
-app.use("/", router);
-app.set("view engine", "ejs");
-//set the page renderer to view and preprocessor ejs.
-
-//TBD
-app.use(
-  cookieSession({
-    name: "Team Horton's cookies",
-    keys: ["key1", "key2"],
-  })
-);
-app.use(flash());
-
-app.use(passport.initialize());
-//initialize the passport setup
-app.use(passport.session());
-//TBD
-
-
-/**
- * When /welcome is visited.
- */
+ //Route for signing up with google account
 app.get("/welcome", isLoggedIn, (req, res) => {
   useremail = req.user._json.email;
   //get the email of user by accesing Google's returned email value
@@ -126,12 +173,7 @@ app.get("/welcome", isLoggedIn, (req, res) => {
   );
 });
 
-// TBD (We can clean it?)
-app.get("/failed", (req, res) => res.send("sorry you failed to login"));
-app.get("/index", (req, res) => res.send(`welcome to IsoWaytion `));
-// TBD (We can clean it?)
-
-// process the post method from /google TBD
+// process the post method from /google 
 app.post(
   "/google",
   passport.authenticate("google", {
@@ -139,7 +181,7 @@ app.post(
   })
 );
 
-// you guys can addmore router
+// Google authentication
 app.get(
   "/google",
   passport.authenticate("google", {
@@ -165,6 +207,8 @@ app.get(
   }
 );
 
+
+//User logout route
 app.get("/logout", (req, res) => {
   //session means the access to our API.
   //eg. can't aceess to welcome
@@ -175,64 +219,7 @@ app.get("/logout", (req, res) => {
   res.redirect("/signin");
 });
 
-
-
-
-
-/*********************************************************************************************************************************************
- * Account Page Server JS
- */
-//Lenght of info array
-const LENGTH = 3;
-
-//Current user info, array
-let currentInfo = new Array(LENGTH);
-
-/******************************************
- * Accessing user database
- */
-
-//**************05-11 edit************************
-//Ciro's local mysql for testing purpose.
-const con = mysql.createConnection({
-  host     : 'localhost',
-  //where the info is hoste
-  user     : 'root',
-  //the user name of db
-  password : 'isowaytion15',
-  //the pswd for user
-  database : 'isowaytion'
-  //name of db
-});
-
-// var con = mysql.createConnection({
-//   host: "205.250.9.115",
-//   user: "root",
-//   password: "123",
-//   database: "isowaytion",
-// });
-
-// initial connection
-con.connect((err) => {
-  if (err) {
-    throw err;
-  }
-  console.log("db is connected");
-  //ciro is connected
-});
-
-// testing
-// con.query(`SELECT email FROM user WHERE email =\"${req.user._json.email}`,(req,res)=>{
-//   // console.log(res);
-//   console.log(res[0]);
-//   console.log(res[0].Email);
-// })
-
-// app.listen(1515, () => console.log(`Hawkan listening on ${1515}`));
-
-/*******************************************
- * Express server side
- */
+//User non-google signup/local signup
 app.get(`/signup`, (req, res) => {
   res.sendFile(path.join(__dirname + "/views/signup.html"));
 });
@@ -268,106 +255,75 @@ app.post(`/signup`, async (req, res) => {
   }
 });
 
-// Temporary google login, catching the post request from sign in page
-// Works for signin and google button
-app.post("/google", (req, res) => {
-  //log below is for memo
-  // console.log(req.user._json);
-  // console.log(req.user._json.name);
-  // console.log(req.user._json.picture);
-  //google profle pic
-  // console.log(req.user._json.email);
-  if (req.user) {
-    const regisInfo = {
-      name: `${req.user._json.name}`,
-      email: `${req.user._json.email}`,
-    };
-    //generates a JSON that contains user info.
-    // console.log(regisInfo);
-    //create user using google's info in our db
-    if (req.user._json.email_verified) {
-      con.query(`INSERT INTO user SET ?`, regisInfo, (err, result) => {
-        if (err) console.log(err);
-        // console.log(result);
-        res.redirect(`/map`);
-      });
-    }
-  } else {
-    res.redirect(`/google`);
-  }
-});
-
-//************05-11 edit ends ****************
+//Send to signup page
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname + "/views/signup.html"));
 });
 
+//Send to signin page
 app.get("/signin", (req, res) => {
   res.sendFile(path.join(__dirname + "/views/signin.html"));
 });
 
+
+
+//Invalid signin page
+app.get("/invalid", function (req, res) {
+  res.sendFile(path.join(__dirname + "/views/signin_invalid.html"));
+});
+
+//Invalid signup page
+app.get("/invalid_signup", function (req, res) {
+  res.sendFile(path.join(__dirname + "/views/signup_invalid.html"));
+});
+
+/************************************
+ * Local Login Functionality
+ */
+
+//paspInit() is a authentication interface connects to setup.js
+//the function email is passed to setup.js after the data of user is fetched from mysql
+paspInit(passport, (email) => {
+  return new Promise(function (resolve, reject) {
+    con.query(
+      `select email, password from user where email = ?`,
+      [email],
+      (err, res, fields) => {
+        if (err) {
+          reject(err);
+        } else {
+          // console.log("user-----------------------------------");
+          // console.log("res[0]['password']")
+          // console.log(res[0])
+          login = "local";
+          resolve(JSON.parse(JSON.stringify(res)));
+        }
+      }
+    );
+  });
+});
+
+app.post(
+  `/signin`,
+  passport.authenticate(`local`, {
+    successRedirect: `/map`,
+    failureRedirect: `/invalid`,
+    failureFlash: true,
+  })
+);
+
+
+/********************************************************
+ * About us route
+ */
 // Send to about us page
 app.get("/aboutus", function (req, res) {
   res.sendFile(path.join(__dirname + "/views/aboutus.html"));
 });
 
-app.get("/invalid", function (req, res) {
-  res.sendFile(path.join(__dirname + "/views/signin_invalid.html"));
-});
-
-app.get("/invalid_signup", function (req, res) {
-  res.sendFile(path.join(__dirname + "/views/signup_invalid.html"));
-});
-
-// Send to Map page.
-app.get("/map", function (req, res) {
-  // con.query(`SELECT email FROM user WHERE email =\"${req.user._json.email}\"`,(dbReq,dbRes)=>{
-  //   // console.log(res);
-  //   console.log(dbRes[0].email);
-  //   // console.log(dbRes.length);
-  //   if(dbRes.length==0){
-  //     //if the query returns an array with 0 length.
-  //     //then we fetch the user's info and push in database.
-  //     const regisInfo ={name:`${req.user._json.name}`,email:`${req.user._json.email}`}
-  //     con.query(`INSERT INTO user SET ?`,regisInfo,(err,result)=>{
-  //       if(err) console.log(err);
-  //       console.log(result);
-
-  //     })
-  //   }
-  // })
-  //   {
-  //   //log below is for memo
-  //   // console.log(req.user._json);
-  //   // console.log(req.user._json.name);
-  //   // console.log(req.user._json.picture);
-  //   //google profle pic
-  //   // console.log(req.user._json.email);
-  //   if(req.user){
-  //     const regisInfo ={name:`${req.user._json.name}`,email:`${req.user._json.email}`}
-  //     //generates a JSON that contains user info.
-  //     // console.log(regisInfo);
-  //     //create user using google's info in our db
-  //     if(req.user._json.email_verified){
-  //       con.query(`INSERT INTO user SET ?`,regisInfo,(err,result)=>{
-  //         if(err) console.log(err);
-  //         // console.log(result);
-  //         res.redirect(`/map`)
-  //       })
-  //     }
-  //   }else{
-  //     res.redirect(`/google`);
-  // }
-  // }
-  res.sendFile(path.join(__dirname + "/views/map.html"));
-});
-
-// Add the router
-app.use(express.static(__dirname + "/view"));
-//Store all HTML files in view folder.
-app.use(express.static(__dirname + "/script"));
-//Store all JS and CSS in Scripts folder.
-
+/**********************************************************************
+ * Account/ Edit info routes
+ */
 app.get("/myAccount", isLoggedIn, (req, res) => {
   // app.get("/myAccount", (req, res) => {
   if (login === "google") {
@@ -479,15 +435,8 @@ app.post("/editInfo", (req, res) => {
   });
 });
 
-// //Insert into table
-// var sql = "INSERT INTO isowaytion (email, name, address) VALUES ('testdummy@gmail.com', 'Hawkan', '123456')";
-// con.query(sql, function (err, result) {
-//   if (err) throw err;
-//   console.log("1 record inserted");
-// });
-
 /*******************************************
- * Isostats
+ * Isostats routes
  */
 
 // Grab the users points for isostats page.
@@ -529,7 +478,7 @@ app.get("/isostats", (req, res) => {
 });
 
 /*******************************************
- * Express server side, LEADERBOARDS
+ * Leaderboards Routes
  */
 
 app.get("/leaderboard", isLoggedIn, (req, res) => {
@@ -611,42 +560,14 @@ app.post("/auth", function (request, response) {
   }
 });
 
-/************************************
- * Local Login Functionality
+/***********************************************
+ * Map routes and map database access
  */
 
-//paspInit() is a authentication interface connects to setup.js
-//the function email is passed to setup.js after the data of user is fetched from mysql
-paspInit(passport, (email) => {
-  return new Promise(function (resolve, reject) {
-    con.query(
-      `select email, password from user where email = ?`,
-      [email],
-      (err, res, fields) => {
-        if (err) {
-          reject(err);
-        } else {
-          // console.log("user-----------------------------------");
-          // console.log("res[0]['password']")
-          // console.log(res[0])
-          login = "local";
-          resolve(JSON.parse(JSON.stringify(res)));
-        }
-      }
-    );
-  });
+// Send to Map page.
+app.get("/map", function (req, res) {
+  res.sendFile(path.join(__dirname + "/views/map.html"));
 });
-
-app.post(
-  `/signin`,
-  passport.authenticate(`local`, {
-    successRedirect: `/map`,
-    failureRedirect: `/invalid`,
-    failureFlash: true,
-  })
-);
-
-
 // data from map.js
   // currently data is only first route
   // when I try to put all the route, it shows error "entity is too large"ee
