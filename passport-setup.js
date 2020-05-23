@@ -28,10 +28,10 @@ pasp.use(new GoogleStrategy({
 
     //Callback urls for google login
     //For local development
-    callbackURL: "http://localhost:1515/google/callback"
+    //callbackURL: "http://localhost:1515/google/callback"
 
     //Hosted deployement
-    //callbackURL: "https://desolate-earth-77828.herokuapp.com/google/callback"
+    callbackURL: "https://desolate-earth-77828.herokuapp.com/google/callback"
     //a redirect url after login
   },
 
