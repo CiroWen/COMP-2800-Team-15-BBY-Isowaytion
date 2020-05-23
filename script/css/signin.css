@@ -104,6 +104,8 @@ a:link {
     both;
   animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.61, 0.355, 1) both;
 }
+
+/* Animations */
 @-webkit-keyframes tracking-in-expand {
   0% {
     letter-spacing: -0.5em;

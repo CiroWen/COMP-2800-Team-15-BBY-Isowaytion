@@ -1,90 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../css/editInfo.css" />
-    <link rel="stylesheet" href="../css/bootstrap.min.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="icon" href="/favicon.ico" />
-    <title>Isowaytion - Edit Account</title>
-  </head>
 
-  <body>
-    <div class="container">
-      <div class="top">
-        <i id="bck" class="fas fa-angle-left bounce-in-top" onclick="sendAccount()"></i>
-        <h2 class="title bounce-in-top">
-          Edit Info
-        </h2>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Style Links -->
+  <link rel="stylesheet" href="../css/editInfo.css" />
+  <link rel="stylesheet" href="../css/bootstrap.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="/favicon.ico" />
+  <title>Isowaytion - Edit Account</title>
+</head>
 
-      <form action="/editInfo" method="post" class="bounce-in-top">
-        <div class="form-group">
-          <label for="exampleInputEmail1"
-            ><span class="subject">Email address:</span> <%= currentInfo[0]
-            %></label
-          >
-          <!-- <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                    placeholder="Email" /> -->
-        </div>
-        <!-- <button class="btn btn-primary-edit px-4">Edit</button> -->
-
-        <div class="form-group mt-5">
-          <label for="exampleInputEmail1"
-            ><span class="subject">Username:</span> <%= currentInfo[1] %></label
-          >
-          <input
-            name="username"
-            type="text"
-            class="form-control"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
-            placeholder="Username"
-          />
-        </div>
-        <!-- <button class="btn btn-primary-edit px-4">Edit</button> -->
-
-        <div class="form-group mt-5">
-          <label for="exampleInputEmail1"
-            ><span class="subject">Address:</span> <%= currentInfo[2] %></label
-          >
-          <input
-            name="address"
-            type="text"
-            class="form-control"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
-            placeholder="Address"
-          />
-        </div>
-        <button type="submit" class="btn btn-primary-edit mt-2 px-4 heartbeat">
-          Edit
-        </button>
-      </form>
+<body>
+  <!-- Back button and Title -->
+  <div class="container">
+    <div class="top">
+      <i id="bck" class="fas fa-angle-left bounce-in-top" onclick="sendAccount()"></i>
+      <h2 class="title bounce-in-top">
+        Edit Info
+      </h2>
     </div>
-    <script
-      src="https://kit.fontawesome.com/df012b2a98.js"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-      crossorigin="anonymous"
-    ></script>
-    <script src="/backbutton.js"></script>
-  </body>
+
+    <form action="/editInfo" method="post" class="bounce-in-top">
+      <div class="form-group">
+        <label for="exampleInputEmail1"><span class="subject">Email address:</span> <%= currentInfo[0]
+            %></label>
+        <!-- <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                    placeholder="Email" /> -->
+      </div>
+      <!-- <button class="btn btn-primary-edit px-4">Edit</button> -->
+
+      <div class="form-group mt-5">
+        <label for="exampleInputEmail1"><span class="subject">Username:</span> <%= currentInfo[1] %></label>
+        <input name="username" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+          placeholder="Username" />
+      </div>
+      <!-- <button class="btn btn-primary-edit px-4">Edit</button> -->
+
+      <div class="form-group mt-5">
+        <label for="exampleInputEmail1"><span class="subject">Address:</span> <%= currentInfo[2] %></label>
+        <input name="address" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+          placeholder="Address" />
+      </div>
+      <button type="submit" class="btn btn-primary-edit mt-2 px-4 heartbeat">
+        Edit
+      </button>
+    </form>
+  </div>
+
+  <!-- Javascript files and other API's -->
+  <script src="https://kit.fontawesome.com/df012b2a98.js" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+  </script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+  </script>
+  <script src="/backbutton.js"></script>
+</body>
+
 </html>

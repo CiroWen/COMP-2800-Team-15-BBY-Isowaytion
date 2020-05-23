@@ -1,86 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Isowaytion</title>
-    <link rel="stylesheet" href="css/map.css" />
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="icon" href="../Images/favicon.ico" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="icon" href="favicon.ico" />
-  </head>
-  <body>
-    <!-- NavBar -->
-    <div class="top">
-      <h3 class="logo roll-in-left">
-        <span class="logo_box">Iso</span>waytion
-      </h3>
-      <a href="/myAccount"
-        ><img src="Images/ryan_profile.png" class="roll-in-left"
-      /></a>
-    </div>
 
-    <input id="appt" class="time" type="time" name="time1" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Isowaytion</title>
+  <!-- Style Links -->
+  <link rel="stylesheet" href="css/map.css" />
+  <link rel="stylesheet" href="css/bootstrap.min.css" />
+  <link rel="icon" href="../Images/favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="favicon.ico" />
+</head>
 
-    <input
-      id="input-time"
-      class="btn btn-primary time"
-      type="button"
-      value="Submit"
-    />
-    <input
-      id="origin-input"
-      class="controls form-control"
-      type="text"
-      placeholder="Origin"
-    />
+<body>
+  <!-- NavBar -->
+  <div class="top">
+    <h3 class="logo roll-in-left">
+      <span class="logo_box">Iso</span>waytion
+    </h3>
+    <a href="/myAccount"><img src="Images/ryan_profile.png" class="roll-in-left" /></a>
+  </div>
 
-    <input
-      id="destination-input"
-      class="controls form-control"
-      type="text"
-      placeholder="Destination"
-    />
+  <!-- Time Input -->
+  <input id="appt" class="time" type="time" name="time1" />
 
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" role="dialog">
-      <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-body">
-            <h3>Please Input Time</h3>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal">
-              GOT IT
-            </button>
-          </div>
+  <!-- Button that submits users time, and directions coordinates to the database -->
+  <input id="input-time" class="btn btn-primary time" type="button" value="Submit" />
+  <!-- Origin Input -->
+  <input id="origin-input" class="controls form-control" type="text" placeholder="Origin" />
+  <!-- Destination Input -->
+  <input id="destination-input" class="controls form-control" type="text" placeholder="Destination" />
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-body">
+          <h3>Please Input Time</h3>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">
+            GOT IT
+          </button>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- <button onclick="toggleHeatmap()">Toggle Heatmap</button> -->
+  <!-- <button onclick="toggleHeatmap()">Toggle Heatmap</button> -->
 
-    <div id="map" class="roll-in-top"></div>
-    <div id="bottom-panel"><h5>Directions</h5></div>
-  </body>
+  <!-- Directions Panel -->
+  <div id="map" class="roll-in-top"></div>
+  <div id="bottom-panel">
+    <h5>Directions</h5>
+  </div>
+
+  <!-- Javascript files and other API's -->
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="./scripts/map.js"></script>
-
   <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB05M9WVnhk7NLh8gSFUxkiOVJecxU5tK0&libraries=places,visualization&callback=initMap"
-    async
-    defer
-  ></script>
+    async defer>
+  </script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
-  <script
-    src="https://kit.fontawesome.com/df012b2a98.js"
-    crossorigin="anonymous"
-  ></script>
+  <script src="https://kit.fontawesome.com/df012b2a98.js" crossorigin="anonymous"></script>
+</body>
+
 </html>

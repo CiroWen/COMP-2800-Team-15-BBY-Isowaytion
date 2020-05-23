@@ -1,70 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/signup.css" />
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="icon" href="favicon.ico" />
 
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Isowaytion - Sign Up</title>
+  <!-- Style Links -->
+  <link rel="stylesheet" href="css/signup.css" />
+  <link rel="stylesheet" href="css/bootstrap.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="favicon.ico" />
+</head>
 
-    <title>Isowaytion - Sign Up</title>
-  </head>
-  <body class="tracking-in-expand">
-    <div class="header">
-      <h1 class="logo text-focus-in"><span class="logo_box">Iso</span>waytion</h1>
-    </div>
-    <div class="container">
-      <h2 class="title bounce-bottom heartbeat">
-        Sign Up
-      </h2>
-      <form action="/signup" method="POST">
-        <div class="form-group">
-          <label for="exampleInputName1">Username</label>
-          <input type="text" class="form-control" id="exampleInputName1" placeholder="Username" name="name" required='true'>
-        </div>
-        <div class="form-group">
-          <label for="exampleInputEmail1">Email address</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Email" name="email" required='true'>
-        </div>
-        <div class="form-group">
-          <label for="exampleInputPassword1">Password</label>
-          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password" required='true'>
-        </div>
-        <p id='invalid'>Email already in-use. Please use another email.</p>
-        <!-- <div class="form-check">
+<body class="tracking-in-expand">
+  <div class="header">
+    <h1 class="logo text-focus-in"><span class="logo_box">Iso</span>waytion</h1>
+  </div>
+  <div class="container">
+    <h2 class="title bounce-bottom heartbeat">
+      Sign Up
+    </h2>
+    <form action="/signup" method="POST">
+      <div class="form-group">
+        <label for="exampleInputName1">Username</label>
+        <input type="text" class="form-control" id="exampleInputName1" placeholder="Username" name="name"
+          required='true'>
+      </div>
+      <div class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+          placeholder="Email" name="email" required='true'>
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password"
+          required='true'>
+      </div>
+      <p id='invalid'>Email already in-use. Please use another email.</p>
+      <!-- <div class="form-check">
           <input type="checkbox" class="form-check-input" id="exampleCheck1">
           <label class="form-check-label" for="exampleCheck1">Check me out</label>
         </div> -->
-        <div class="button_group">
-          <button class="btn btn-outline-primary signup">Sign Up</button>
-          <button class="btn btn-outline-primary" type="submit" formaction="/google" method="GET" formnovalidate><i class="fab fa-google"></i> Google</button>
-        </div>
-        </br>
-        <a href="/signin" class="auth" id="signin">Already have an account? Sign in here.</a>
-        </div>
-      </form>
-      
-    </div>
-    <script src="https://kit.fontawesome.com/df012b2a98.js" crossorigin="anonymous"></script>
-    <script
-      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-      crossorigin="anonymous"
-    ></script>
-  </body>
+      <div class="button_group">
+        <button class="btn btn-outline-primary signup">Sign Up</button>
+        <button class="btn btn-outline-primary" type="submit" formaction="/google" method="GET" formnovalidate><i
+            class="fab fa-google"></i> Google</button>
+      </div>
+      </br>
+      <a href="/signin" class="auth" id="signin">Already have an account? Sign in here.</a>
+  </div>
+  </form>
+  </div>
+
+  <!-- Javascript files and other API's -->
+  <script src="https://kit.fontawesome.com/df012b2a98.js" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+  </script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+  </script>
+</body>
+
 </html>
