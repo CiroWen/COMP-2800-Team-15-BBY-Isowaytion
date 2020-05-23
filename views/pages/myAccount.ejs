@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,57 +8,59 @@
     <!-- Style Links -->
     <link rel="stylesheet" type="text/css" href="../css/accountstyle.css">
     <link rel="stylesheet" href="../css/bootstrap.min.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
     <link rel="icon" href="/favicon.ico" />
 </head>
+
 <body>
     <div class="outer"></div>
-        <!-- NavBar -->
-        <div class="top">
-            <i class="fas fa-angle-left roll-in-left" onclick="sendMap()"></i>
-            <h3 class="logo roll-in-left"><span class="logo_box">Iso</span>waytion</h3>
-          </div>
-        </br>
-        <!-- User's Name -->
-        <div class="header">
-            <form action="/myAccount" method="post"></form>
-            <div class="dot"><img id="profile" src="<%= profilePic %>"></div>
-        </br>
+    <!-- NavBar -->
+    <div class="top">
+        <i class="fas fa-angle-left roll-in-left" onclick="sendMap()"></i>
+        <h3 class="logo roll-in-left"><span class="logo_box">Iso</span>waytion</h3>
+    </div>
     </br>
-            <div class="head">
-                <h1 id="username" class="text-pop-up-top"><%= currentInfo[1] %></h1>
-                </form>
+    <!-- User's Name -->
+    <div class="header">
+        <form action="/myAccount" method="post"></form>
+        <div class="dot"><img id="profile" src="<%= profilePic %>"></div>
+        </br>
+        </br>
+        <div class="head">
+            <h1 id="username" class="text-pop-up-top"><%= currentInfo[1] %></h1>
+            </form>
+        </div>
+    </div>
+    <!-- Account info Options -->
+    <div class="info bounce-in-top-later">
+        <ul>
+            <div id="info1">
+                <li id="title1"><a href="/editInfo"><strong>Edit Info</strong></a></li>
             </div>
-        </div>
-        <!-- Account info Options -->
-        <div class="info bounce-in-top-later">
-            <ul>
-                <div id="info1">
-                    <li id="title1" ><a href="/editInfo"><strong>Edit Info</strong></a></li>
-                </div>
-                <div id="info2">
-                    <li id="title2"><a href="/isostats"><strong>IsoStats</strong></a></li>
-                </div>
-                <div id="info3">
-                    <li id="title3"><a href="/leaderboard"><strong>Leaderboard</strong></a></li>
-                </div>
-                <div id="info4">
-                    <li id="title4"><a href="/aboutus"><strong>About Us</strong></a></li>
-                </div>
-            </ul>
-        </div>
-        <!-- Share Button -->
-        <div class="share-btn">
-            <div id="fb-root"></div>
-            <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v7.0%22%3E"></script>
-                <div class="fb-share-button" data-href="https://github.com/CiroGuangchengWen/COMP-2800-Team-15-BBY-Isowaytion" data-layout="button" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fgithub.com%2FCiroGuangchengWen%2FCOMP-2800-Team-15-BBY-Isowaytion&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share To Facebook</a></div>
-        </div>
+            <div id="info2">
+                <li id="title2"><a href="/isostats"><strong>IsoStats</strong></a></li>
+            </div>
+            <div id="info3">
+                <li id="title3"><a href="/leaderboard"><strong>Leaderboard</strong></a></li>
+            </div>
+            <div id="info4">
+                <li id="title4"><a href="/aboutus"><strong>About Us</strong></a></li>
+            </div>
+        </ul>
+    </div>
+    <!-- Share Button -->
+    <div class="share-btn">
+        <div id="fb-root"></div>
+        <script async defer crossorigin="anonymous"
+            src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v7.0%22%3E"></script>
+        <div class="fb-share-button" data-href="https://github.com/CiroGuangchengWen/COMP-2800-Team-15-BBY-Isowaytion"
+            data-layout="button" data-size="large"><a target="_blank"
+                href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fgithub.com%2FCiroGuangchengWen%2FCOMP-2800-Team-15-BBY-Isowaytion&amp;src=sdkpreparse"
+                class="fb-xfbml-parse-ignore">Share To Facebook</a></div>
+    </div>
 
-        <!-- Signout Button -->
-        <div class="logout">
+    <!-- Signout Button -->
+    <div class="logout">
         <div id="button_group">
             <form action="/logout" method="GET">
                 <button class="btn btn-outline-primary signout">Sign Out</button>
@@ -67,25 +70,19 @@
     </br>
     <p class="footer">COMP2800 Team Horton</p>
     </div>
-    <script
-      src="https://kit.fontawesome.com/df012b2a98.js"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-      crossorigin="anonymous"
-    ></script>
+
+    <!-- Javascript files and other API's -->
+    <script src="https://kit.fontawesome.com/df012b2a98.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
     <script src="/backbutton.js"></script>
 </body>
+
 </html>

@@ -146,6 +146,7 @@ li {
     both;
 }
 
+/* Animations */
 @-webkit-keyframes swing-in-top-fwd {
   0% {
     -webkit-transform: rotateX(-100deg);
