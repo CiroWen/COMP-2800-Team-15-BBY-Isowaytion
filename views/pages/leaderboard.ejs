@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Isowaytion - Leaderboard</title>
+    <!-- Style Links -->
+    <link rel="stylesheet" type="text/css" href="../css/leaderboard.css" />
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="/favicon.ico" />
+  </head>
+
+  <body>
+    <div class="top">
+      <i class="fas fa-angle-left" onclick="history.back()"></i>
+      <h2 class="title">
+        Leaderboard
+      </h2>
+    </div>
+    <div class="outer slide-in-blurred-top">
+
+        <div class="info">
+
+            <ul>
+                <form action="/leaderboard" method="POST">
+                    <div id="userInfo">
+                        <li id="title"><b><%= name %></b></li>
+                        <li id="points"><b><%= points %></b></li>
+                    </div>
+                </form>
+                <% if (userData.length / 2 < 10) { %>
+                <% for (var i = 0; i < userData.length;  i += 2 ) { %>
+                <button class="userDisplay">
+                    <li id="title"><b><%= userData[i] %></b></li>
+                    <li id="points"><b><%= userData[i + 1] %></b></li>
+                </button>
+                <!-- The Modal -->
+                <div id="myModal" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <ul style="display: flex;">
+                            <div style="flex-grow: 3;">
+                                <li>Points</li>
+                                <li>Number of Routes</li>
+                            </div>
+                            <div>
+                                <li><%= userData[i + 1] %></li>
+                                <li>12</li>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+                <% } %>
+                <% } else { %>
+                <% for (var i = 0; i < 20;  i += 2 ) { %>
+                <button class="userDisplay">
+                    <li id="title"><b><%= userData[i] %></b></li>
+                    <li id="points"><b><%= userData[i + 1] %></b></li>
+                </button>
+                <!-- The Modal -->
+                <div id="myModal" class="modal">
+
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <ul style="display: flex;">
+                            <div style="flex-grow: 3;">
+                                <li>Points</li>
+                                <li>Number of Routes</li>
+                            </div>
+                            <div>
+                                <li><%= userData[i + 1] %></li>
+                                <li>12</li>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+                <% } %>
+                <% } %>
+            </ul>
+        </div>
+        <script src="https://kit.fontawesome.com/df012b2a98.js" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+        </script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+        </script>
+        <!-- JS Files -->
+        <script src="/leaderboard.js"></script>
+</body>
+
+</html>
