@@ -242,6 +242,10 @@ AutocompleteDirectionsHandler.prototype.route = function () {
           .then((res) => res.json())
           .then((res) => {
             //a nested loop to push all coordinates into headmap data array
+            console.log(`inmapmap`);
+            
+            console.log(res);
+            
             for (let k = 0; k < res.length; k++) {
               for (let i = 0; i < res[k].length; i++) {
                 heatMapData.push(
@@ -249,12 +253,9 @@ AutocompleteDirectionsHandler.prototype.route = function () {
                 );
               }
             }
-            
             heatmap.setMap(heatmap.getMap());
             // update heatmap layer
-          });
-
-        
+          });        
         me.directionsRenderer.setDirections(result);
         // render direction on map
         
