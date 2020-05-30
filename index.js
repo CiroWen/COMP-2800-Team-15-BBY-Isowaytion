@@ -789,8 +789,8 @@ function makeEventName(length) {
 
 
 //setting the port to be listened when index.js in run
-app.listen(port, () =>
+app.listen(process.env.PORT || 1515, () =>
   console.log(
-    `Thank you for testing IsoWaytion. ctrl + c to quit, visit localhost:${port} to test`
+    `Thank you for testing IsoWaytion. ctrl + c to quit, visit localhost: to test`
   )
 );
